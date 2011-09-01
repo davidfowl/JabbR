@@ -41,6 +41,9 @@
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.2\lib\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlSanitizationLibrary">
       <HintPath>..\packages\AntiXSS.4.0.1\lib\net35\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
@@ -139,6 +142,7 @@
     <Compile Include="ContentProviders\EmbedContentProvider.cs" />
     <Compile Include="ContentProviders\IContentProvider.cs" />
     <Compile Include="ContentProviders\ImageContentProvider.cs" />
+    <Compile Include="ContentProviders\WebPageContentProvider.cs" />
     <Compile Include="ContentProviders\YoutubeContentProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
