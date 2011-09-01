@@ -73,3 +73,20 @@
 {
     
 }
+
+.webPageContent
+{
+    width: 50%;
+    color: Black;
+}
+.webPageLink
+{
+    text-decoration: none;
+    color: Blue;
+    font-weight: bold;
+}
+.webPageDescription
+{
+    color: Gray;
+    font-style: italic;
+}
