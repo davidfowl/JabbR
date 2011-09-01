@@ -139,7 +139,8 @@ $(function () {
         }
         else {
             $.each(rooms, function () {
-                addMessage(this.Name + ' (' + this.Count + ')');
+                var msg = addMessage('<a href="#" class="joinroomlink">' + this.Name + '</a>' + ' (' + this.Count + ')');
+                var link = $(msg.html()); // Hack to make jQuery reconize link in dom
             });
         }
         addMessage('<br/>');
@@ -290,6 +291,19 @@ $(function () {
             $('#new-message').focus();
         }
 
+        return false;
+    });
+
+    $('.joinroomlink').live('click', function () {
+        var room = $(this).html();
+        if (room && room.length > 0) {
+            chat.send('/join ' + room) // Is there a better / more direct way?
+            .fail(function (e) {
+                addMessage(e, 'error');
+            });
+            $('#new-message').val('');
+            $('#new-message').focus();
+        }
         return false;
     });
 

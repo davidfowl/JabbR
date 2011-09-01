@@ -283,6 +283,9 @@ namespace SignalR.Samples.Hubs.Chat {
             RemoveFromGroup(room);
 
             Caller.room = null;
+
+            // Show the room list
+            HandleRooms();
         }
 
         private void HandleMe(string room, string name, string[] parts) {
