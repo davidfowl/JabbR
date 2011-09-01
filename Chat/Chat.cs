@@ -263,7 +263,8 @@ namespace SignalR.Samples.Hubs.Chat {
                 new { Name = "me", Description = "Type /me 'does anything'" },
                 new { Name = "msg", Description = "Type /msg nickname (message) to send a private message to nickname." },
                 new { Name = "leave", Description = "Type /leave to leave the current room." },
-                new { Name = "rooms", Description = "Type /rooms to show the list of rooms" }
+                new { Name = "rooms", Description = "Type /rooms to show the list of rooms" },
+                new { Name = "gravatar", Description = "Type \"/gravatar email\" to set your gravatar." }
             });
         }
 
@@ -366,10 +367,6 @@ namespace SignalR.Samples.Hubs.Chat {
                 throw new InvalidOperationException("Email was not specified!");
             }
 
-            if (!_users.ContainsKey(name)){
-                throw new InvalidOperationException("Set username first!");
-            }
-
             var user = _users[name];
             user.Hash = email.ToMD5();
 
@@ -379,8 +376,6 @@ namespace SignalR.Samples.Hubs.Chat {
             {
                 foreach (var room in _userRooms[name])
                 {
-                    _rooms[room].Users.Remove(name);
-                    _rooms[room].Users.Add(name);
                     Clients[room].changeGravatar(user);
                 }
             }
