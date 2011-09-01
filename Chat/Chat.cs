@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -116,7 +116,7 @@ namespace SignalR.Samples.Hubs.Chat {
             Clients[roomName].addMessage(chatMessage.Id,
                                          chatMessage.User,
                                          chatMessage.Content,
-                                         chatMessage.When);
+                                         chatMessage.WhenFormatted);
 
             if (links.Any()) {
                 // REVIEW: is this safe to do? We're holding on to this instance 
@@ -228,6 +228,11 @@ namespace SignalR.Samples.Hubs.Chat {
                     }
                     else if (commandName.Equals("msg", StringComparison.OrdinalIgnoreCase)) {
                         HandleMsg(name, parts);
+
+                        return true;
+                    }
+                    else if (commandName.Equals("gravatar", StringComparison.OrdinalIgnoreCase)) {
+                        HandleGravatar(name, parts);
 
                         return true;
                     }
@@ -354,6 +359,40 @@ namespace SignalR.Samples.Hubs.Chat {
             Caller.joinRoom(newRoom);
         }
 
+        private void HandleGravatar(string name, string[] parts){
+            string email = string.Join(" ", parts.Skip(1));
+
+            if (string.IsNullOrWhiteSpace(email)){
+                throw new InvalidOperationException("Email was not specified!");
+            }
+
+            if (!_users.ContainsKey(name)){
+                throw new InvalidOperationException("Set username first!");
+            }
+
+            var user = _users[name];
+            user.Hash = email.ToMD5();
+
+            bool inRooms = _userRooms[name].Any();
+
+            if (inRooms)
+            {
+                foreach (var room in _userRooms[name])
+                {
+                    _rooms[room].Users.Remove(name);
+                    _rooms[room].Users.Add(name);
+                    Clients[room].changeGravatar(user);
+                }
+            }
+
+
+            if (!inRooms)
+            {
+                Caller.changeGravatar(user);
+            }
+
+        }
+
         private void HandleRooms() {
             var rooms = _rooms.Select(r => new {
                 Name = r.Key,
@@ -434,26 +473,19 @@ namespace SignalR.Samples.Hubs.Chat {
         }
 
         private ChatUser AddUser(string newUserName) {
+            var offset = TimeSpan.FromHours(ResolveOffset());
             var user = new ChatUser(newUserName) {
-                ClientId = Context.ClientId
+                ClientId = Context.ClientId,
+                Offset = offset,
+                Timezone = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(tz => tz.BaseUtcOffset == offset)
             };
 
             _users[newUserName] = user;
             _userRooms[newUserName] = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            // Get the offset
-            var offset = TimeSpan.FromHours(ResolveOffset());
-
-            // Try to resolve the timezone
-            var zone = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(tz => tz.BaseUtcOffset == offset);
-            if (zone != null) {
-                offset = zone.GetUtcOffset(DateTimeOffset.UtcNow);
-            }
-
             Caller.name = user.Name;
             Caller.hash = user.Hash;
-            Caller.id = user.Id;            
-            Caller.offset = offset.TotalHours;
+            Caller.id = user.Id;
 
             Caller.addUser(user);
 
