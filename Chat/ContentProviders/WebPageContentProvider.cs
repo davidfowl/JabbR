@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using System.Net;
 using System.IO;
 using System.Text;
+using System.Drawing;
 
 // Credit
 // http://webcmd.wordpress.com/2011/02/16/c-webservice-for-getting-link-details-like-facebook/
@@ -34,12 +35,28 @@ namespace SignalR.Samples.Hubs.Chat.ContentProviders {
             public  string Email { get; set; }
             public  string PhoneNumber { get; set; }
             public  string FaxNumber { get; set; }
-            public  string Image { get; set; }
+            public  ImageLink Image { get; set; }
+            public List<ImageLink> Images { get; set; }
+
+            public PageDetails() {
+                this.Images = new List<ImageLink>();
+            }
 
             public override string  ToString() {
  	            StringBuilder sb = new StringBuilder();
 
+                ImageLink firstValidImage = null;
+                if (!Image.IsValid) {
+                    firstValidImage = Images.FirstOrDefault(img => img.IsValid);
+                }
+                else {
+                    firstValidImage = Image;
+                }
+
                 sb.Append("<div class=\"webPageContent\">");
+                if (firstValidImage != null) {
+                    sb.AppendFormat("<div><img src=\"{0}\" alt=\"{1}\" /></div>", firstValidImage.Href, Title);
+                }
                 sb.AppendFormat("<div><a href=\"{0}\" class=\"webPageLink\">{1}</a></div>", Url, Title);
                 if (!string.IsNullOrWhiteSpace(Description)) {
                     sb.AppendFormat("<div><p class=\"webPageDescription\">{0}</p></div>", Description);
@@ -48,6 +65,75 @@ namespace SignalR.Samples.Hubs.Chat.ContentProviders {
 
                 return sb.ToString();
             }
+        }
+
+        private class ImageLink {
+            public string Href { get; set; }
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public bool IsValid { get { return Width > 0 && Height > 0; } }
+
+            public ImageLink() { }
+            public ImageLink(string pageUrl, string imgUrl) {
+                SetImageLink(FullyQualifiedImage(imgUrl, pageUrl));
+            }
+            public ImageLink(string imgUrl) {
+                SetImageLink(imgUrl);
+            }
+
+            private void SetImageLink(string url) {
+                this.Href = url;
+                try {
+                    using (WebClient webClient = new WebClient()) {
+                        using (MemoryStream stream = new MemoryStream(webClient.DownloadData(url))) {
+                            Image img = Image.FromStream(stream);
+                            stream.Close();
+                            this.Width = img.Width;
+                            this.Height = img.Height;
+                        }
+                    }
+                }
+                catch {
+                    // Swallow
+                }
+            }
+
+            private string FullyQualifiedImage(string imageUrl, string siteUrl) {
+                if (imageUrl.ToLower().StartsWith("http:") || imageUrl.ToLower().StartsWith("https:")) {
+                    return imageUrl;
+                }
+
+                if (imageUrl.IndexOf("//") == 0) {
+                    return "http:" + imageUrl;
+                }
+                try {
+                    string baseurl = siteUrl.Replace("http://", string.Empty).Replace("https://", string.Empty);
+                    baseurl = baseurl.Split('/')[0];
+                    return string.Format("http://{0}{1}", baseurl, imageUrl);
+                }
+                catch { }
+
+                return imageUrl;
+
+            }
+
+        }
+
+        //score the image based on matches in comparing alt to title and h1 tag
+        private int ScoreImage(string text, string compare) {
+            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(compare))
+                return 0;
+            text = text.Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            compare = compare.Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            int score = 0;
+            if (!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(compare)) {
+                string[] c = compare.Split(' ');
+
+                foreach (string test in c) {
+                    if (text.Contains(test)) { score++; }
+                }
+            }
+            return score;
         }
 
         public string GetContent(System.Net.HttpWebResponse response) {
@@ -91,7 +177,7 @@ namespace SignalR.Samples.Hubs.Chat.ContentProviders {
                                         details.Url = childNode.Attributes["content"].Value;
                                         break;
                                     case "og:image":
-                                        details.Image = childNode.Attributes["content"].Value;
+                                        details.Image = new ImageLink(response.ResponseUri.ToString(), childNode.Attributes["content"].Value);
                                         break;
                                     case "og:site_name":
                                         details.SiteName = HttpUtility.HtmlDecode(childNode.Attributes["content"].Value);
@@ -113,6 +199,34 @@ namespace SignalR.Samples.Hubs.Chat.ContentProviders {
                             break;
                     }
                 }
+
+                // Find images
+                var imgNodes = document.DocumentNode.SelectNodes("//img");
+                var h1Node = document.DocumentNode.SelectSingleNode("//h1");
+                string h1Text = null;
+                if (h1Node != null && !string.IsNullOrWhiteSpace(h1Node.InnerText)) {
+                    h1Text = h1Node.InnerText;
+                }
+                int bestScore = -1;
+                if (imgNodes != null) {
+                    foreach (var imageNode in imgNodes) {
+                        if (imageNode != null && imageNode.Attributes["src"] != null && imageNode.Attributes["alt"] != null) {
+                            ImageLink imgLink = new ImageLink(response.ResponseUri.ToString(), imageNode.Attributes["src"].Value);
+                            if (imgLink.IsValid && imgLink.Width > 50) {
+                                int imgScore = ScoreImage(imageNode.Attributes["alt"].Value, details.Title);
+                                imgScore += ScoreImage(imageNode.Attributes["alt"].Value, h1Text);
+                                if (imgScore > bestScore) {
+                                    bestScore = imgScore;
+                                    details.Image = imgLink;
+                                }
+                                if (!details.Images.Any(il=> object.ReferenceEquals(imgLink, il) || il.Href.ToLower() == imgLink.Href.ToLower())) {
+                                    details.Images.Add(imgLink);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return details.ToString();
             }
             return null;
