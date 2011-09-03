@@ -12,8 +12,6 @@ using Chat.Models;
 using Microsoft.Security.Application;
 using SignalR.Hubs;
 using SignalR.Samples.Hubs.Chat.ContentProviders;
-using System.IO;
-using System.Xml.Linq;
 
 namespace SignalR.Samples.Hubs.Chat {
     public class Chat : Hub, IDisconnect {
@@ -33,17 +31,17 @@ namespace SignalR.Samples.Hubs.Chat {
             new WebPageContentProvider()
         };
 
-        public bool OldVersion {
+        public bool OutOfSync {
             get {
                 string version = Caller.version;
                 return String.IsNullOrEmpty(version) ||
-                        new Version(version) < typeof(Chat).Assembly.GetName().Version;
+                        new Version(version) != typeof(Chat).Assembly.GetName().Version;
             }
         }
 
         public bool Join() {
             Caller.version = typeof(Chat).Assembly.GetName().Version.ToString();
-
+            
             // Check the user id cookie
             var cookie = Context.Cookies["userid"];
             if (cookie == null) {
@@ -91,7 +89,7 @@ namespace SignalR.Samples.Hubs.Chat {
         }
 
         public void Send(string content) {
-            if (OldVersion) {
+            if (OutOfSync) {
                 throw new InvalidOperationException("Chat was just updated, please refresh you browser and rejoin " + Caller.room);
             }
 
