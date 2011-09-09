@@ -65,8 +65,9 @@ namespace SignalR.Samples.Hubs.Chat {
 
             // Set some client state
             Caller.id = user.Id;
-            Caller.name = user.Name;
+            Caller.name = Context.Cookies["username"] == null ? user.Name : Context.Cookies["username"].Value;
             Caller.hash = user.Hash;
+            Caller.gravatar = Context.Cookies["gravatar"] == null ? user.Gravatar : Context.Cookies["gravatar"].Value;
 
             // Add this user to the list of users
             Caller.addUser(userViewModel);
@@ -412,7 +413,9 @@ namespace SignalR.Samples.Hubs.Chat {
                 throw new InvalidOperationException("Email was not specified!");
             }
 
+            user.Gravatar = email;
             user.Hash = email.ToMD5();
+
             var userViewModel = new UserViewModel(user);
 
             if (user.Rooms.Any()) {
