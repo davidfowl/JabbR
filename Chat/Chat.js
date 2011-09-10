@@ -366,7 +366,6 @@ $(function () {
 
     function clearCookies() {
 
-        $.cookie('userid', '');
         $.cookie('username', '');
         $.cookie('gravatar', '');
 
@@ -374,9 +373,8 @@ $(function () {
 
     function updateCookies() {
 
-        $.cookie('userid', chat.id, { path: '/', expires: 30 });
         $.cookie('username', chat.name, { path: '/', expires: 30 });
-        $.cookie('gravatar', chat.gravatar, { path: '/', expires: 30 });
+        $.cookie('gravatar', chat.hash, { path: '/', expires: 30 });
 
     }
 

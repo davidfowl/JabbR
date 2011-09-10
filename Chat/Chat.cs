@@ -41,22 +41,31 @@ namespace SignalR.Samples.Hubs.Chat {
             Caller.version = typeof(Chat).Assembly.GetName().Version.ToString();
 
             // Check the user id cookie
-            HttpCookie cookie = Context.Cookies["userid"];
+            HttpCookie cookie = Context.Cookies["username"];
             if (cookie == null) {
                 return false;
             }
 
-            ChatUser user = _db.Users.FirstOrDefault(u => u.Id == cookie.Value);
+            ChatUser user = _db.Users.FirstOrDefault(u => u.Name.Equals(cookie.Value, StringComparison.OrdinalIgnoreCase));
 
-            // If there's no registered user, return false
+            // If there's no registered user, check for user cookie value, else return false
             if (user == null) {
+
+                if (!string.IsNullOrWhiteSpace(cookie.Value)){
+                    AddUser(cookie.Value, Context.Cookies["gravatar"] == null ? default(string) : Context.Cookies["gravatar"].Value);
+                    return true;
+                }
+
                 return false;
+
             }
 
             // Update the users's client id mapping
             user.ClientId = Context.ClientId;
             user.Active = true;
             user.LastActivity = DateTime.UtcNow;
+            user.Name = Context.Cookies["username"].Value;
+            user.Hash = Context.Cookies["gravatar"] == null ? default(string) : Context.Cookies["gravatar"].Value;
 
             var userViewModel = new UserViewModel(user);
 
@@ -65,10 +74,9 @@ namespace SignalR.Samples.Hubs.Chat {
 
             // Set some client state
             Caller.id = user.Id;
-            Caller.name = Context.Cookies["username"] == null ? user.Name : Context.Cookies["username"].Value;
+            Caller.name = user.Name;
             Caller.hash = user.Hash;
-            Caller.gravatar = Context.Cookies["gravatar"] == null ? user.Gravatar : Context.Cookies["gravatar"].Value;
-
+            
             // Add this user to the list of users
             Caller.addUser(userViewModel);
             return true;
@@ -413,8 +421,8 @@ namespace SignalR.Samples.Hubs.Chat {
                 throw new InvalidOperationException("Email was not specified!");
             }
 
-            user.Gravatar = email;
             user.Hash = email.ToMD5();
+            Caller.hash = user.Hash;
 
             var userViewModel = new UserViewModel(user);
 
@@ -446,7 +454,7 @@ namespace SignalR.Samples.Hubs.Chat {
 
             ChatUser user = _db.Users.FirstOrDefault(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-            if (user == null) {
+            if (user == null){
                 AddUser(newUserName);
             }
             else {
@@ -556,9 +564,17 @@ namespace SignalR.Samples.Hubs.Chat {
         }
 
         private void AddUser(string name) {
-            var user = new ChatUser {
+            AddUser(name, default(string));
+        }
+
+        private void AddUser(string name, string gravatarHash)
+        {
+
+            var user = new ChatUser
+            {
                 Name = name,
                 Active = true,
+                Hash = gravatarHash,
                 Id = Guid.NewGuid().ToString("d"),
                 LastActivity = DateTime.UtcNow,
                 ClientId = Context.ClientId
@@ -572,6 +588,7 @@ namespace SignalR.Samples.Hubs.Chat {
 
             var userViewModel = new UserViewModel(user);
             Caller.addUser(userViewModel);
+
         }
 
         private void LeaveAllRooms(ChatUser user) {
@@ -614,7 +631,17 @@ namespace SignalR.Samples.Hubs.Chat {
             ChatUser user = _db.Users.FirstOrDefault(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (user == null) {
-                throw new InvalidOperationException(String.Format("You go by the name '{0}' but the server has no idea who you are. Maybe it got reset :(.", name));
+
+                HttpCookie cookie = Context.Cookies["username"];
+
+                if (cookie != null){
+                    user = _db.Users.FirstOrDefault(u => u.Name.Equals(cookie.Value, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if(user == null){
+                    throw new InvalidOperationException(String.Format("You go by the name '{0}' but the server has no idea who you are. Maybe it got reset :(.", name));
+                }
+
             }
 
             // Keep the client id up to date

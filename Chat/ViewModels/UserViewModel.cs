@@ -3,7 +3,6 @@
 namespace Chat.ViewModels {
     public class UserViewModel {
         public UserViewModel(ChatUser user) {
-            Gravatar = user.Gravatar;
             Name = user.Name;
             Hash = user.Hash;
             Id = user.Id;
