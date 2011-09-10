@@ -9,6 +9,7 @@ namespace Chat.ViewModels {
             Active = user.Active;
         }
 
+        public string Gravatar { get; set; }
         public string Name { get; set; }
         public string Hash { get; set; }
         public string Id { get; set; }

@@ -210,7 +210,7 @@ $(function () {
             e.hide().fadeIn('slow');
         }
 
-        updateCookie();
+        updateCookies();
     };
 
     chat.changeUserName = function (user, oldName, newName) {
@@ -226,7 +226,7 @@ $(function () {
 
         if (user.Id === this.id) {
             addMessage('Your name is now ' + newName, 'notification');
-            updateCookie();
+            updateCookies();
         }
         else {
             addMessage(oldName + '\'s nick has changed to ' + newName, 'notification');
@@ -246,6 +246,7 @@ $(function () {
 
         if (currentUser.Id === this.id) {
             addMessage('Your gravatar has been set.', 'notification');
+            updateCookies();
         }
         else {
             addMessage(currentUser.Name + "'s gravatar changed.", 'notification');
@@ -363,8 +364,18 @@ $(function () {
         }
     }
 
-    function updateCookie() {
-        $.cookie('userid', chat.id, { path: '/', expires: 30 });
+    function clearCookies() {
+
+        $.cookie('username', '');
+        $.cookie('gravatar', '');
+
+    }
+
+    function updateCookies() {
+
+        $.cookie('username', chat.name, { path: '/', expires: 30 });
+        $.cookie('gravatar', chat.hash, { path: '/', expires: 30 });
+
     }
 
     addMessage('Welcome to the SignalR IRC clone', 'notification');
@@ -381,7 +392,7 @@ $(function () {
             })
             .done(function (success) {
                 if (success === false) {
-                    $.cookie('userid', '');
+                    clearCookies();
                     addMessage('Choose a name using "/nick nickname".', 'notification');
                 }
             });
