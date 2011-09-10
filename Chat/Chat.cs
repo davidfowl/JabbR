@@ -411,7 +411,7 @@ namespace SignalR.Samples.Hubs.Chat {
                 throw new InvalidOperationException("Email was not specified!");
             }
 
-            user.Hash = email.ToMD5();
+            user.Hash = email.ToLowerInvariant().ToMD5();
             var userViewModel = new UserViewModel(user);
 
             if (user.Rooms.Any()) {
