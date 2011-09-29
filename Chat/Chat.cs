@@ -44,6 +44,7 @@ namespace SignalR.Samples.Hubs.Chat {
 
             // Check the user id cookie
             HttpCookie cookie = Context.Cookies["userid"];
+            
             if (cookie == null) {
                 return false;
             }
@@ -60,15 +61,21 @@ namespace SignalR.Samples.Hubs.Chat {
             user.Active = true;
             user.LastActivity = DateTime.UtcNow;
 
-            var userViewModel = new UserViewModel(user);
-
-            LeaveAllRooms(user);
+            var userViewModel = new UserViewModel(user);        
             Caller.room = null;
 
             // Set some client state
             Caller.id = user.Id;
             Caller.name = user.Name;
             Caller.hash = user.Hash;
+          
+            if (user.Rooms.Count > 0)
+            {
+                foreach (var room in user.Rooms)
+                {
+                    Caller.joinRoom(room.Name);   
+                }
+            }
 
             // Add this user to the list of users
             Caller.addUser(userViewModel);
@@ -177,13 +184,7 @@ namespace SignalR.Samples.Hubs.Chat {
         }
 
         private void Disconnect(string clientId) {
-            ChatUser user = _db.Users.FirstOrDefault(u => u.ClientId == clientId);
 
-            if (user == null) {
-                return;
-            }
-
-            LeaveAllRooms(user);
         }
 
         private void UpdateActivity() {
