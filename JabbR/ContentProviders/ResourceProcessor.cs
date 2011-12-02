@@ -17,11 +17,21 @@ namespace JabbR.ContentProviders
             var requestTask = Task.Factory.FromAsync((cb, state) => request.BeginGetResponse(cb, state), ar => request.EndGetResponse(ar), null);
             return requestTask.ContinueWith(task => ExtractContent((HttpWebResponse)task.Result));
         }
-        
+
+        private readonly static string contentWrapperFormat = "<div class='provided-content {0}'>{1}</div>";
+
         private string ExtractContent(HttpWebResponse response)
         {
-            return _contentProviders.Value.Select(c => c.GetContent(response))
-                                          .FirstOrDefault(content => content != null);
+            var item = (from i in
+                            from p in _contentProviders.Value
+                            select new
+                            {
+                                Name = p.Name,
+                                Content = p.GetContent(response)
+                            }
+                        where i.Content != null
+                        select i).FirstOrDefault();
+            return item == null ? string.Empty : string.Format(contentWrapperFormat, item.Name, item.Content);
         }
 
 

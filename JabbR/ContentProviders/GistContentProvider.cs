@@ -48,5 +48,10 @@ namespace JabbR.ContentProviders {
 ";
             }
         }
+
+        public override string Name
+        {
+            get { return "Gist"; }
+        }
     }
 }

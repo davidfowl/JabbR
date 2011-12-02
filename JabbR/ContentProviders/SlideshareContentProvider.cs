@@ -43,5 +43,11 @@ namespace JabbR.ContentProviders
             }
             return null;
         }
+
+
+        public string Name
+        {
+            get { return "SlideShare"; }
+        }
     }
 }

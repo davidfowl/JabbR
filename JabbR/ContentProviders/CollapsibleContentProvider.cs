@@ -18,6 +18,9 @@ namespace JabbR.ContentProviders
             return null;
         }
 
+
+        public abstract string Name { get; }
+
         protected abstract string GetTitle(HttpWebResponse response);
 
         protected abstract string GetCollapsibleContent(HttpWebResponse response);
@@ -27,5 +30,7 @@ namespace JabbR.ContentProviders
         protected virtual bool IsCollapsible { get { return true; } }
 
         private const string ContentFormat = @"<h3 class=""collapsible_title"">{0} (click to show/hide)</h3><div class=""collapsible_box"">{1}</div>";
+
+
     }
 }
