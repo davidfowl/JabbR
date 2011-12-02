@@ -115,7 +115,7 @@ namespace JabbR
             UpdateActivity(user, room);
 
             HashSet<string> links;
-            var messageText = Transform(content, out links);
+            var messageText = ParseContent(content, out links);
 
             ChatMessage chatMessage = _service.AddMessage(user, room, messageText);
 
@@ -562,6 +562,33 @@ namespace JabbR
         {
             // Update the room count
             Clients.updateRoomCount(room.Name, room.Users.Online().Count());
+        }
+
+        private string ParseContent(string content, out HashSet<string> links) 
+        {
+            var messageText = ConvertHashtagsToRoomLinks(content);
+            messageText = Transform(messageText, out links);
+            return messageText;
+        }
+
+        private string ConvertHashtagsToRoomLinks(string message) 
+        {
+            const string hashTagPattern = @"(?:(?<=\s)|^)#(\w*[A-Za-z_]+\w*)";
+
+            message = Regex.Replace(message, hashTagPattern, m => {
+                string roomName = m.Groups[1].Value; /* hashtag without #*/
+
+                if (_repository.GetRoomByName(roomName) != null) {
+                    return string.Format(CultureInfo.InvariantCulture,
+                                        "<a href=\"#/rooms/{0}\" title=\"{1}\">{1}</a>",
+                                        roomName,
+                                        m.Value /* full match */);
+                } else {
+                    return m.Value;
+                }
+            });
+
+            return message;
         }
 
         private string Transform(string message, out HashSet<string> extractedUrls)
