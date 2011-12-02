@@ -1,31 +1,37 @@
-﻿body {
+﻿body
+{
     font-family: Lucida Grande, Trebuchet MS;
     font-size: 13px;
     background-color: #e5e5e5;
 }
 
-.banner > * {
+.banner > *
+{
     float: left;
     margin-left: 10px;
 }
 
-.banner > div {
+.banner > div
+{
     float: left;
     margin-top: 28px;
     margin-left: 10px;
 }
 
-.banner a {
+.banner a
+{
     color: #fff;
     text-decoration: none;
 }
 
-#logo {
+#logo
+{
     margin-top: 10px;
     margin-left: 0px;
 }
 
-#chat-area {
+#chat-area
+{
     position: absolute;
     top: 95px;
     bottom: 10px;
@@ -34,7 +40,8 @@
     min-height: 450px;
 }
 
-#heading {
+#heading
+{
     background-color: #00103f;
     color: #fff;
     position: absolute;
@@ -43,11 +50,13 @@
     width: 100%;
 }
 
-#heading h1 {
+#heading h1
+{
     margin-left: 5px;
 }
 
-.messages {
+.messages
+{
     width: 70%;
     border: 1px solid #ccc;
     overflow: auto;
@@ -60,23 +69,27 @@
     background-color: #fff;
 }
 
-.messages li {
+.messages li
+{
     list-style-type: none;
     position: relative;
     margin: 0px;
 }
 
-.messages li.message {
+.messages li.message
+{
     padding: 0px;
     border-left: 175px solid #f1f1f1; /* background color for left column (user info) */
 }
 
-.messages li img.gravatar {
+.messages li img.gravatar
+{
     height: 16px;
     width: 16px;
 }
 
-.users {
+.users
+{
     margin-left: 0px;
     padding-left: 0px;
     overflow: auto;
@@ -91,28 +104,50 @@
     margin-top: 0px;
 }
 
-.users li {
+.users li
+{
     padding: 4px;
 }
 
-.users li .name {
+.users li .name
+{
     word-wrap: break-word;
 }
 
-.users li.typing {
+.users li.typing
+{
     background-image: url('Content/images/keyboard.png');
     background-repeat: no-repeat;
     background-position: right center;
 }
 
-#tabs {
+#content-providers-list
+{
+   margin-top:2px;
+}
+
+#content-providers-list ul
+{
+    margin:0px;
+    padding:0px;
+    list-style:none;
+}
+#content-providers-list ul li
+{
+    float:left;
+    margin-left:5px;
+}
+
+#tabs
+{
     padding: 0;
     margin: 0px 0px 0px 5px;
     z-index: 1000;
     height: 30px;
 }
 
-#tabs li {
+#tabs li
+{
     display: inline-block;
     padding: 0;
     margin: 0px 4px 0px 0px;
@@ -125,7 +160,8 @@
     cursor: pointer;
 }
 
-#tabs li button {
+#tabs li button
+{
     height: inherit;
     margin: 0;
     padding: 0 20px 0 0;
@@ -137,18 +173,21 @@
     font-weight: inherit;
 }
 
-#tabs li.current {
+#tabs li.current
+{
     color: #32aa52;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#e5e5e5'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e5e5e5)); /* for webkit browsers */
     background: -moz-linear-gradient(top,  #f5f5f5,  #e5e5e5); /* for firefox 3.6+ */
 }
 
-#tabs li .content {
+#tabs li .content
+{
     margin: 6px 10px 6px 10px;
 }
 
-#tabs li .close {
+#tabs li .close
+{
     position: absolute;
     top: 7px;
     right: 5px;
@@ -157,55 +196,65 @@
     background: url(Content/images/close-icon.png);
 }
 
-#tabs li .close:hover {
+#tabs li .close:hover
+{
     background: url(Content/images/close-icon-hover.png);
 }
 
-#tabs li.unread {
+#tabs li.unread
+{
 }
 
-#tabs li:hover {
+#tabs li:hover
+{
     background-color: #e5e5e5;
     color: #32aa52;
 }
 
-#tabs li.current:hover {
+#tabs li.current:hover
+{
     background-color: #e5e5e5;
 }
 
-li.room {
+li.room
+{
     cursor: pointer;
 }
 
-li.room:hover {
+li.room:hover
+{
     background-color: #f5f5f5;
 }
 
-#tabs li.lobby {
+#tabs li.lobby
+{
     background-color: #00103f;
     color: #fff;
     padding-right: 0;
 }
 
-#tabs li.lobby button 
+#tabs li.lobby button
 {
     padding-right: 0;
     margin-right: 10px;
 }
 
-#tabs li.lobby.current {
+#tabs li.lobby.current
+{
     background-color: #00103f;
     color: #000;
 }
 
-#send-message {
+#send-message
+{
     position: absolute;
     bottom: 20px;
     height: 50px;
     width: 70%;
 }
 
-#message-box {
+#message-box
+{
     position: absolute;
     left: 0;
     right: 115px;
@@ -213,21 +262,24 @@ li.room:hover {
     margin: 0;
 }
 
-#new-message {
+#new-message
+{
     font-family: Trebuchet MS;
     padding: 5px;
     border: 1px solid #ccc;
     width: 100%;
 }
 
-#send {
+#send
+{
     padding: 5px;
     position: absolute;
     right: 0;
     width: 100px;
 }
 
-#message-instruction {
+#message-instruction
+{
     color: #999;
     font-style: italic;
     position: absolute;
@@ -235,86 +287,102 @@ li.room:hover {
     width: 100%;
 }
 
-.error {
+.error
+{
     padding: 5px;
     background-color: #fddfde;
     border-bottom: 1px solid #fbc7c6;
 }
 
-.pm {
+.pm
+{
     color: Red;
     padding: 5px;
 }
 
-.notification {
+.notification
+{
     color: #bbb;
     border-bottom: 1px solid #eee;
     padding: 5px;
 }
 
-.message {
+.message
+{
     border-bottom: 1px solid #eee;
 }
 
-.message.continue {
+.message.continue
+{
     border-bottom: 1px solid #f1f1f1;
 }
 
-.message .left {
+.message .left
+{
     float: left;
     width: 170px; /* width should exclude padding */
     padding: 5px;
     margin-left: -175px;
 }
 
-.message .left .name {
+.message .left .name
+{
     font-weight: bold;
 }
 
-.message .middle {
+.message .middle
+{
     margin-right: 85px;
     padding: 5px;
     word-wrap: break-word;
 }
 
-.messages li .right {
+.messages li .right
+{
     position: absolute;
     padding: 5px;
     top: 0px;
     right: 0px;
-    width: 8    5px;
+    width: 8 5px;
 }
 
-.messages li .right .time {
+.messages li .right .time
+{
     color: #bbb;
 }
 
-.highlight {
+.highlight
+{
     background-color: #fff6bd;
 }
 
-.list-header {
+.list-header
+{
     padding: 5px;
     border-bottom: 1px solid #eee;
 }
 
-.list-item {
+.list-item
+{
     padding: 5px;
     padding-left: 10px;
     border-bottom: 1px solid #f1f1f1;
 }
 
 
-.list-header .content {
+.list-header .content
+{
     font-weight: bold;
 }
 
-.list-item .right {
+.list-item .right
+{
     /* hide time for list items */
     display: none;
 }
 
-.message-separator {
+.message-separator
+{
     height: 8px;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#164c85', endColorstr='#eeeeee'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#164c85), to(#eee)); /* for webkit browsers */
@@ -323,7 +391,8 @@ li.room:hover {
 
 /* This stuff is to support TweetContentProvider, but should be extracted out if other content providers need custom CSS */
 
-.tweet {
+.tweet
+{
     margin-left: 30px;
     margin-right: 10px;
     border: 1px solid #ccc;
@@ -331,23 +400,27 @@ li.room:hover {
     min-height: 48px;
 }
 
-.tweet img {
+.tweet img
+{
     float: left;
     margin-right: 5px;
 }
 
-.tweet .user {
+.tweet .user
+{
     margin-bottom: 5px;
 }
 
-.tweet .name {
+.tweet .name
+{
     font-weight: bold;
     font-size: 15px;
 }
 
 /* End TweetContentProvider CSS */
 
-.captureDocumentWrite_collapsible h3, h3.collapsible_title {
+.captureDocumentWrite_collapsible h3, h3.collapsible_title
+{
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     border-bottom-left-radius: 0px;
@@ -361,12 +434,14 @@ li.room:hover {
     cursor: pointer;
 }
 
-.collapsible_box {
+.collapsible_box
+{
     border: 1px solid #DDD;
 }
 
 /* CLEAR FIX */
-.clearfix:after {
+.clearfix:after
+{
     clear: both;
     display: block;
     content: " ";
@@ -374,18 +449,22 @@ li.room:hover {
     visibility: hidden;
 }
 
-.clearfix {
+.clearfix
+{
     display: inline-block;
 }
 
 /* Hide these rules from IE-mac \*/
-* html .clearfix {
+* html .clearfix
+{
     height: 1%;
 }
-.clearfix {
+.clearfix
+{
     display: block;
 }
-li.clearfix {
+li.clearfix
+{
     display: list-item;
 }
 

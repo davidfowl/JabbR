@@ -18,7 +18,7 @@ namespace JabbR.ContentProviders
             return requestTask.ContinueWith(task => ExtractContent((HttpWebResponse)task.Result));
         }
 
-        private readonly static string contentWrapperFormat = "<div class='provided-content {0}'>{1}</div>";
+        private readonly static string contentWrapperFormat = "<script>addContentProvider({{Name:'{0}'}});</script><div class='provided-content {1}'>{2}</div>";
 
         private string ExtractContent(HttpWebResponse response)
         {
@@ -31,7 +31,7 @@ namespace JabbR.ContentProviders
                             }
                         where i.Content != null
                         select i).FirstOrDefault();
-            return item == null ? string.Empty : string.Format(contentWrapperFormat, item.Name, item.Content);
+            return item == null ? string.Empty : string.Format(contentWrapperFormat, item.Name, item.Name.Replace(' ', '_'), item.Content);
         }
 
 

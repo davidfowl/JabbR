@@ -198,6 +198,7 @@
 
         $('<ul/>').attr('id', 'users-' + roomId)
                   .addClass('users')
+                  .addClass('right-content')
                   .appendTo($chatArea).hide();
 
         $tabs.find('li')
