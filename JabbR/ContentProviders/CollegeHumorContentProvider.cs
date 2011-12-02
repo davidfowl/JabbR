@@ -16,6 +16,7 @@ namespace JabbR.ContentProviders
             }
         }
 
+
         public override IEnumerable<string> Domains
         {
             get { yield return "http://www.collegehumor.com"; }
@@ -32,6 +33,11 @@ namespace JabbR.ContentProviders
         protected override string GetTitle(HttpWebResponse response)
         {
             return response.ResponseUri.ToString();
+        }
+
+        public override string Name
+        {
+            get { return "College Humor"; }
         }
     }
 }

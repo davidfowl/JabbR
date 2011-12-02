@@ -22,5 +22,10 @@ namespace JabbR.ContentProviders
         {
             return response.ResponseUri.AbsoluteUri.StartsWith("http://imgur.com/", StringComparison.OrdinalIgnoreCase);
         }
+
+        public override string Name
+        {
+            get { return "Imgur"; }
+        }
     }
 }

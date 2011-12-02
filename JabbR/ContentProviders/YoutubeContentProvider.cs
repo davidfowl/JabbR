@@ -37,5 +37,10 @@ namespace JabbR.ContentProviders
         {
             return response.ResponseUri.ToString();
         }
+
+        public override string Name
+        {
+            get { return "YouTube"; }
+        }
     }
 }
