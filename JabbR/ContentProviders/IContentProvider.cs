@@ -7,5 +7,6 @@ namespace JabbR
     public interface IContentProvider
     {
         string GetContent(HttpWebResponse response);
+        string Name { get; }
     }
 }

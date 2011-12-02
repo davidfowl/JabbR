@@ -105,6 +105,24 @@
     background-position: right center;
 }
 
+#content-providers-list
+{
+   margin-top:2px;
+}
+
+#content-providers-list ul
+{
+    margin:0px;
+    padding:0px;
+    list-style:none;
+}
+#content-providers-list ul li
+{
+    float:left;
+    margin-left:5px;
+}
+
+
 #tabs {
     padding: 0;
     margin: 0px 0px 0px 5px;

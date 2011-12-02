@@ -48,5 +48,10 @@ namespace JabbR.ContentProviders
     captureDocumentWrite('http://pastie.org/{{0}}.js', 'http://pastie.org/{{0}}', $('#{0}'));
 </script>
 ";
+
+        public override string Name
+        {
+            get { return "Pastie"; }
+        }
     }
 }
