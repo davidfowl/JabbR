@@ -18,7 +18,7 @@ namespace JabbR.ContentProviders
             return requestTask.ContinueWith(task => ExtractContent((HttpWebResponse)task.Result));
         }
 
-        private readonly static string contentWrapperFormat = "<script>addContentProvider({{Name:'{0}'}});</script><div class='provided-content {1}'>{2}</div>";
+        private readonly static string contentWrapperFormat = "<div class='provided-content {1}'>{2}</div><script>addContentProvider({{Name:'{0}'}});</script>";
 
         private string ExtractContent(HttpWebResponse response)
         {
