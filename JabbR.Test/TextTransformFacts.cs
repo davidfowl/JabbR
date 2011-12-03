@@ -35,7 +35,7 @@ namespace JabbR.Test
 
                 Assert.True(result);
             }
-
+            
             [Fact]
             public void HashtagRegexMatchesHashtagInSubstring()
             {
