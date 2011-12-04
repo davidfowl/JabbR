@@ -21,7 +21,7 @@ namespace JabbR.ContentProviders
                 return result;
             }
 
-            return null;
+            return ContentProviderResultModel.Empty;
         }
 
         protected abstract ContentProviderResultModel GetCollapsibleContent(HttpWebResponse response);

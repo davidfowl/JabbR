@@ -44,7 +44,7 @@ namespace JabbR.ContentProviders
                     };
                 }
             }
-            return null;
+            return ContentProviderResultModel.Empty;
         }
 
         private static dynamic FetchDinner(int dinnerId)

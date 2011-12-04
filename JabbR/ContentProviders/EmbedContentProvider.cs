@@ -37,7 +37,7 @@ namespace JabbR.ContentProviders
             var args = ExtractParameters(response.ResponseUri);
             if (args == null || !args.Any())
             {
-                return null;
+                return ContentProviderResultModel.Empty;
             }
 
             return new ContentProviderResultModel()
