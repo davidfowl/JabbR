@@ -47,7 +47,7 @@ namespace JabbR.ContentProviders
                     Title = response.ResponseUri.AbsoluteUri
                 };
             }
-            return ContentProviderResultModel.Empty;
+            return null;
         }
 
         protected override bool IsValidContent(HttpWebResponse response)

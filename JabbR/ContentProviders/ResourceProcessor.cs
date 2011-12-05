@@ -21,7 +21,7 @@ namespace JabbR.ContentProviders
         private ContentProviderResultModel ExtractContent(HttpWebResponse response)
         {
             return _contentProviders.Value.Select(c => c.GetContent(response))
-                                          .FirstOrDefault(content => content != ContentProviderResultModel.Empty);
+                                          .FirstOrDefault(content => content != null);
         }
 
 

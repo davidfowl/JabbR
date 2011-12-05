@@ -288,7 +288,7 @@ namespace JabbR
                     }
 
                     
-                    if (task.Result == ContentProviderResultModel.Empty)
+                    if (task.Result == null)
                     {
                         continue;
                     }
