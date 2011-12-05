@@ -36,33 +36,15 @@
             return this.tab.hasClass('unread');
         };
 
-        this.getUnread = function () {
-            return $tab.data('unread') || 0;
-        };
-
         this.hasSeparator = function () {
             return this.messages.find('.message-separator').length > 0;
         };
 
         this.needsSeparator = function (focus) {
-            if (focus === true && this.isActive()) {
+            if (this.isActive()) {
                 return false;
             }
-            return this.isInitialized() && this.getUnread() === 0;
-        };
-
-        this.addSeparator = function () {
-            if (this.isLobby()) {
-                return;
-            }
-            templates.separator.tmpl().appendTo(this.messages);
-            this.scrollToBottom();
-        };
-
-        this.removeSeparator = function () {
-            this.messages.find('.message-separator').fadeOut(2000, function () {
-                $(this).remove();
-            });
+            return this.hasSeparator() === false;
         };
 
         this.updateUnread = function (isMentioned) {
@@ -113,8 +95,6 @@
         };
 
         this.makeActive = function () {
-            var hasUnread = this.hasUnread();
-
             this.tab.addClass('current')
                     .removeClass('unread')
                     .data('unread', 0)
@@ -128,19 +108,6 @@
             this.users.addClass('current')
                       .show();
 
-            // if no unread since last separator
-            // remove previous separator
-            if (!hasUnread) {
-                this.removeSeparator();
-            }
-        };
-
-        this.setInitialized = function () {
-            this.tab.data('initialized', true);
-        };
-
-        this.isInitialized = function () {
-            return this.tab.data('initialized') === true;
         };
 
         // Users
@@ -251,6 +218,18 @@
         });
     }
 
+    function handleScroll() {
+        var roomName = $(this).attr('id').substring(9);
+        var room = getRoomElements(roomName);
+
+        // remove separator once use has scrolled to bottom of messages list
+        if ($(this).isNearTheEnd() && room.hasSeparator() && room.isActive() && ui.hasFocus()) {
+            $(this).find('.message-separator').fadeOut(2000, function () {
+                $(this).remove();
+            });
+        }
+    }
+
     var ui = {
         initialize: function () {
             $chatArea = $('#chat-area');
@@ -309,18 +288,6 @@
                 return false;
             });
 
-            // handle click on notifications
-            $(document).on('click', '.notification a.info', function (ev) {
-                var $notification = $(this).closest('.notification');
-
-                if ($(this).hasClass('collapse')) {
-                    ui.collapseNotifications($notification);
-                }
-                else {
-                    ui.expandNotifications($notification);
-                }
-            });
-
             $submitButton.submit(function (ev) {
                 var msg = $.trim($newMessage.val());
 
@@ -335,7 +302,6 @@
                 // always scroll to bottom after new message sent
                 var room = getCurrentRoomElements();
                 room.scrollToBottom();
-                room.removeSeparator();
 
                 ev.preventDefault();
                 return false;
@@ -588,15 +554,6 @@
                 $previousMessage.addClass('continue');
             }
 
-            // check to see if room needs a separator
-            if (room.needsSeparator(ui.hasFocus())) {
-                // if there's an existing separator, remove it
-                if (room.hasSeparator()) {
-                    room.removeSeparator();
-                }
-                room.addSeparator();
-            }
-
             var $e = templates.message.tmpl(message).appendTo(room.messages);
         },
         addChatMessageContent: function (id, content, roomName) {
@@ -619,15 +576,23 @@
 
             $element = templates.notification.tmpl(message).appendTo(room.messages);
 
-            if (type === 'notification' && room.isLobby() === false) {
-                ui.collapseNotifications($element);
-            }
-
             if (nearEnd) {
                 ui.scrollToBottom(roomName);
             }
 
             return $element;
+        },
+        addSeparator: function (roomName) {
+            var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
+            if (room.isLobby()) {
+                return;
+            }
+            templates.separator.tmpl().appendTo(room.messages);
+            ui.scrollToBottom(roomName);
+        },
+        removeSeparator: function (roomName) {
+            var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
+            room.messages.find('.message-separator').remove();
         },
         hasFocus: function () {
             return ui.focus;
@@ -637,39 +602,6 @@
         },
         setCommands: function (commands) {
             ui.commands = commands;
-        },
-        setInitialized: function (roomName) {
-            var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
-            room.setInitialized();
-        },
-        collapseNotifications: function ($notification) {
-            // collapse multiple notifications
-            var $notifications = $notification.prevUntil(':not(.notification)');
-            if ($notifications.length > 3) {
-                $notifications
-                    .hide()
-                    .find('.info').text('');    // clear any prior text
-                $notification.find('.info')
-                    .text(' (plus ' + $notifications.length + ' hidden... click to expand)')
-                    .removeClass('collapse');
-            }
-        },
-        expandNotifications: function ($notification) {
-            // expand collapsed notifications
-            var $notifications = $notification.prevUntil(':not(.notification)'),
-                topBefore = $notification.position().top;
-
-            $notification.find('.info')
-                .text(' (click to collapse)')
-                .addClass('collapse');
-            $notifications.show();
-
-            var room = getCurrentRoomElements(),
-                topAfter = $notification.position().top,
-                scrollTop = room.messages.scrollTop();
-
-            // make sure last notification is visible
-            room.messages.scrollTop(scrollTop + topAfter - topBefore + $notification.height());
         }
     };
 

@@ -256,15 +256,6 @@ li.room:hover {
     margin-right: 95px;
 }
 
-.notification a.info {
-    color: #bbb;
-    font-style: italic;
-    text-decoration: none;
-}
-.notification a.info:visited {
-    color: inherit;
-}
-
 .message {
     border-bottom: 1px solid #eee;
 }
@@ -329,7 +320,7 @@ li.room:hover {
 
 .message-separator {
     height: 2px;
-    background-color: #88b7d6;
+    background-color: #164c85;
 }
 
 /* This stuff is to support TweetContentProvider, but should be extracted out if other content providers need custom CSS */

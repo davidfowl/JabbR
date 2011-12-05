@@ -287,8 +287,8 @@ namespace JabbR
                         continue;
                     }
 
-                    
-                    if (task.Result == null)
+
+                    if (task.Result == null || string.IsNullOrEmpty(task.Result.Content))
                     {
                         continue;
                     }

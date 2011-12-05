@@ -43,9 +43,6 @@
 
                         ui.addChatMessage(viewModel, room);
                     });
-                    // mark room as initialized to differentiate messages
-                    // that are added after initial population
-                    ui.setInitialized(room);
                     ui.scrollToBottom(room);
 
                     d.resolveWith(chat);
@@ -225,7 +222,6 @@
     };
 
     chat.addMessage = function (message, room) {
-
         var viewModel = getMessageViewModel(message);
         scrollIfNecessary(function () {
             ui.addChatMessage(viewModel, room);
