@@ -269,6 +269,7 @@
       <DependentUpon>201112092057338_InviteCodes.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\ChatClient.cs" />
+    <Compile Include="Models\ClientState.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\IChatService.cs" />

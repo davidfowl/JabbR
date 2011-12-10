@@ -41,6 +41,7 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="SignalR">
       <HintPath>..\packages\SignalR.Server.0.3.3\lib\net40\SignalR.dll</HintPath>
     </Reference>
@@ -58,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatFacts.cs" />
     <Compile Include="ChatServiceFacts.cs" />
     <Compile Include="CommandManagerFacts.cs" />
     <Compile Include="TextTransformFacts.cs" />
