@@ -2,15 +2,16 @@
 /// <reference path="Scripts/jQuery.tmpl.js" />
 /// <reference path="Scripts/jquery.cookie.js" />
 
-(function ($, window, utility) {
+(function ($, window, document, utility) {
     "use strict";
 
     var $chatArea = null,
         $tabs = null,
+        $document = $(document),
         $submitButton = null,
         $newMessage = null,
         $enableDisableToast = null,
-        $ui=null,
+        $ui = null,
         $sound = null,
         templates = null,
         app = null,
@@ -320,7 +321,7 @@
         return window.webkitNotifications;
     }
 
-    function toastMessage(message) {        
+    function toastMessage(message) {
         if (window.webkitNotifications && window.webkitNotifications.checkPermission() === 0) {
             // Replace any previous toast
             hideToast();
@@ -331,12 +332,12 @@
                     message.message);
 
             chromeToast.ondisplay = function () {
-                setTimeout(function() {
-                    chromeToast.cancel(); 
+                setTimeout(function () {
+                    chromeToast.cancel();
                 }, toastTimeOut);
             };
-                 
-            chromeToast.onclick = function() {
+
+            chromeToast.onclick = function () {
                 hideToast();
             };
 
@@ -349,11 +350,11 @@
             chromeToast.cancel();
         }
     }
-    
+
     function toggleEnableToast() {
         if (window.webkitNotifications) {
             if (!toastEnabled) {
-                window.webkitNotifications.requestPermission(function() {
+                window.webkitNotifications.requestPermission(function () {
                     $enableDisableToast.html('Disable notifications');
                     toastEnabled = true;
                 });
@@ -374,7 +375,7 @@
         var roomPreferences = preferences[roomName] || {};
 
         // Restore the preference
-        if(roomPreferences.hasSound === true) {
+        if (roomPreferences.hasSound === true) {
             $sound.removeClass('off');
         }
         else {
@@ -385,7 +386,7 @@
     function setPreference(roomName, name, value) {
         var roomPreferences = preferences[roomName];
 
-        if(!roomPreferences) {
+        if (!roomPreferences) {
             roomPreferences = {};
             preferences[roomName] = roomPreferences;
         }
@@ -410,17 +411,17 @@
         //lets store any events to be triggered as constants here to aid intellisense and avoid
         //string duplication everywhere
         events: {
-            closeRoom           : 'closeRoom',
-            prevMessage         : 'prevMessage',
-            openRoom            : 'openRoom',
-            nextMessage         : 'nextMessage',
-            activeRoomChanged   : 'activeRoomChanged',
-            scrollRoomTop       : 'scrollRoomTop',
-            typing              : 'typing',
-            sendMessage         : 'sendMessage',
-            focusit             : 'focusit',
-            blurit              : 'blurit',
-            preferencesChanged  : 'preferencesChanged'
+            closeRoom: 'closeRoom',
+            prevMessage: 'prevMessage',
+            openRoom: 'openRoom',
+            nextMessage: 'nextMessage',
+            activeRoomChanged: 'activeRoomChanged',
+            scrollRoomTop: 'scrollRoomTop',
+            typing: 'typing',
+            sendMessage: 'sendMessage',
+            focusit: 'focusit',
+            blurit: 'blurit',
+            preferencesChanged: 'preferencesChanged'
         },
 
         initialize: function (state) {
@@ -458,9 +459,9 @@
                     toastEnabled = true;
                 }
             }
-            
+
             // DOM events
-            $(document).on('click', 'h3.collapsible_title', function () {
+            $document.on('click', 'h3.collapsible_title', function () {
                 var $message = $(this).closest('.message'),
                     nearEnd = ui.isNearTheEnd();
 
@@ -471,11 +472,11 @@
                 });
             });
 
-            $(document).on('click', '#tabs li', function () {
+            $document.on('click', '#tabs li', function () {
                 ui.setActiveRoom($(this).data('name'))
             });
 
-            $(document).on('click', 'li.room', function () {
+            $document.on('click', 'li.room', function () {
                 var roomName = $(this).data('name');
 
                 navigateToRoom(roomName);
@@ -483,7 +484,7 @@
                 return false;
             });
 
-            $(document).on('click', '#tabs li .close', function (ev) {
+            $document.on('click', '#tabs li .close', function (ev) {
                 var roomName = $(this).closest('li').data('name');
 
                 $ui.trigger(ui.events.closeRoom, [roomName]);
@@ -493,7 +494,7 @@
             });
 
             // handle click on notifications
-            $(document).on('click', '.notification a.info', function (ev) {
+            $document.on('click', '.notification a.info', function (ev) {
                 var $notification = $(this).closest('.notification');
 
                 if ($(this).hasClass('collapse')) {
@@ -525,10 +526,10 @@
                 return false;
             });
 
-            $sound.click(function() {
+            $sound.click(function () {
                 var room = getCurrentRoomElements();
 
-                if(!room.isLobby()){
+                if (!room.isLobby()) {
                     $(this).toggleClass('off');
 
                     // Store the preference
@@ -859,7 +860,7 @@
                 // Always play if the window does not have focus.
                 if (ui.focus === false) {
                     ui.notify();
-                } 
+                }
                 else {
                     // if the window has focus only play if the message isn't to the active room
                     if (!room.isActive()) {
@@ -946,12 +947,12 @@
             // make sure last notification is visible
             room.messages.scrollTop(scrollTop + topAfter - topBefore + $notification.height());
         },
-        getState: function() {
+        getState: function () {
             return preferences;
         },
         notify: function () {
             var hasSound = getActivePreference('hasSound');
-            if(hasSound === true) {
+            if (hasSound === true) {
                 $('#noftificationSound')[0].play();
             }
         }
@@ -961,4 +962,4 @@
         window.chat = {};
     }
     window.chat.ui = ui;
-})(jQuery, window, window.chat.utility);
+})(jQuery, window, window.document, window.chat.utility);
