@@ -105,6 +105,9 @@ namespace JabbR.Services
 
         public ChatRoom AddRoom(ChatUser user, string name)
         {
+            if (user.OwnedRooms.Count >= user.RoomAllowance)
+                throw new InvalidOperationException("Max room number has been reached");
+
             if (name.Equals("Lobby", StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException("Lobby is not a valid chat room.");

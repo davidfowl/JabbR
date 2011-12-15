@@ -451,6 +451,10 @@ li.room:hover {
     border: 1px solid #DDD;
     padding: 5px;
 }
+/*limit the width of image*/
+.collapsible_box img {
+    max-width: 640px;
+}
 
 /* CLEAR FIX */
 .clearfix:after {
