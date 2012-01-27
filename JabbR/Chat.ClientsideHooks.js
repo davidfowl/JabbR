@@ -63,7 +63,6 @@
         }
     });
 
-
     function interceptMessage(msg) {
         for (var i in plugins) {
             var matches = [];
