@@ -102,6 +102,7 @@
   <ItemGroup>
     <Content Include="apple-touch-icon.png" />
     <Content Include="Chat.bbcnews.css" />
+    <Content Include="Chat.ClientsideHooks.js" />
     <Content Include="Chat.css" />
     <Content Include="Chat.documentOnWrite.js" />
     <Content Include="Chat.js" />

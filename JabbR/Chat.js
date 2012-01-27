@@ -642,20 +642,23 @@
     });
 
     $ui.bind(ui.events.sendMessage, function (ev, msg) {
-        chat.send(msg)
+        msg = interceptor.interceptMessage(msg);
+        if (msg) {
+            chat.send(msg)
             .fail(function (e) {
                 ui.addMessage(e, 'error');
             });
 
-        clearTimeout(typingTimeoutId);
-        typingTimeoutId = 0;
-        chat.typing(false);
+            clearTimeout(typingTimeoutId);
+            typingTimeoutId = 0;
+            chat.typing(false);
 
-        // Store message history
-        messageHistory.push(msg);
+            // Store message history
+            messageHistory.push(msg);
 
-        // REVIEW: should this pop items off the top after a certain length?
-        historyLocation = messageHistory.length;
+            // REVIEW: should this pop items off the top after a certain length?
+            historyLocation = messageHistory.length;
+        }
     });
 
     $ui.bind(ui.events.focusit, function () {
