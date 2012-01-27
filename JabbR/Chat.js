@@ -642,6 +642,7 @@
     });
 
     $ui.bind(ui.events.sendMessage, function (ev, msg) {
+        msg = interceptor.interceptMessage(msg);
         chat.send(msg)
             .fail(function (e) {
                 ui.addMessage(e, 'error');
