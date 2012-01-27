@@ -12,7 +12,8 @@
     });
 
     plugins.push({
-        description: "rungist - type /rungist [gistnumber] to run a file named jabbr.js from that gist",
+        description: "rungist - type /rungist [gistnumber] to run a file named jabbr.js from that gist. <br/>"+
+            "For example type /rungist 1688574 to run <a href='https://gist.github.com/1688574' target='_blank'>this gist</a> and type /help again",
         filter: /(^\/rungist )(\w+$)/gi,
         func: function (input, match) {
             runGist(match[0][2]);
