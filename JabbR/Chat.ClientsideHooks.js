@@ -90,8 +90,6 @@
         });
     }
 
-
-
     return {
         plugins: plugins,
         interceptMessage: interceptMessage,
