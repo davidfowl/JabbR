@@ -213,9 +213,9 @@
 
     function getRoomElements(roomName) {
         var roomId = getRoomId(roomName);
-        return new Room($('#tabs-' + roomId),
-                        $('#users-' + roomId),
-                        $('#messages-' + roomId));
+        return new Room($('[id="tabs-' + roomId + '"]'),
+                        $('[id="users-' + roomId + '"]'),
+                        $('[id="messages-' + roomId + '"]'));
     }
 
     function getCurrentRoomElements() {
