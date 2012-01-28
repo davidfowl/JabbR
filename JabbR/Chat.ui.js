@@ -181,6 +181,9 @@
             this.users.addClass('current')
                       .show();
 
+            // setting focus to the message box #287
+            $newMessage.focus();
+
             // if no unread since last separator
             // remove previous separator
             if (currUnread <= lastUnread) {
