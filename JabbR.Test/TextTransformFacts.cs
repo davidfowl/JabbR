@@ -146,5 +146,34 @@ namespace JabbR.Test
                 Assert.Equal("message <a rel=\"nofollow external\" target=\"_blank\" href=\"https://www.jabbr.net\" title=\"https://www.jabbr.net\">https://www.jabbr.net</a> continues on", result);
             }
         }
+
+        public class ParseEmojisFacts
+        {
+            [Fact]
+            public void SingleEmojiIsTransformed()
+            {
+                //arrange
+                var message = "JabbR has Emoji support :thumbsup:";
+
+                //act
+                var result = TextTransform.TransformEmojis(message);
+
+                //assert
+                Assert.Equal("JabbR has Emoji support <img src=\"/Content/images/emojis/thumbsup.png\" alt=\":thumbsup:\" title=\":thumbsup:\" height=\"20\" width=\"20\" align=\"absmiddle\" />", result);
+            }
+
+            [Fact]
+            public void MultipleEmojisAreTransformed()
+            {
+                //arrange
+                var message = "JabbR has Emoji support :thumbsup::ok_hand:";
+
+                //act
+                var result = TextTransform.TransformEmojis(message);
+
+                //assert
+                Assert.Equal("JabbR has Emoji support <img src=\"/Content/images/emojis/thumbsup.png\" alt=\":thumbsup:\" title=\":thumbsup:\" height=\"20\" width=\"20\" align=\"absmiddle\" /><img src=\"/Content/images/emojis/ok_hand.png\" alt=\":ok_hand:\" title=\":ok_hand:\" height=\"20\" width=\"20\" align=\"absmiddle\" />", result);
+            }
+        }
     }
 }
