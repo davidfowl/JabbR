@@ -192,12 +192,15 @@ namespace JabbR
             string id = Caller.id;
             ChatUser user = _repository.VerifyUserId(id);
 
-            var rooms = _repository.GetAllowedRooms(user).Select(r => new RoomViewModel
-            {
-                Name = r.Name,
-                Count = r.Users.Count(u => u.Status != (int)UserStatus.Offline),
-                Private = r.Private
-            });
+            var rooms = _repository.GetAllowedRooms(user)
+                .ToArray()
+                .OrderByActivity()
+                .Select(r => new RoomViewModel
+                {
+                    Name = r.Name,
+                    Count = r.Users.Count(u => u.Status != (int)UserStatus.Offline),
+                    Private = r.Private
+                });
 
             return rooms;
         }

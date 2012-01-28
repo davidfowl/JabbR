@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JabbR.Services;
+using System.Diagnostics;
 
 namespace JabbR.Models
 {
@@ -23,6 +24,46 @@ namespace JabbR.Models
                    where !r.Private ||
                          r.Private && r.AllowedUsers.Any(u => u.Id == userId)
                    select r;
+        }
+
+        public static IEnumerable<ChatRoom> OrderByActivity(this IEnumerable<ChatRoom> rooms)
+        {
+            var roomsRet = rooms.Select(r => new
+            {
+                Room = r,
+                TimeDistance = r.Messages
+                    .OrderByDescending(m => m.When)
+                    .Take(10)
+                    .AggregateDistanceBetweenMessages(),
+                TimeSinceLast = r.Messages.Max(m => m.When)
+            }).OrderBy(n => n.TimeDistance).Select(n => n.Room);
+            return roomsRet;
+
+        }
+        private static TimeSpan AggregateDistanceBetweenMessages(this IEnumerable<ChatMessage> input)
+        {
+            if (input.Count() > 0)
+            {
+                TimeSpan ret = default(TimeSpan);
+                ChatMessage previous = null;
+                foreach(var current in input)
+                {
+                    if (previous == null)
+                    {
+                        ret = ret.Add(DateTime.Now - current.When);
+                    }
+                    else
+                    {
+                        ret = ret.Add(previous.When - current.When);
+                    }
+                    previous = current;
+                }
+                return ret;
+            }
+            else
+            {
+                return TimeSpan.MaxValue;
+            }
         }
 
         public static ChatRoom VerifyUserRoom(this IJabbrRepository repository, ChatUser user, string roomName)
