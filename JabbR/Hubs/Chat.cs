@@ -147,7 +147,8 @@ namespace JabbR
         {
             var textTransform = new TextTransform(_repository);
             string message = textTransform.Parse(content);
-            return TextTransform.TransformAndExtractUrls(message, out links);
+            message = TextTransform.TransformAndExtractUrls(message, out links);
+            return TextTransform.TransformEmojis(message);
         }
 
         public void Disconnect()
