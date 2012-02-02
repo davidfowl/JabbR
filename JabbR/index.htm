@@ -23,6 +23,7 @@
     <script src="Scripts/jquery.timeago.0.10.js" type="text/javascript"></script>
     <script src="Scripts/jquery.captureDocumentWrite.min.js" type="text/javascript"></script>
     <script src="Scripts/jquery.sortElements.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.isotope.js" type="text/javascript"></script>
     <script src="Scripts/quicksilver.js" type="text/javascript"></script>
     <script src="Scripts/jquery.livesearch.js" type="text/javascript"></script>
     <script src="Scripts/Markdown.Converter.js" type="text/javascript"></script>
@@ -109,6 +110,17 @@
                 <span class="flag{{if flagClass}} ${flagClass}{{/if}}" {{if flag}}title="${country}"{{/if}}></span>
             </div>
         </li>
+    </script>
+    <script id="new-userlist-template" type="text/x-jquery-tmpl">
+        <div id="${id}-container">
+            <div class="userlist-header">
+                ${listname}
+                <div class="displaycontrol"></div>
+            </div>
+            <div>
+                <ul id="${id}" />
+            </div>
+        </div>
     </script>
     <script id="new-tab-template" type="text/x-jquery-tmpl">
         <li id="tabs-${id}" class="room" data-name="${name}">

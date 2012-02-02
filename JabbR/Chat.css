@@ -127,9 +127,10 @@
     width: 16px;
     display: inline-block;
 }
-
+.userlist-header {
+    font-weight: bold;
+}
 .users {
-    margin-left: 0px;
     padding-left: 0px;
     font-size: small;
     position: absolute;
@@ -145,7 +146,11 @@
 #users-lobby {
     top: 85px;
 }
-
+.users ul {
+    margin-left: 0px;
+    padding-left: 0px;
+    margin-top: 0px;
+}
 .users li {
     padding: 4px;
     list-style: none;
@@ -1324,7 +1329,6 @@ li.clearfix {
         left: auto;
         bottom: 70px;
     }
-
 
     .users span {
         display: none;
