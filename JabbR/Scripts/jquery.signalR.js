@@ -53,16 +53,17 @@
             /// <summary>Starts the connection</summary>
             /// <param name="options" type="Object">Options map</param>
             /// <param name="callback" type="Function">A callback function to execute when the connection has started</param>
-            /// <returns type="signalR" />
             var connection = this,
                 config = {
                     transport: "auto"
                 },
-                initialize;
+                initialize,
+                promise = $.Deferred();
 
             if (connection.transport) {
                 // Already started, just return
-                return connection;
+                promise.resolve(connection);
+                return promise;
             }
 
             if ($.type(options) === "function") {
@@ -75,18 +76,19 @@
                 }
             }
 
-            if ($.type(callback) === "function") {
-                $(connection).bind("onStart", function (e, data) {
+            $(connection).bind("onStart", function (e, data) {
+                if ($.type(callback) === "function") {
                     callback.call(connection);
-                });
-            }
+                }
+                promise.resolve(connection);
+            });
 
             initialize = function (transports, index) {
                 index = index || 0;
                 if (index >= transports.length) {
                     if (!connection.transport) {
                         // No transport initialized successfully
-                        throw "SignalR: No transport could be initialized successfully. Try specifying a different transport or none at all for auto initialization.";
+                        promise.reject("SignalR: No transport could be initialized successfully. Try specifying a different transport or none at all for auto initialization.");
                     }
                     return;
                 }
@@ -149,7 +151,7 @@
                 });
             }, 0);
 
-            return connection;
+            return promise;
         },
 
         starting: function (callback) {
@@ -223,6 +225,17 @@
             /// <returns type="signalR" />
             var connection = this;
             $(connection).bind("onDisconnect", function (e, data) {
+                callback.call(connection);
+            });
+            return connection;
+        },
+
+        reconnect: function (callback) {
+            /// <summary>Adds a callback that will be invoked when the underlying transport reconnects</summary>
+            /// <param name="callback" type="Function">A callback function to execute when the connection is restored</param>
+            /// <returns type="signalR" />
+            var connection = this;
+            $(connection).bind("onReconnect", function (e, data) {
                 callback.call(connection);
             });
             return connection;
@@ -531,6 +544,10 @@
                         if (onSuccess) {
                             onSuccess();
                         }
+
+                        if (reconnecting) {
+                            $connection.trigger("onReconnect");
+                        }
                     }
                 }, false);
 
@@ -626,10 +643,7 @@
                 frame.prop("src", url);
                 transportLogic.foreverFrame.connections[frameId] = connection;
 
-                frame.bind("load", function () {
-                    log("Forever frame iframe load event fired, reconnecting");
-                    that.reconnect(connection);
-                }).bind("readystatechange", function () {
+                frame.bind("readystatechange", function () {
                     if ($.inArray(this.readyState, ["loaded", "complete"]) >= 0) {
                         log("Forever frame iframe readyState changed to " + this.readyState + ", reconnecting");
                         that.reconnect(connection);
@@ -675,6 +689,11 @@
 
             stop: function (connection) {
                 if (connection.frame) {
+                    if (connection.frame.stop) {
+                        connection.frame.stop();
+                    } else if (connection.frame.document && connection.frame.document.execCommand) {
+                        connection.frame.document.execCommand("Stop");
+                    }
                     $(connection.frame).remove();
                     delete transportLogic.foreverFrame.connections[connection.frameId];
                     connection.frame = null;
@@ -693,6 +712,10 @@
                     connection.onSuccess();
                     connection.onSuccess = null;
                     delete connection.onSuccess;
+                }
+                else {
+                    // If there's no onSuccess handler we assume this is a reconnect
+                    $(connection).trigger("onReconnect");
                 }
             }
         },
@@ -717,6 +740,12 @@
                         var messageId = instance.messageId,
                             connect = (messageId === null),
                             url = transportLogic.getUrl(instance, that.name, !connect);
+
+                        if (!connect) {
+                            window.setTimeout(function () {
+                                $(instance).trigger("onReconnect");
+                            }, 100);
+                        }
 
                         instance.pollXhr = $.ajax(url, {
                             global: false,

@@ -111,6 +111,7 @@
     <Content Include="Chat.twitter.js" />
     <Content Include="Chat.ui.js" />
     <Content Include="Chat.utility.js" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\ajax-loader.png" />
     <Content Include="Content\images\close-icon-hover.png" />
     <Content Include="Content\images\close-icon.png" />
@@ -705,6 +706,7 @@
     <Content Include="Mobile.css" />
     <Content Include="mobile.htm" />
     <Content Include="Content\sounds\notification.wav" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\jquery.history.js" />
     <Content Include="Scripts\jquery-1.7-vsdoc.js" />
@@ -732,6 +734,7 @@
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\Markdown.Converter.js" />
+    <Content Include="Scripts\modernizr.js" />
     <Content Include="Scripts\quicksilver.js" />
     <Content Include="Scripts\qunit.js" />
     <Content Include="Scripts\sammy-latest.min.js" />
@@ -768,6 +771,7 @@
     <Compile Include="ContentProviders\GoogleDocsPresentationsContentProvider.cs" />
     <Compile Include="ContentProviders\GoogleMapsContentProvider.cs" />
     <Compile Include="ContentProviders\JoinMeContentProvider.cs" />
+    <Compile Include="ContentProviders\MixcloudContentProvider.cs" />
     <Compile Include="ContentProviders\NerdDinnerContentProvider.cs" />
     <Compile Include="ContentProviders\NugetNuggetContentProvider.cs" />
     <Compile Include="ContentProviders\SoundCloudContentProvider.cs" />

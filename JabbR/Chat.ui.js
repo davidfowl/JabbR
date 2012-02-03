@@ -23,9 +23,11 @@
         $login = null,
         name,
         lastCycledMessage = null,
+        $updatePopup = null,
         $window = $(window),
         $document = $(document),
-        $roomFilterInput = null;
+        $roomFilterInput = null,
+        updateTimeout = 15000;
 
     function getRoomId(roomName) {
         return escape(roomName.toLowerCase()).replace(/[^a-z0-9]/, '_');
@@ -603,6 +605,7 @@
             $toast = $('#preferences .toast');
             $sound = $('#preferences .sound');
             $login = $('.janrainEngage');
+            $updatePopup = $('#jabbr-update');
             focus = true;
             $roomFilterInput = $('#users-filter');
             templates = {
@@ -1035,21 +1038,30 @@
                     $(this).remove();
                 });
         },
-        setUserTyping: function (userViewModel, roomName, isTyping) {
+        setUserTyping: function (userViewModel, roomName) {
             var room = getRoomElements(roomName),
-                $user = room.getUser(userViewModel.name);
+                $user = room.getUser(userViewModel.name),
+                timeout = null;
 
             // Do not show typing indicator for current user
             if (userViewModel.name === ui.getUserName()) {
                 return;
             }
 
-            if (isTyping) {
-                $user.addClass('typing');
+            // Mark the user as typing
+            $user.addClass('typing');
+            var oldTimeout = $user.data('typing');
+
+            if (oldTimeout) {
+                clearTimeout(oldTimeout);
             }
-            else {
+
+            timeout = window.setTimeout(function () {
                 $user.removeClass('typing');
-            }
+            },
+            3000);
+
+            $user.data('typing', timeout);
         },
         prependChatMessages: function (messages, roomName) {
             var room = getRoomElements(roomName),
@@ -1262,6 +1274,15 @@
         },
         showLogin: function () {
             $login.click();
+        },
+        showUpdateUI: function () {
+            $updatePopup.modal();
+
+            window.setTimeout(function () {
+                // Reload the page
+                document.location = document.location.pathname;
+            }, 
+            updateTimeout);
         },
         changeNote: function (userViewModel, roomName) {
             var room = getRoomElements(roomName),

@@ -14,6 +14,8 @@
         isUnreadMessageForUser = false,
         focus = true,
         loadingHistory = false,
+        checkingStatus = false,
+        typing = false,
         typingTimeoutId = null,
         $ui = $(ui);
 
@@ -413,8 +415,20 @@
     chat.showUserInfo = function (userInfo) {
         var lastActivityDate = userInfo.LastActivity.fromJsonDate();
         var status = "Currently " + userInfo.Status;
+        if (userInfo.IsAfk) {
+            status += userInfo.Status == 'Active' ? ' but ' : ' and ';
+            status += ' is Afk';
+        }
         ui.addMessage('User information for ' + userInfo.Name +
             " (" + status + " - last seen " + $.timeago(lastActivityDate) + ")", 'list-header');
+
+        if (userInfo.AfkNote) {
+            ui.addMessage('Afk: ' + userInfo.AfkNote, 'list-item');
+        }
+        else if (userInfo.Note) {
+            ui.addMessage('Note: ' + userInfo.Note, 'list-item');
+        }
+
         chat.showUsersOwnedRoomList(userInfo.Name, userInfo.OwnedRooms);
     };
 
@@ -481,9 +495,9 @@
         ui.addMessage('Your name is now ' + user.Name, 'notification', this.activeRoom);
     };
 
-    chat.setTyping = function (user, room, isTyping) {
+    chat.setTyping = function (user, room) {
         var viewModel = getUserViewModel(user);
-        ui.setUserTyping(viewModel, room, isTyping);
+        ui.setUserTyping(viewModel, room);
     };
 
     chat.sendMeMessage = function (name, message, room) {
@@ -622,31 +636,28 @@
             return;
         }
 
-        // Clear any previous timeout
-        if (typingTimeoutId) {
-            clearTimeout(typingTimeoutId);
-        }
-        else {
-            // Otherwise, mark as typing
-            chat.typing(true);
-        }
+        if (checkingStatus === false && typing === false) {
+            typing = true;
 
-        // Set timeout to turn off
-        typingTimeoutId = window.setTimeout(function () {
-            typingTimeoutId = 0;
-            chat.typing(false);
-        }, 3000);
+            chat.typing(chat.activeRoom);
+
+            window.setTimeout(function () {
+                typing = false;
+            },
+            2500);
+        }
     });
 
     $ui.bind(ui.events.sendMessage, function (ev, msg) {
-        chat.send(msg)
+        chat.send(msg, chat.activeRoom)
+            .done(function (requiresUpdate) {
+                if (requiresUpdate === true) {
+                    ui.showUpdateUI();
+                }
+            })
             .fail(function (e) {
                 ui.addMessage(e, 'error');
             });
-
-        clearTimeout(typingTimeoutId);
-        typingTimeoutId = 0;
-        chat.typing(false);
 
         // Store message history
         messageHistory.push(msg);
@@ -668,7 +679,7 @@
     });
 
     $ui.bind(ui.events.openRoom, function (ev, room) {
-        chat.send('/join ' + room)
+        chat.send('/join ' + room, chat.activeRoom)
             .fail(function (e) {
                 ui.setActiveRoom('Lobby');
                 ui.addMessage(e, 'error');
@@ -676,7 +687,7 @@
     });
 
     $ui.bind(ui.events.closeRoom, function (ev, room) {
-        chat.send('/leave ' + room)
+        chat.send('/leave ' + room, chat.activeRoom)
             .fail(function (e) {
                 ui.addMessage(e, 'error');
             });
@@ -761,6 +772,29 @@
                         });
                 });
         });
+
+        connection.hub.reconnect(function () {
+            if (checkingStatus === true) {
+                return;
+            }
+
+            checkingStatus = true;
+
+            chat.checkStatus()
+                .done(function (requiresUpdate) {
+                    if (requiresUpdate === true) {
+                        ui.showUpdateUI();
+                    }
+                })
+                .always(function () {
+                    checkingStatus = false;
+                });
+        });
+
+        connection.hub.disconnect(function () {
+            connection.hub.start();
+        });
+
     });
 
 })(jQuery, $.connection, window, window.chat.ui);
