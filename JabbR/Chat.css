@@ -508,6 +508,10 @@ li.room:hover {
     padding: 5px;
 }
 
+.collapsible_box img {
+    max-width: 620px;
+}
+
 pre.multiline {
     white-space: pre-wrap; /* css-3 */
     white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
