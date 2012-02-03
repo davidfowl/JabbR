@@ -54,19 +54,17 @@
         chat.getRoomInfo(room)
                 .done(function (roomInfo) {
                     $.each(roomInfo.Users, function () {
-                        var viewModel = getUserViewModel(this);
-
-                        ui.addUser(viewModel, room);
-                        ui.setUserActivity(viewModel);
+                        var userViewModel = getUserViewModel(this);
+                        ui.addUser(userViewModel, room);
+                        ui.setUserActivity(userViewModel);
                     });
-
+                    
                     $.each(roomInfo.Owners, function () {
                         ui.setRoomOwner(this, room);
                     });
 
                     $.each(roomInfo.RecentMessages, function () {
                         var viewModel = getMessageViewModel(this);
-
                         ui.addChatMessage(viewModel, room);
                     });
                     // mark room as initialized to differentiate messages
@@ -317,7 +315,6 @@
 
     chat.changeUserName = function (oldName, user, room) {
         ui.changeUserName(oldName, user, room);
-
         if (!isSelf(user)) {
             ui.addMessage(oldName + '\'s nick has changed to ' + user.Name, 'notification', room);
         }
@@ -577,7 +574,7 @@
                 return a.Count > b.Count ? -1 : 1;
             });
 
-            $.each(rooms, function () {
+            $.each(sorted, function () {
                 ui.addMessage(this.Name + ' (' + this.Count + ')', 'list-item');
             });
         }
