@@ -622,6 +622,7 @@
     <Content Include="Content\images\icons-36-black.png" />
     <Content Include="Content\images\icons-36-white.png" />
     <Content Include="Content\images\lock.png" />
+    <Content Include="Content\images\state.gif" />
     <Content Include="Content\images\toast-off.png" />
     <Content Include="Content\images\toast-on.png" />
     <Content Include="Content\images\pop-in-icon.png" />
@@ -708,12 +709,11 @@
     <Content Include="Content\sounds\notification.wav" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="robots.txt" />
+    <Content Include="Scripts\jquery-ui-1.8.17.min.js" />
     <Content Include="Scripts\jquery.history.js" />
     <Content Include="Scripts\jquery-1.7-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.js" />
     <Content Include="Scripts\jquery-1.7.min.js" />
-    <Content Include="Scripts\jquery-ui-1.8.16.js" />
-    <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
     <Content Include="Scripts\jquery.autotabcomplete.js" />
     <Content Include="Scripts\jquery.captureDocumentWrite.js" />
     <Content Include="Scripts\jquery.captureDocumentWrite.min.js" />

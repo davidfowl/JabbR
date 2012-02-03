@@ -22,3 +22,9 @@
 .modal-footer:after{clear:both;}
 .modal-footer .btn{float:right;margin-left:5px;margin-bottom:0;}
 .close{float:right;font-size:20px;font-weight:bold;line-height:18px;color:#000000;text-shadow:0 1px 0 #ffffff;opacity:0.2;filter:alpha(opacity=20);}.close:hover{color:#000000;text-decoration:none;opacity:0.4;filter:alpha(opacity=40);cursor:pointer;}
+
+.label{padding:1px 3px 2px;font-size:9.75px;font-weight:bold;color:#ffffff;text-transform:uppercase;background-color:#999999;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+.label-important{background-color:#b94a48;}
+.label-warning{background-color:#f89406;}
+.label-success{background-color:#468847;}
+.label-info{background-color:#3a87ad;}
