@@ -9,6 +9,7 @@ using SignalR;
 using SignalR.Hosting;
 using SignalR.Hubs;
 using Xunit;
+using JabbR.Commands;
 
 namespace JabbR.Test
 {
