@@ -71,6 +71,11 @@
                         ui.addChatMessage(viewModel, room);
                     });
 
+                    // load more messages if no scrollbar is visible
+                    if (!ui.hasScrollbar(room) && roomInfo.RecentMessages.length > 0) {
+                        $ui.trigger(ui.events.scrollRoomTop, [{ name: room, messageId: roomInfo.RecentMessages[0].Id}]);
+                    };
+
                     ui.changeRoomTopic(roomInfo);
                     // mark room as initialized to differentiate messages
                     // that are added after initial population

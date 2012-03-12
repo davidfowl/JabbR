@@ -1373,6 +1373,10 @@
         hasFocus: function () {
             return ui.focus;
         },
+        hasScrollbar: function (roomName) {
+            var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
+            return room.messages[0].scrollHeight > room.messages[0].clientHeight;
+        },
         getCommands: function () {
             return ui.commands;
         },
