@@ -71,11 +71,6 @@
                         ui.addChatMessage(viewModel, room);
                     });
 
-                    // load more messages if no scrollbar is visible
-                    if (!ui.hasScrollbar(room) && roomInfo.RecentMessages.length > 0) {
-                        $ui.trigger(ui.events.scrollRoomTop, [{ name: room, messageId: roomInfo.RecentMessages[0].Id}]);
-                    };
-
                     ui.changeRoomTopic(roomInfo);
                     // mark room as initialized to differentiate messages
                     // that are added after initial population
@@ -176,6 +171,25 @@
         ui.updateUnread(room, isMentioned);
 
         updateTitle();
+    }
+
+    function populatePreviousMessages(roomInfo) {
+        // Do nothing if we're loading history already
+        if (loadingHistory === true) {
+            return;
+        }
+
+        loadingHistory = true;
+
+        // TODO: Show a little animation so the user experience looks fancy
+        chat.getPreviousMessages(roomInfo.messageId)
+            .done(function (messages) {
+                ui.prependChatMessages($.map(messages, getMessageViewModel), roomInfo.name);
+                loadingHistory = false;
+            })
+            .fail(function () {
+                loadingHistory = false;
+            });
     }
 
     // Room commands
@@ -774,8 +788,8 @@
         ui.setMessage(messageHistory[historyLocation]);
     });
 
-    $ui.bind(ui.events.activeRoomChanged, function (ev, room) {
-        if (room === 'Lobby') {
+    $ui.bind(ui.events.activeRoomChanged, function (ev, roomInfo) {
+        if (roomInfo.name === 'Lobby') {
             populateLobbyRooms();
 
             // Remove the active room
@@ -783,30 +797,20 @@
         }
         else {
             // When the active room changes update the client state and the cookie
-            chat.activeRoom = room;
+            chat.activeRoom = roomInfo.name;
+
+            // load more messages if no scrollbar is visible
+            if (!ui.hasScrollbar(roomInfo.name) && roomInfo.messageId !== null) {
+                populatePreviousMessages(roomInfo);
+            };
         }
 
-        ui.scrollToBottom(room);
+        ui.scrollToBottom(roomInfo.name);
         updateCookie();
     });
 
     $ui.bind(ui.events.scrollRoomTop, function (ev, roomInfo) {
-        // Do nothing if we're loading history already
-        if (loadingHistory === true) {
-            return;
-        }
-
-        loadingHistory = true;
-
-        // TODO: Show a little animation so the user experience looks fancy
-        chat.getPreviousMessages(roomInfo.messageId)
-            .done(function (messages) {
-                ui.prependChatMessages($.map(messages, getMessageViewModel), roomInfo.name);
-                loadingHistory = false;
-            })
-            .fail(function () {
-                loadingHistory = false;
-            });
+        populatePreviousMessages(roomInfo);
     });
 
     $(ui).bind(ui.events.preferencesChanged, function (ev) {
