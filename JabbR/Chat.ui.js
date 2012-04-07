@@ -506,6 +506,19 @@
         $.history.load('/rooms/' + roomName);
     }
 
+    function getNextOpenRoom() {
+        var $currentRoomTab = $tabs.find("li.current"),
+            $nextTab = null,
+            nextRoomName = null;
+
+        $nextTab = $currentRoomTab.next();
+        if ($nextTab.length === 0) {
+            $nextTab = $tabs.find("li:first");
+        }
+        nextRoomName = $nextTab.data("name");
+        navigateToRoom(nextRoomName);
+    }
+    
     function processMessage(message) {
         var isFromCollapibleContentProvider = message.message.indexOf('class="collapsible_box"') > -1;
         message.message = isFromCollapibleContentProvider ? message.message : utility.parseEmojis(message.message);
@@ -782,6 +795,10 @@
                 else {
                     ui.expandNotifications($notification);
                 }
+            });
+
+            $(window).keybind('keydown', {
+                'S-Tab': getNextOpenRoom
             });
 
             $submitButton.click(function (ev) {
