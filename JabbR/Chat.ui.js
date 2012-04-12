@@ -1026,9 +1026,15 @@
 
             loadRoomPreferences(roomName);
 
+            var $child = room.messages.children('.message:first');
+            var messageId = null;
+            if ($child.length > 0) {
+                messageId = $child.attr('id').substr(2); // Remove the "m-"
+            }
+
             if (room.isActive()) {
                 // Still trigger the event (just do less overall work)
-                $ui.trigger(ui.events.activeRoomChanged, [roomName]);
+                $ui.trigger(ui.events.activeRoomChanged, [{ name: roomName, messageId: messageId}]);
                 return true;
             }
 
@@ -1040,7 +1046,7 @@
                 room.makeActive();
 
                 document.location.hash = '#/rooms/' + roomName;
-                $ui.trigger(ui.events.activeRoomChanged, [roomName]);
+                $ui.trigger(ui.events.activeRoomChanged, [{ name: roomName, messageId: messageId}]);
                 return true;
             }
 
@@ -1372,6 +1378,10 @@
         },
         hasFocus: function () {
             return ui.focus;
+        },
+        hasScrollbar: function (roomName) {
+            var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
+            return room.messages[0].scrollHeight > room.messages[0].clientHeight;
         },
         getCommands: function () {
             return ui.commands;
