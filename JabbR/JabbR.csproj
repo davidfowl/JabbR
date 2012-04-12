@@ -107,6 +107,10 @@
   <ItemGroup>
     <Content Include="apple-touch-icon.png" />
     <EmbeddedResource Include="Elmah\Elmah.SqlServer.sql" />
+    <Content Include="App_Data\Jabbr.mdf" />
+    <Content Include="App_Data\Jabbr_log.ldf">
+      <DependentUpon>Jabbr.mdf</DependentUpon>
+    </Content>
     <Content Include="Chat.bbcnews.css" />
     <Content Include="Chat.css" />
     <Content Include="Chat.documentOnWrite.js" />
