@@ -132,7 +132,7 @@ namespace JabbR.App_Start
             }
 
             // Only run migrations for SQL server (Sql ce not supported as yet)
-            var settings = new Settings();
+            var settings = new MigrationsConfiguration();
             var migrator = new DbMigrator(settings);
             migrator.Update();
         }
