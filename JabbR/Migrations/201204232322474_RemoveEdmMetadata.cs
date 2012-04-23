@@ -1,4 +1,4 @@
-namespace JabbR.Migrations
+namespace JabbR.Models.Migrations
 {
     using System.Data.Entity.Migrations;
     

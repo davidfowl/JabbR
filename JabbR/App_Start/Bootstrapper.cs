@@ -14,7 +14,6 @@ using JabbR.Migrations;
 using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
-using Microsoft.CSharp.RuntimeBinder;
 using Ninject;
 using RouteMagic;
 using SignalR;
