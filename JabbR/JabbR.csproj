@@ -863,10 +863,6 @@
     <Compile Include="Migrations\201204231611225_Indexes.Designer.cs">
       <DependentUpon>201204231611225_Indexes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201204232322474_RemoveEdmMetadata.cs" />
-    <Compile Include="Migrations\201204232322474_RemoveEdmMetadata.Designer.cs">
-      <DependentUpon>201204232322474_RemoveEdmMetadata.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\ChatClient.cs">
       <SubType>Code</SubType>
     </Compile>
