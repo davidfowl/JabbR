@@ -50,6 +50,7 @@
             var e = document.createElement('script');
             e.type = 'text/javascript';
             e.id = 'janrainAuthWidget';
+
             if (document.location.protocol === 'https:') {
                 e.src = 'https://rpxnow.com/js/lib/<%:appName %>/engage.js';
             } else {
