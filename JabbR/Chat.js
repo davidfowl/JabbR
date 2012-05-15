@@ -452,6 +452,13 @@
             ui.addMessage('Note: ' + userInfo.Note, 'list-item');
         }
 
+      $.getJSON('http://www.gravatar.com/' + userInfo.Hash + '.json?callback=?', function (profile) {
+        ui.addMessage('Gravatar', 'list-header');
+        ui.addMessage('<img src="' + profile.entry[0].thumbnailUrl + '" />', 'list-item');
+        ui.addMessage('Profile Link: <a href="' + profile.entry[0].profileUrl + '">' + profile.entry[0].displayName + '</a>', 'list-item');
+        ui.addMessage('Name: ' + profile.entry[0].name.formatted, 'list-item');
+      });     
+
         chat.showUsersOwnedRoomList(userInfo.Name, userInfo.OwnedRooms);
     };
 
