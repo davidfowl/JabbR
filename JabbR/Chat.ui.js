@@ -57,22 +57,37 @@
 
         function glowTab(n) {
             // Stop if we're not unread anymore
-            if (!$tab.hasClass('unread') || n === 0) {
+            if(!$tab.hasClass('unread'))
+            {
                 return;
             }
 
             // Go light
-            $tab.animate({ backgroundColor: '#e5e5e5', color: '#000000' }, 800, function () {
+            $tab.animate({ backgroundColor: '#e5e5e5', color: '#000000' }, 800, function()
+            {
                 // Stop if we're not unread anymore
-                if (!$tab.hasClass('unread')) {
+                if(!$tab.hasClass('unread'))
+                {
                     return;
                 }
 
-                // Go dark
-                $tab.animate({ backgroundColor: '#164C85', color: '#ffffff' }, 800, function () {
-                    // Glow the tab again
-                    glowTab(n - 1);
-                });
+                n--;
+
+                // Check if we're on our last glow
+                if(n !== 0)
+                {
+                    // Go dark
+                    $tab.animate({ backgroundColor: '#164C85', color: '#ffffff' }, 800, function()
+                    {
+                        // Glow the tab again
+                        glowTab(n);
+                    });
+                }
+                else
+                {
+                    // Leave the table highlighted
+                    $tab.animate({ backgroundColor: '#4B4D96', color: '#ffffff' }, 800);
+                }
             });
         }
 
