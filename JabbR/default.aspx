@@ -50,7 +50,11 @@
             var e = document.createElement('script');
             e.type = 'text/javascript';
             e.id = 'janrainAuthWidget';
-            e.src = ('https:' == document.location.protocol ? 'https://rpxnow.com' : 'http://widget-cdn.rpxnow.com') + '/js/lib/<%:appName %>/engage.js';
+            if (document.location.protocol === 'https:') {
+                e.src = 'https://rpxnow.com/js/lib/<%:appName %>/engage.js';
+            } else {
+                e.src = 'http://widget-cdn.rpxnow.com/js/lib/<%:appName %>/engage.js';
+            }
 
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(e, s);
