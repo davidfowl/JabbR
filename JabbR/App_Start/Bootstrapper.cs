@@ -9,17 +9,17 @@ using System.Web.Hosting;
 using System.Web.Routing;
 using Elmah;
 using JabbR.ContentProviders.Core;
-using JabbR.Handlers;
 using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Newtonsoft.Json;
 using Ninject;
-using RouteMagic;
 using SignalR;
 using SignalR.Hosting.Common;
 using SignalR.Ninject;
+using System.Web.Http;
+using System.Net.Http.Formatting;
 
 [assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.Bootstrapper), "PreAppStart")]
 
@@ -108,14 +108,36 @@ namespace JabbR.App_Start
             ClearConnectedClients(repositoryFactory());
 
             SetupRoutes(kernel);
+            SetupWebApi(kernel);
+        }
+
+        private static void SetupWebApi(IKernel kernel)
+        {
+            //find the default json formatter and replace it
+            int formatterIndex = 0;
+            var formatters = GlobalConfiguration.Configuration.Formatters;
+            for (formatterIndex = 0; formatterIndex < formatters.Count; formatterIndex++)
+            {
+                if (formatters[formatterIndex].GetType() == typeof(JsonMediaTypeFormatter))
+                    break;
+            }
+
+            if (formatterIndex < formatters.Count)
+            {
+                GlobalConfiguration.Configuration.Formatters[formatterIndex] = new JsonNetMediaFormatter();
+            }
+            GlobalConfiguration.Configuration.ServiceResolver.SetResolver(
+                (t) => kernel.Get(t),
+                (t)=> kernel.GetAll(t));
         }
 
         private static void SetupRoutes(IKernel kernel)
         {
-            RouteTable.Routes.MapHttpHandler("Download", "api/v1/messages/{room}/{format}",
-                                             new { format = "json" },
-                                             new { },
-                                             ctx => kernel.Get<MessagesHandler>());
+            RouteTable.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/v1/{controller}/{room}/{format}",
+                defaults: new { format = RouteParameter.Optional }
+            );
         }
 
         private static void ClearConnectedClients(IJabbrRepository repository)
