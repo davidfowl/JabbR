@@ -816,6 +816,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\HttpRequestExtensions.cs" />
     <Compile Include="Api\MessagesController.cs" />
     <Compile Include="Api\Model\MessageApiModel.cs" />
     <Compile Include="App_Start\Bootstrapper.cs" />
@@ -902,6 +903,7 @@
     <Compile Include="Infrastructure\SafeCollection.cs" />
     <Compile Include="Infrastructure\TaskAsyncHelper.cs" />
     <Compile Include="Infrastructure\TextTransform.cs" />
+    <Compile Include="Infrastructure\UriExtensions.cs" />
     <Compile Include="Migrations\201111290920351_Passwords.cs" />
     <Compile Include="Migrations\201111290920351_Passwords.Designer.cs">
       <DependentUpon>201111290920351_Passwords.cs</DependentUpon>
@@ -1048,7 +1050,9 @@
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Auth\Login.ashx" />
