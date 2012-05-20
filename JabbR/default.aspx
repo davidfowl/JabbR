@@ -80,7 +80,7 @@
         <li class="message ${highlight} clearfix" id="m-${id}" data-name="${name}" data-timestamp="${date}">
             <div class="left">
                 {{if showUser}}
-                <img src="http://www.gravatar.com/avatar/${hash}?s=16&d=mm" class="gravatar" />
+                <img src="https://secure.gravatar.com/avatar/${hash}?s=16&d=mm" class="gravatar" />
                 <span class="name">${trimmedName}</span>
                 {{/if}}
                 <span class="state"></span>
@@ -110,7 +110,7 @@
     </script>
     <script id="new-user-template" type="text/x-jquery-tmpl">
         <li class="user" data-name="${name}">
-            <img class="gravatar" src="http://www.gravatar.com/avatar/${hash}?s=16&d=mm" />
+            <img class="gravatar" src="https://secure.gravatar.com/avatar/${hash}?s=16&d=mm" />
             <div class="details">
                 <span class="name">${name}</span>
                 <span class="admin">{{if admin}}(admin){{/if}}</span>
@@ -139,7 +139,7 @@
     <!-- TweetContentProvider: Should be extracted out if other content providers need templates -->
     <script id="tweet-template" type="text/x-jquery-tmpl">
         <div class="user">
-            <img src="${user.profile_image_url}" />
+            <img src="${user.profile_image_url_https}" />
             <span class="name">${user.screen_name}</span> (${user.name})
         </div>
         {{html text}}

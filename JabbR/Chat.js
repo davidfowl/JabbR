@@ -879,8 +879,9 @@
         ui.addMessage('Welcome to ' + originalTitle, 'notification');
         ui.addMessage('Type /help to see the list of commands', 'notification');
 
-        connection.hub.start(function () {
-            chat.join()
+        function initConnection() {
+            connection.hub.start(function () {
+                chat.join()
                 .fail(function (e) {
                     ui.addMessage(e, 'error');
                 })
@@ -900,16 +901,16 @@
                             ui.setCommands(commands);
                         });
                 });
-        });
+            });
 
-        connection.hub.reconnected(function () {
-            if (checkingStatus === true) {
-                return;
-            }
+            connection.hub.reconnected(function () {
+                if (checkingStatus === true) {
+                    return;
+                }
 
-            checkingStatus = true;
+                checkingStatus = true;
 
-            chat.checkStatus()
+                chat.checkStatus()
                 .done(function (requiresUpdate) {
                     if (requiresUpdate === true) {
                         ui.showUpdateUI();
@@ -918,21 +919,23 @@
                 .always(function () {
                     checkingStatus = false;
                 });
-        });
+            });
 
-        connection.hub.disconnected(function () {
-            ui.showDisconnectUI();
-        });
+            connection.hub.disconnected(function () {
+                ui.showDisconnectUI();
+            });
 
-        connection.hub.error(function (err) {
-            // Make all pening messages failed if there's an error
-            for (var id in pendingMessages) {
-                clearTimeout(pendingMessages[id]);
-                ui.failMessage(id);
-                delete pendingMessages[id];
-            }
-        });
+            connection.hub.error(function (err) {
+                // Make all pening messages failed if there's an error
+                for (var id in pendingMessages) {
+                    clearTimeout(pendingMessages[id]);
+                    ui.failMessage(id);
+                    delete pendingMessages[id];
+                }
+            });
+        }
 
+        initConnection();
     });
 
 })(jQuery, $.connection, window, window.chat.ui, window.chat.utility);

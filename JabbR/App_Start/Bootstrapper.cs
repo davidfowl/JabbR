@@ -10,19 +10,21 @@ using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Routing;
 using Elmah;
+using JabbR.Auth;
 using JabbR.ContentProviders.Core;
 using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Ninject;
+using RouteMagic;
 using SignalR;
 using SignalR.Hosting.Common;
 using SignalR.Ninject;
-using Newtonsoft.Json.Serialization;
 
-[assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.Bootstrapper), "PreAppStart")]
+//[assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.Bootstrapper), "PreAppStart")]
 
 namespace JabbR.App_Start
 {
@@ -49,15 +51,15 @@ namespace JabbR.App_Start
 
             kernel.Bind<JabbrContext>()
                 .To<JabbrContext>()
-                .InRequestScope();
+                .InJabbrRequestScope();
 
             kernel.Bind<IJabbrRepository>()
                 .To<PersistedRepository>()
-                .InRequestScope();
+                .InJabbrRequestScope();
 
             kernel.Bind<IChatService>()
                   .To<ChatService>()
-                  .InRequestScope();
+                  .InJabbrRequestScope();
 
             kernel.Bind<ICryptoService>()
                 .To<CryptoService>()
@@ -102,11 +104,21 @@ namespace JabbR.App_Start
 
             // Start the sweeper
             var repositoryFactory = new Func<IJabbrRepository>(() => kernel.Get<IJabbrRepository>());
-            _timer = new Timer(_ => Sweep(repositoryFactory, resolver), null, _sweepInterval, _sweepInterval);
+            _timer = new Timer(
+                _ =>
+                {
+                    using (RequestScope.Create())
+                    {
+                        Sweep(repositoryFactory, resolver);
+                    }
+                }, null, _sweepInterval, _sweepInterval);
 
             SetupErrorHandling();
 
-            ClearConnectedClients(repositoryFactory());
+            using (RequestScope.Create())
+            {
+                ClearConnectedClients(repositoryFactory());
+            }
 
             SetupRoutes(kernel);
             SetupWebApi(kernel);
@@ -127,6 +139,8 @@ namespace JabbR.App_Start
                 name: "DefaultApi",
                 routeTemplate: "api/v1/{controller}/{room}"
             );
+
+            RouteTable.Routes.MapHttpHandler<ProxyHandler>("proxy", "proxy/{*path}");
         }
 
         private static void ClearConnectedClients(IJabbrRepository repository)
