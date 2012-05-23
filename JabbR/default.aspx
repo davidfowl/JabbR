@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" %>
+?<%@ Page Language="C#" %>
 <%@ Import namespace="System.Configuration" %>
 <%@ Import Namespace="SquishIt.Framework" %>
 <%
@@ -62,6 +62,16 @@
         })();
     </script>
     <% } %>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
     <% if (!String.IsNullOrEmpty(googleAnalytics)) { %>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -119,14 +129,19 @@
             </div>
         </li>
     </script>
-    <script id="new-userlist-template" type="text/x-jquery-tmpl">
-        <h3 class="userlist-header nav-header">
-            ${listname}
-        </h3>
-        <div>
-            <ul id="${id}" />
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">${listname}</li>
+              <ul id="${id}" />
+    		  <script id="new-userlist-template" type="text/x-jquery-tmpl">
+			  </script>
+			   </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
         </div>
-    </script>
     <script id="new-tab-template" type="text/x-jquery-tmpl">
         <li id="tabs-${id}" class="room" data-name="${name}" role="tab">
             <span class="lock"></span>
@@ -214,30 +229,32 @@
       </ul>
     </nav>
     </header>
-    <div id="chat-area" role="tabpanel">
-      <ul id="messages-lobby" class="messages current" role="log">
-      </ul>
-      <form id="users-filter-form" action="#">
-      <input id="users-filter" class="filter" type="text" />
-      </form>
-      <ul id="userlist-lobby" class="users current">
-      </ul>
-      <div id="preferences">
-        <a class="sound" title="audible notifications"></a>
-        <a class="richness" title="toggle rich-content"></a>
-        <a class="toast" title="popup notifications" aria-haspopup="true"></a>
-        <a class="download" title="download messages" aria-haspopup="true"></a>
-      </div>
-      <form id="send-message" action="#">
-      <div id="message-box">
-        <textarea id="new-message" autocomplete="off" aria-autocomplete="none" accesskey="m"></textarea>
-      </div>
-      <input type="submit" id="send" value="Send" class="send" />
-      <div id="message-instruction">
-        Type @ then press TAB to auto-complete nicknames
-      </div>
-      </form>
-    </div>
+    <div class="span1">
+		<div id="chat-area" role="tabpanel">
+		  <ul id="messages-lobby" class="messages current" role="log">
+		  </ul>
+		  <form id="users-filter-form" action="#">
+		  <input id="users-filter" class="filter" type="text" />
+		  </form>
+		  <ul id="userlist-lobby" class="users current">
+		  </ul>
+		  <div id="preferences">
+			<a class="sound" title="audible notifications"></a>
+			<a class="richness" title="toggle rich-content"></a>
+			<a class="toast" title="popup notifications" aria-haspopup="true"></a>
+			<a class="download" title="download messages" aria-haspopup="true"></a>
+		  </div>
+		  <form id="send-message" action="#">
+		  <div id="message-box">
+			<textarea id="new-message" autocomplete="off" aria-autocomplete="none" accesskey="m"></textarea>
+		  </div>
+		  <input type="submit" id="send" value="Send" class="send" />
+		  <div id="message-instruction">
+			Type @ then press TAB to auto-complete nicknames
+		  </div>
+		  </form>
+		</div>
+	</div>
     <audio src="Content/sounds/notification.wav" id="noftificationSound" hidden="hidden" aria-hidden="true">
     </audio>
     <section aria-hidden="true" aria-haspopup="true">
