@@ -44,7 +44,7 @@ namespace JabbR.ContentProviders
             {
                 yield return "http://www.youtube.com";
                 yield return "https://www.youtube.com";
-                yield return "https://youtu.be";
+                yield return "http://youtu.be";
                 yield return "https://youtu.be";
             }
         }
