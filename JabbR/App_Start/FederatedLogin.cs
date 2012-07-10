@@ -30,7 +30,13 @@ namespace JabbR.App_Start
         {
             get
             {
-                return string.Format(WaadUrl, ConfigurationManager.AppSettings["auth.waad.namespace"]);
+                string waadNamespace = ConfigurationManager.AppSettings["auth.waad.namespace"];
+                if (!string.IsNullOrEmpty(waadNamespace))
+                {
+                    return string.Format(WaadUrl, ConfigurationManager.AppSettings["auth.waad.namespace"]);
+                }
+
+                return null;
             }
         }
 
@@ -62,15 +68,21 @@ namespace JabbR.App_Start
 
         public static void PreAppStart()
         {
-            DynamicModuleUtility.RegisterModule(typeof(NoConfigWSFederationAuthenticationModule));
-            DynamicModuleUtility.RegisterModule(typeof(NoConfigSessionAuthenticationModule));
+            if (!string.IsNullOrEmpty(IssuerUrl))
+            {
+                DynamicModuleUtility.RegisterModule(typeof(NoConfigWSFederationAuthenticationModule));
+                DynamicModuleUtility.RegisterModule(typeof(NoConfigSessionAuthenticationModule));
+            }
         }
 
         public static void PostAppStart()
         {
-            FederatedAuthentication.ServiceConfiguration.AudienceRestriction.AllowedAudienceUris.Add(new Uri(ApplicationRealm));
-            FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.Configuration.CertificateValidator = X509CertificateValidator.None;
-            FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.Configuration.IssuerNameRegistry = new SimpleIssuerNameRegistry(IssuerCertificateThumbprint);
+            if (!string.IsNullOrEmpty(IssuerUrl))
+            {
+                FederatedAuthentication.ServiceConfiguration.AudienceRestriction.AllowedAudienceUris.Add(new Uri(ApplicationRealm));
+                FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.Configuration.CertificateValidator = X509CertificateValidator.None;
+                FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.Configuration.IssuerNameRegistry = new SimpleIssuerNameRegistry(IssuerCertificateThumbprint);
+            }
         }
 
 
