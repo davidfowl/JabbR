@@ -68,7 +68,7 @@
     </script>
     <% } %>
 
-    <% if (!String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !Request.IsAuthenticated)
+    <% if (!String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace) && !Request.IsAuthenticated)
        { %>
     <script type="text/javascript">
         (function () {
@@ -88,6 +88,11 @@
         })();
 
         function waad_load(data) {
+            if (data.length == 0) {
+                $("#waadEmbed").append('<p>No identity providers were configured</p>');
+                return;
+            }
+
             var list = '';
             $.each(data, function (k, idp) {
                 var link = '<a href="' + idp.LoginUrl + '">' + idp.Name + '</a>';
