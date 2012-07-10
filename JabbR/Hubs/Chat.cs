@@ -12,6 +12,7 @@ using JabbR.Services;
 using JabbR.ViewModels;
 using Newtonsoft.Json;
 using SignalR.Hubs;
+using System.Configuration;
 
 namespace JabbR
 {
@@ -79,6 +80,13 @@ namespace JabbR
             {
                 return false;
             }
+
+            if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["auth.waad.namespace"]) &&
+                String.IsNullOrEmpty(user.Identity))
+            {
+                return false;
+            }
+
 
             // Update some user values
             _service.UpdateActivity(user, Context.ConnectionId, UserAgent);
