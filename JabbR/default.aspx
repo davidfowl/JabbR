@@ -5,6 +5,11 @@
     string appName = ConfigurationManager.AppSettings["auth.appName"];
     string apiKey = ConfigurationManager.AppSettings["auth.apiKey"];
     string googleAnalytics = ConfigurationManager.AppSettings["googleAnalytics"];
+    
+    // Windows Azure Active Directory
+    string waadSelectorEnabled = ConfigurationManager.AppSettings["auth.waad.selectorEnabled"];
+    string waadNamespace = ConfigurationManager.AppSettings["auth.waad.namespace"];
+    string waadRealm = ConfigurationManager.AppSettings["auth.waad.realm"];
 %>
 
 <!DOCTYPE html>
@@ -62,6 +67,44 @@
         })();
     </script>
     <% } %>
+
+    <% if (!String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !Request.IsAuthenticated)
+       { %>
+    <script type="text/javascript">
+        (function () {
+
+            function isReady() {
+                $("#waad-login").modal();
+                var script = document.createElement('script');
+                script.src = 'https://<%: waadNamespace %>.accesscontrol.windows.net/v2/metadata/IdentityProviders.js?protocol=wsfederation&realm=<%: waadRealm %>&context=' + escape(document.location.hash) + '&request_id=&version=1.0&callback=waad_load';
+                document.getElementsByTagName('head')[0].appendChild(script);
+            };
+
+            if (document.addEventListener) {
+                document.addEventListener("DOMContentLoaded", isReady, false);
+            } else {
+                window.attachEvent('onload', isReady);
+            }
+        })();
+
+        function waad_load(data) {
+            var list = '';
+            $.each(data, function (k, idp) {
+                var link = '<a href="' + idp.LoginUrl + '">' + idp.Name + '</a>';
+                list += "<li>" + link + "</li>";
+            });
+            $("#waadEmbed").append($('<ul>').append(list));
+        }
+    </script>
+    <style type="text/css">
+    #waadEmbed { margin:0px auto; width: 400px; }
+    #waadEmbed ul li {position: relative;margin:5px;width: 100px;min-height: 60px;border: 1px solid #ccc;display: -moz-inline-stack;
+                      display: inline-block;vertical-align: top;zoom: 1;*display: inline;_height: 100px;text-align: center;background-color:#eee;}
+    #waadEmbed ul li a {position: absolute;display: block;text-decoration: none;color: black;width:100%;height:100%;line-height: 30px;text-align: center;}
+    #waadEmbed ul li a:hover {color: #069;}
+    </style>
+    <% } %>
+  
     <% if (!String.IsNullOrEmpty(googleAnalytics)) { %>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -293,6 +336,16 @@
         </div>
         <div class="modal-body">
           <div id="janrainEngageEmbed">
+          </div>
+        </div>
+      </div>
+      <div id="waad-login" class="modal hide fade">
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">&times;</a>
+          <h3>JabbR Login</h3>
+        </div>
+        <div class="modal-body">
+          <div id="waadEmbed">
           </div>
         </div>
       </div>
