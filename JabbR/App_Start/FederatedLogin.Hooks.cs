@@ -55,8 +55,7 @@ namespace JabbR.App_Start
                 // Try to get the user by identity
                 ChatUser user = repository.GetUserByIdentity(userIdentity);
 
-                string wctx = context.Request.Form["wctx"];
-                string hash = wctx;
+                string hash = context.Request.Form["wctx"];
 
                 // No user with this identity
                 if (user == null)
