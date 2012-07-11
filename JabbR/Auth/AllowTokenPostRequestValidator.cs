@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web;
 using System.Web.Util;
-using Microsoft.IdentityModel.Protocols.WSFederation;
 using JabbR.App_Start;
-using Ninject;
 using JabbR.Services;
+using Microsoft.IdentityModel.Protocols.WSFederation;
+using Ninject;
 
 namespace JabbR.Auth
 {
@@ -14,7 +14,6 @@ namespace JabbR.Auth
                                                      RequestValidationSource requestValidationSource,
                                                      string collectionKey, out int validationFailureIndex)
         {
-
             var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
             if (string.IsNullOrEmpty(settings.FedAuthIdentityProviderUrl))
             {
