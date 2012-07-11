@@ -11,8 +11,8 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using JabbR.Services;
 
-[assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PostAppStart")]
 [assembly: WebActivator.PreApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PreAppStart", Order = 1)]
+[assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PostAppStart")]
 
 namespace JabbR.App_Start
 {
@@ -20,13 +20,8 @@ namespace JabbR.App_Start
     {
         public static void PreAppStart()
         {
-            var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
-
-            if (!string.IsNullOrEmpty(settings.FedAuthIdentityProviderUrl))
-            {
-                DynamicModuleUtility.RegisterModule(typeof(NoConfigWSFederationAuthenticationModule));
-                DynamicModuleUtility.RegisterModule(typeof(NoConfigSessionAuthenticationModule));
-            }
+            DynamicModuleUtility.RegisterModule(typeof(NoConfigWSFederationAuthenticationModule));
+            DynamicModuleUtility.RegisterModule(typeof(NoConfigSessionAuthenticationModule));
         }
 
         public static void PostAppStart()
@@ -44,6 +39,16 @@ namespace JabbR.App_Start
 
         private partial class NoConfigWSFederationAuthenticationModule : WSFederationAuthenticationModule
         {
+            protected override void InitializeModule(HttpApplication context)
+            {
+                // shortcircuit registration of the module WSFederationAuthenticationModule events if fed auth is not configured
+                var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
+                if (!string.IsNullOrEmpty(settings.FedAuthIdentityProviderUrl))
+                {
+                    base.InitializeModule(context);
+                }
+            }
+
             protected override void InitializePropertiesFromConfiguration(string serviceName)
             {
                 var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
