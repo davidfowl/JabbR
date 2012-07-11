@@ -12,7 +12,6 @@ using JabbR.Services;
 using JabbR.ViewModels;
 using Newtonsoft.Json;
 using SignalR.Hubs;
-using System.Configuration;
 
 namespace JabbR
 {
