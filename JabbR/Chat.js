@@ -912,7 +912,7 @@
                         else {
                             ui.addMessage('Use /nick user password to log in with jabbr', 'notification');
                             ui.addMessage('To enable janrain login, setup the missing values in web.config', 'notification');
-                            ui.addMessage('To enable Windows Azure Active Directory login, setup the missing values in web.config', 'notification');
+                            ui.addMessage('To enable federated authentication, setup the missing values in web.config', 'notification');
                         }
                     }
                     // get list of available commands
