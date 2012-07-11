@@ -16,13 +16,11 @@ namespace JabbR.App_Start
 {
     public static partial class FederatedLogin
     {
-        const string WaadUrl = "https://{0}.accesscontrol.windows.net/v2/wsfederation";
-
         public static string ApplicationRealm
         {
             get
             {
-                return ConfigurationManager.AppSettings["auth.waad.realm"];
+                return ConfigurationManager.AppSettings["fedauth.realm"];
             }
         }
 
@@ -30,13 +28,7 @@ namespace JabbR.App_Start
         {
             get
             {
-                string waadNamespace = ConfigurationManager.AppSettings["auth.waad.namespace"];
-                if (!string.IsNullOrEmpty(waadNamespace))
-                {
-                    return string.Format(WaadUrl, ConfigurationManager.AppSettings["auth.waad.namespace"]);
-                }
-
-                return null;
+                return ConfigurationManager.AppSettings["fedauth.identityProviderUrl"];
             }
         }
 
@@ -44,7 +36,7 @@ namespace JabbR.App_Start
         {
             get
             {
-                return ConfigurationManager.AppSettings["auth.waad.certThumbprint"];
+                return ConfigurationManager.AppSettings["fedauth.certThumbprint"];
             }
         }
 
@@ -52,7 +44,7 @@ namespace JabbR.App_Start
         {
             get
             {
-                string requireSsl = ConfigurationManager.AppSettings["auth.waad.requireSsl"];
+                string requireSsl = ConfigurationManager.AppSettings["fedauth.requireSsl"];
                 return (requireSsl != null && bool.Parse(requireSsl));
             }
         }
@@ -61,7 +53,7 @@ namespace JabbR.App_Start
         {
             get
             {
-                string selectorEnabled = ConfigurationManager.AppSettings["auth.waad.selectorEnabled"];
+                string selectorEnabled = ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"];
                 return (selectorEnabled != null && bool.Parse(selectorEnabled));
             }
         }

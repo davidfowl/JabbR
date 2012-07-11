@@ -7,9 +7,9 @@
     string googleAnalytics = ConfigurationManager.AppSettings["googleAnalytics"];
     
     // Windows Azure Active Directory
-    string waadSelectorEnabled = ConfigurationManager.AppSettings["auth.waad.selectorEnabled"];
-    string waadNamespace = ConfigurationManager.AppSettings["auth.waad.namespace"];
-    string waadRealm = ConfigurationManager.AppSettings["auth.waad.realm"];
+    string waadSelectorEnabled = ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"];
+    string waadNamespace = ConfigurationManager.AppSettings["fedauth.waad.namespace"];
+    string realm = ConfigurationManager.AppSettings["fedauth.realm"];
 
     bool showWaadSelector = !String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace) && !Request.IsAuthenticated;
 %>
@@ -79,7 +79,7 @@
             function isReady() {
                 $("#waad-login").modal();
                 var script = document.createElement('script');
-                script.src = 'https://<%: waadNamespace %>.accesscontrol.windows.net/v2/metadata/IdentityProviders.js?protocol=wsfederation&realm=<%: waadRealm %>&context=' + escape(document.location.hash) + '&request_id=&version=1.0&callback=waad_load';
+                script.src = 'https://<%: waadNamespace %>.accesscontrol.windows.net/v2/metadata/IdentityProviders.js?protocol=wsfederation&realm=<%: realm  %>&context=' + escape(document.location.hash) + '&request_id=&version=1.0&callback=waad_load';
                 document.getElementsByTagName('head')[0].appendChild(script);
             };
 
