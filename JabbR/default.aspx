@@ -75,12 +75,8 @@
        { %>
     <script type="text/javascript">
         (function () {
-
             function isReady() {
-                $("#waad-login").modal();
-                var script = document.createElement('script');
-                script.src = 'https://<%: waadNamespace %>.accesscontrol.windows.net/v2/metadata/IdentityProviders.js?protocol=wsfederation&realm=<%: realm  %>&context=' + escape(document.location.hash) + '&request_id=&version=1.0&callback=waad_load';
-                document.getElementsByTagName('head')[0].appendChild(script);
+                window.waadSelector('<%: waadNamespace %>', '<%: realm  %>');
             };
 
             if (document.addEventListener) {
@@ -89,20 +85,6 @@
                 window.attachEvent('onload', isReady);
             }
         })();
-
-        function waad_load(data) {
-            if (data.length == 0) {
-                $("#waadEmbed").append('<p>No identity providers were configured</p>');
-                return;
-            }
-
-            var list = '';
-            $.each(data, function (k, idp) {
-                var link = '<a href="' + idp.LoginUrl + '">' + idp.Name + '</a>';
-                list += "<li>" + link + "</li>";
-            });
-            $("#waadEmbed").append($('<ul>').append(list));
-        }
     </script>
     <% } %>
   
@@ -233,6 +215,29 @@
         </div>   
     </script>
     <!-- /Github Issus Content Provider -->
+     <!-- /Windows Azure Active Directory Identity Provider Selector-->
+    <script id="waad-idp-selector" type="text/x-jquery-tmpl">
+        <div id="waad-login" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">&times;</a>
+              <h3>JabbR Login</h3>
+            </div>
+            <div class="modal-body">
+              <div id="waadEmbed">
+                {{if IdentityProviders.length == 0}}
+                    <p>No identity providers were configured in Windows Azure Active Directory</p>
+                {{else}}
+                <ul>
+                    {{each IdentityProviders}}
+                        <li><a href="${LoginUrl}" title="Login with ${Name}">${Name}</a></li>
+                    {{/each}}
+                </ul>
+                {{/if}}
+              </div>
+            </div>
+        </div>
+    </script>
+     <!-- /Windows Azure Active Directory Identity Provider Selector-->
 </head>
 <body>
   <section id="page" role="application">
@@ -284,7 +289,7 @@
     </div>
     <audio src="Content/sounds/notification.wav" id="noftificationSound" hidden="hidden" aria-hidden="true">
     </audio>
-    <section aria-hidden="true" aria-haspopup="true">
+    <section id="popups" aria-hidden="true" aria-haspopup="true">
       <div id="disconnect-dialog" class="modal hide fade">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">&times;</a>
@@ -340,16 +345,6 @@
           </div>
         </div>
       </div>
-      <div id="waad-login" class="modal hide fade">
-        <div class="modal-header">
-          <a class="close" data-dismiss="modal">&times;</a>
-          <h3>JabbR Login</h3>
-        </div>
-        <div class="modal-body">
-          <div id="waadEmbed">
-          </div>
-        </div>
-      </div>
     </section>
   </section> 
   <%= Bundle.JavaScript()
@@ -382,7 +377,8 @@
         "~/Chat.twitter.js",
         "~/Chat.pinnedWindows.js",
         "~/Chat.githubissues.js",
-        "~/Chat.js")
+        "~/Chat.js",
+        "~/Scripts/waad.selector.js")
             .ForceRelease()
             .Render("~/Scripts/JabbR2_#.js")
   %>
