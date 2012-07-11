@@ -10,6 +10,8 @@
     string waadSelectorEnabled = ConfigurationManager.AppSettings["auth.waad.selectorEnabled"];
     string waadNamespace = ConfigurationManager.AppSettings["auth.waad.namespace"];
     string waadRealm = ConfigurationManager.AppSettings["auth.waad.realm"];
+
+    bool showWaadSelector = !String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace) && !Request.IsAuthenticated;
 %>
 
 <!DOCTYPE html>
@@ -27,7 +29,8 @@
                   "~/Chat.dictionary.css",
                   "~/Content/KeyTips.css",
                   "~/Content/bootstrap.min.css",
-                  "~/Content/emoji20.css")
+                  "~/Content/emoji20.css",
+                  "~/Content/IdentityProviderSelector.css")
             .ForceRelease()
             .Render("~/Content/JabbR_#.css")
   %>
@@ -68,7 +71,7 @@
     </script>
     <% } %>
 
-    <% if (!String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace) && !Request.IsAuthenticated)
+    <% if (showWaadSelector)
        { %>
     <script type="text/javascript">
         (function () {
@@ -101,13 +104,6 @@
             $("#waadEmbed").append($('<ul>').append(list));
         }
     </script>
-    <style type="text/css">
-    #waadEmbed { margin:0px auto; width: 400px; }
-    #waadEmbed ul li {position: relative;margin:5px;width: 100px;min-height: 60px;border: 1px solid #ccc;display: -moz-inline-stack;
-                      display: inline-block;vertical-align: top;zoom: 1;*display: inline;_height: 100px;text-align: center;background-color:#eee;}
-    #waadEmbed ul li a {position: absolute;display: block;text-decoration: none;color: black;width:100%;height:100%;line-height: 30px;text-align: center;}
-    #waadEmbed ul li a:hover {color: #069;}
-    </style>
     <% } %>
   
     <% if (!String.IsNullOrEmpty(googleAnalytics)) { %>
