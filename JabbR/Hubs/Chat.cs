@@ -81,7 +81,7 @@ namespace JabbR
                 return false;
             }
 
-            if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["auth.waad.namespace"]) &&
+            if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["fedauth.identityProviderUrl"]) &&
                 String.IsNullOrEmpty(user.Identity))
             {
                 return false;
