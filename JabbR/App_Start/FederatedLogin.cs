@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Configuration;
 using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens;
 using System.Web;
-using System.Web.Util;
-using Microsoft.IdentityModel.Protocols.WSFederation;
+using JabbR.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
-using JabbR.Services;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PreAppStart", Order = 1)]
 [assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PostAppStart")]
@@ -102,30 +99,6 @@ namespace JabbR.App_Start
                 }
 
                 return null;
-            }
-        }
-
-        public class AllowTokenPostRequestValidator : RequestValidator
-        {
-            protected override bool IsValidRequestString(HttpContext context, string value,
-                                                         RequestValidationSource requestValidationSource,
-                                                         string collectionKey, out int validationFailureIndex)
-            {
-                validationFailureIndex = 0;
-
-                if (requestValidationSource == RequestValidationSource.Form &&
-                    collectionKey.Equals(WSFederationConstants.Parameters.Result, StringComparison.Ordinal))
-                {
-                    SignInResponseMessage message =
-                        WSFederationMessage.CreateFromFormPost(context.Request) as SignInResponseMessage;
-
-                    if (message != null)
-                    {
-                        return true;
-                    }
-                }
-                return base.IsValidRequestString(context, value, requestValidationSource, collectionKey,
-                                                 out validationFailureIndex);
             }
         }
     }
