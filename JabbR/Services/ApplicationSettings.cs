@@ -36,5 +36,14 @@ namespace JabbR.Services
                 return ConfigurationManager.AppSettings["auth.appId"];
             }
         }
+
+
+        public string FedAuthIdentityProviderUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["fedauth.identityProviderUrl"];
+            }
+        }
     }
 }
