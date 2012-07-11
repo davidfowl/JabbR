@@ -8,59 +8,21 @@ using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using JabbR.Services;
 
 [assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PostAppStart")]
-[assembly: WebActivator.PreApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PreAppStart")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(JabbR.App_Start.FederatedLogin), "PreAppStart", Order = 1)]
 
 namespace JabbR.App_Start
 {
     public static partial class FederatedLogin
     {
-        public static string ApplicationRealm
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["fedauth.realm"];
-            }
-        }
-
-        public static string IssuerUrl
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["fedauth.identityProviderUrl"];
-            }
-        }
-
-        public static string IssuerCertificateThumbprint
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["fedauth.certThumbprint"];
-            }
-        }
-
-        public static bool RequireSsl
-        {
-            get
-            {
-                string requireSsl = ConfigurationManager.AppSettings["fedauth.requireSsl"];
-                return (requireSsl != null && bool.Parse(requireSsl));
-            }
-        }
-
-        public static bool IdentityProviderSelectorEnabled
-        {
-            get
-            {
-                string selectorEnabled = ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"];
-                return (selectorEnabled != null && bool.Parse(selectorEnabled));
-            }
-        }
-
         public static void PreAppStart()
         {
-            if (!string.IsNullOrEmpty(IssuerUrl))
+            var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
+
+            if (!string.IsNullOrEmpty(settings.FedAuthIdentityProviderUrl))
             {
                 DynamicModuleUtility.RegisterModule(typeof(NoConfigWSFederationAuthenticationModule));
                 DynamicModuleUtility.RegisterModule(typeof(NoConfigSessionAuthenticationModule));
@@ -69,11 +31,13 @@ namespace JabbR.App_Start
 
         public static void PostAppStart()
         {
-            if (!string.IsNullOrEmpty(IssuerUrl))
+            var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
+
+            if (!string.IsNullOrEmpty(settings.FedAuthIdentityProviderUrl))
             {
-                FederatedAuthentication.ServiceConfiguration.AudienceRestriction.AllowedAudienceUris.Add(new Uri(ApplicationRealm));
+                FederatedAuthentication.ServiceConfiguration.AudienceRestriction.AllowedAudienceUris.Add(new Uri(settings.FedAuthRealm));
                 FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.Configuration.CertificateValidator = X509CertificateValidator.None;
-                FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.Configuration.IssuerNameRegistry = new SimpleIssuerNameRegistry(IssuerCertificateThumbprint);
+                FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.Configuration.IssuerNameRegistry = new SimpleIssuerNameRegistry(settings.FedAuthCertificateThumbprint);
             }
         }
 
@@ -82,11 +46,13 @@ namespace JabbR.App_Start
         {
             protected override void InitializePropertiesFromConfiguration(string serviceName)
             {
-                this.Realm = ApplicationRealm;
-                this.Issuer = IssuerUrl;
+                var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
+
+                this.Realm = settings.FedAuthRealm;
+                this.Issuer = settings.FedAuthIdentityProviderUrl;
                 // if not using the idp selector, redirect straight to idp if not authenticated
-                this.PassiveRedirectEnabled = !IdentityProviderSelectorEnabled; 
-                this.RequireHttps = RequireSsl;
+                this.PassiveRedirectEnabled = !settings.FedAuthWindowsAzureActiveDirectorySelectorEnabled; 
+                this.RequireHttps = settings.FedAuthRequiresSsl;
             }
         }
 
@@ -94,7 +60,9 @@ namespace JabbR.App_Start
         {
             protected override void InitializePropertiesFromConfiguration(string serviceName)
             {
-                this.CookieHandler.RequireSsl = RequireSsl;
+                var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
+
+                this.CookieHandler.RequireSsl = settings.FedAuthRequiresSsl;
             }
         }
 

@@ -45,5 +45,39 @@ namespace JabbR.Services
                 return ConfigurationManager.AppSettings["fedauth.identityProviderUrl"];
             }
         }
+
+        public string FedAuthRealm
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["fedauth.realm"];
+            }
+        }
+
+        public string FedAuthCertificateThumbprint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["fedauth.certThumbprint"];
+            }
+        }
+
+        public bool FedAuthRequiresSsl
+        {
+            get
+            {
+                string requireSsl = ConfigurationManager.AppSettings["fedauth.requireSsl"];
+                return (!string.IsNullOrEmpty(requireSsl) && bool.Parse(requireSsl));
+            }
+        }
+
+        public bool FedAuthWindowsAzureActiveDirectorySelectorEnabled
+        {
+            get
+            {
+                string selectorEnabled = ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"];
+                return (!string.IsNullOrEmpty(selectorEnabled) && bool.Parse(selectorEnabled));
+            }
+        }
     }
 }
