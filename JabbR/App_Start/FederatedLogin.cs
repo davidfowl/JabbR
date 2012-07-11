@@ -63,6 +63,16 @@ namespace JabbR.App_Start
 
         private class NoConfigSessionAuthenticationModule : SessionAuthenticationModule
         {
+            protected override void InitializeModule(HttpApplication context)
+            {
+                // shortcircuit registration of the module SessionAuthenticationModule events if fed auth is not configured
+                var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
+                if (!string.IsNullOrEmpty(settings.FedAuthIdentityProviderUrl))
+                {
+                    base.InitializeModule(context);
+                }
+            }
+
             protected override void InitializePropertiesFromConfiguration(string serviceName)
             {
                 var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
