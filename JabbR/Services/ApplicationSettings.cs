@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System;
 
 namespace JabbR.Services
 {
@@ -66,8 +67,9 @@ namespace JabbR.Services
         {
             get
             {
-                string requireSsl = ConfigurationManager.AppSettings["fedauth.requireSsl"];
-                return (!string.IsNullOrEmpty(requireSsl) && bool.Parse(requireSsl));
+                bool requireSsl = false;
+                bool requireSslParsed = Boolean.TryParse(ConfigurationManager.AppSettings["fedauth.requireSsl"], out requireSsl);
+                return requireSslParsed && requireSsl;
             }
         }
 
@@ -75,8 +77,9 @@ namespace JabbR.Services
         {
             get
             {
-                string selectorEnabled = ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"];
-                return (!string.IsNullOrEmpty(selectorEnabled) && bool.Parse(selectorEnabled));
+                bool selectorEnabled = false;
+                bool selectorEnabledParsed = Boolean.TryParse(ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"], out selectorEnabled);
+                return selectorEnabledParsed && selectorEnabled;
             }
         }
     }
