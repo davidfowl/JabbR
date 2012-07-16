@@ -44,9 +44,10 @@ namespace JabbR.App_Start
                 string userIdentity = userIdentityClaim.Value;
                 string username = identity.Name;
                 string email = String.Empty;
-                if (identity.Claims.SingleOrDefault(c => c.ClaimType == ClaimTypes.Email) != null)
+                Claim emailClaim = identity.Claims.SingleOrDefault(c => c.ClaimType == ClaimTypes.Email);
+                if (emailClaim != null)
                 {
-                    email = identity.Claims.SingleOrDefault(c => c.ClaimType == ClaimTypes.Email).Value.ToString();
+                    email = emailClaim.Value.ToString();
                 }
 
                 var repository = Bootstrapper.Kernel.Get<IJabbrRepository>();
