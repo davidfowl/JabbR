@@ -63,6 +63,10 @@ namespace JabbR.App_Start
                   .To<ChatService>()
                   .InRequestScope();
 
+            kernel.Bind<IIdentityLinker>()
+                  .To<IdentityLinker>()
+                  .InRequestScope();
+
             kernel.Bind<ICryptoService>()
                 .To<CryptoService>()
                 .InSingletonScope();
