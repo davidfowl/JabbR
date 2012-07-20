@@ -25,7 +25,8 @@ using SignalR.Hosting.Common;
 using SignalR.Hubs;
 using SignalR.Ninject;
 
-[assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.Bootstrapper), "PreAppStart")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(JabbR.App_Start.Bootstrapper), "PreAppStart", Order = 0)]
+[assembly: WebActivator.PostApplicationStartMethod(typeof(JabbR.App_Start.Bootstrapper), "PostAppStart")]
 
 namespace JabbR.App_Start
 {
@@ -62,6 +63,10 @@ namespace JabbR.App_Start
                   .To<ChatService>()
                   .InRequestScope();
 
+            kernel.Bind<IIdentityLinker>()
+                  .To<IdentityLinker>()
+                  .InRequestScope();
+
             kernel.Bind<ICryptoService>()
                 .To<CryptoService>()
                 .InSingletonScope();
@@ -95,8 +100,11 @@ namespace JabbR.App_Start
 
 
             Kernel = kernel;
+        }
 
-            var resolver = new NinjectDependencyResolver(kernel);
+        public static void PostAppStart()
+        {
+            var resolver = new NinjectDependencyResolver(Kernel);
 
             var host = new Host(resolver);
             host.Configuration.KeepAlive = TimeSpan.FromSeconds(30);
@@ -107,15 +115,15 @@ namespace JabbR.App_Start
             DoMigrations();
 
             // Start the sweeper
-            var repositoryFactory = new Func<IJabbrRepository>(() => kernel.Get<IJabbrRepository>());
+            var repositoryFactory = new Func<IJabbrRepository>(() => Kernel.Get<IJabbrRepository>());
             _timer = new Timer(_ => Sweep(repositoryFactory, resolver), null, _sweepInterval, _sweepInterval);
 
             SetupErrorHandling();
 
             ClearConnectedClients(repositoryFactory());
 
-            SetupRoutes(kernel);
-            SetupWebApi(kernel);
+            SetupRoutes(Kernel);
+            SetupWebApi(Kernel);
         }
 
         private static void SetupWebApi(IKernel kernel)
