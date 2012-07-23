@@ -453,7 +453,7 @@
         }
 
         $.getJSON('https://secure.gravatar.com/' + userInfo.Hash + '.json?callback=?', function (profile) {
-          ui.showGravatarProfile(profile.entry[0]);
+            ui.showGravatarProfile(profile.entry[0]);
         });     
 
         chat.showUsersOwnedRoomList(userInfo.Name, userInfo.OwnedRooms);

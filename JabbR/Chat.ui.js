@@ -1619,8 +1619,8 @@
         shouldCollapseContent: shouldCollapseContent,
         collapseRichContent: collapseRichContent,
         showGravatarProfile: function (profile) {
-          var room = getCurrentRoomElements();
-          templates.gravatarprofile.tmpl(profile).appendTo(room.messages);
+            var room = getCurrentRoomElements();
+            templates.gravatarprofile.tmpl(profile).appendTo(room.messages);
         }
     };
 
