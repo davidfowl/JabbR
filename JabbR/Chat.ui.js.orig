@@ -1666,10 +1666,11 @@
         },
         shouldCollapseContent: shouldCollapseContent,
         collapseRichContent: collapseRichContent,
+<<<<<<< HEAD
         showGravatarProfile: function (profile) {
             var room = getCurrentRoomElements();
             templates.gravatarprofile.tmpl(profile).appendTo(room.messages);
-        },
+=======
         toggleMessageSection: function (disabledIt) {
             if (disabledIt) {
                 // disable button and textarea
@@ -1695,6 +1696,7 @@
             var room = getRoomElements(roomName);
 
             room.unClose();
+>>>>>>> upstream/master
         }
     };
 
