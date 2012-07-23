@@ -768,7 +768,8 @@
                 message: $('#new-message-template'),
                 notification: $('#new-notification-template'),
                 separator: $('#message-separator-template'),
-                tab: $('#new-tab-template')
+                tab: $('#new-tab-template'),
+                gravatarprofile: $('#gravatar-profile-template')
             };
 
             if (toast.canToast()) {
@@ -1616,7 +1617,11 @@
             room.updateUserStatus($user);
         },
         shouldCollapseContent: shouldCollapseContent,
-        collapseRichContent: collapseRichContent
+        collapseRichContent: collapseRichContent,
+        showGravatarProfile: function (profile) {
+          var room = getCurrentRoomElements();
+          templates.gravatarprofile.tmpl(profile).appendTo(room.messages);
+        }
     };
 
     if (!window.chat) {
