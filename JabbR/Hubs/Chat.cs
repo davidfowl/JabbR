@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using JabbR.Commands;
@@ -179,6 +180,13 @@ namespace JabbR
             ChatUser user = _repository.VerifyUserId(id);
             ChatRoom room = _repository.VerifyUserRoom(_cache, user, message.Room);
 
+            // REVIEW: Is it better to use _repository.VerifyRoom(message.Room, mustBeOpen: false)
+            // here?
+            if (room.Closed)
+            {
+                throw new InvalidOperationException(String.Format("You cannot post messages to '{0}'. The room is closed.", message.Room));
+            }
+
             // Update activity *after* ensuring the user, this forces them to be active
             UpdateActivity(user, room);
 
@@ -279,7 +287,8 @@ namespace JabbR
             {
                 Name = r.Name,
                 Count = r.Users.Count(u => u.Status != (int)UserStatus.Offline),
-                Private = r.Private
+                Private = r.Private,
+                Closed = r.Closed
             }).ToList();
 
             return rooms;
@@ -330,7 +339,8 @@ namespace JabbR
                          select u.Name,
                 RecentMessages = recentMessages.Select(m => new MessageViewModel(m)),
                 Topic = ConvertUrlsAndRoomLinks(room.Topic ?? ""),
-                Welcome = ConvertUrlsAndRoomLinks(room.Welcome ?? "")
+                Welcome = ConvertUrlsAndRoomLinks(room.Welcome ?? ""),
+                Closed = room.Closed
             };
         }
 
@@ -394,7 +404,8 @@ namespace JabbR
                 rooms.Add(new RoomViewModel
                 {
                     Name = room.Name,
-                    Private = room.Private
+                    Private = room.Private,
+                    Closed = room.Closed
                 });
             }
 
@@ -456,6 +467,10 @@ namespace JabbR
 
         private void DisconnectClient(string clientId)
         {
+            // Sleep a little so that a browser refresh doesn't show the user 
+            // coming offline and back online
+            Thread.Sleep(500);
+
             ChatUser user = _service.DisconnectClient(clientId);
 
             // There's no associated user for this client id
@@ -543,7 +558,8 @@ namespace JabbR
             {
                 Name = room.Name,
                 Private = room.Private,
-                Welcome = ConvertUrlsAndRoomLinks(room.Welcome ?? "")
+                Welcome = ConvertUrlsAndRoomLinks(room.Welcome ?? ""),
+                Closed = room.Closed
             };
 
             var isOwner = user.OwnedRooms.Contains(room);
@@ -723,21 +739,26 @@ namespace JabbR
 
         void INotificationService.CloseRoom(IEnumerable<ChatUser> users, ChatRoom room)
         {
-            // Kick all people from the room.
+            // notify all members of room that it is now closed
             foreach (var user in users)
             {
                 foreach (var client in user.ConnectedClients)
                 {
-                    // Kick the user from this room
-                    Clients[client.Id].kick(room.Name);
-
-                    // Remove the user from this the room group so he doesn't get the leave message
-                    Groups.Remove(client.Id, room.Name).Wait();
+                    Clients[client.Id].roomClosed(room.Name);
                 }
             }
+        }
 
-            // Tell the caller the room was successfully closed.
-            Caller.roomClosed(room.Name);
+        void INotificationService.UnCloseRoom(IEnumerable<ChatUser> users, ChatRoom room)
+        {
+            // notify all members of room that it is now re-opened
+            foreach (var user in users)
+            {
+                foreach (var client in user.ConnectedClients)
+                {
+                    Clients[client.Id].roomUnClosed(room.Name);
+                }
+            }
         }
 
         void INotificationService.LogOut(ChatUser user, string clientId)
@@ -887,7 +908,8 @@ namespace JabbR
             var roomViewModel = new RoomViewModel
             {
                 Name = room.Name,
-                Topic = parsedTopic
+                Topic = parsedTopic,
+                Closed = room.Closed
             };
             Clients[room.Name].changeTopic(roomViewModel);
         }
@@ -960,7 +982,8 @@ namespace JabbR
             var roomViewModel = new RoomViewModel
             {
                 Name = room.Name,
-                Private = room.Private
+                Private = room.Private,
+                Closed = room.Closed
             };
 
             // Update the room count

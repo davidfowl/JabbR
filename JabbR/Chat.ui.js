@@ -21,7 +21,7 @@
         templates = null,
         focus = true,
         commands = [],
-        Keys = { Up: 38, Down: 40, Esc: 27, Enter: 13, Slash: 47 },
+        Keys = { Up: 38, Down: 40, Esc: 27, Enter: 13, Slash: 47, Space: 32 },
         scrollTopThreshold = 75,
         toast = window.chat.toast,
         preferences = null,
@@ -33,7 +33,8 @@
         $document = $(document),
         $roomFilterInput = null,
         updateTimeout = 15000,
-        $richness = null;
+        $richness = null,
+        lastPrivate = null;
 
     function getRoomId(roomName) {
         return escape(roomName.toLowerCase()).replace(/[^a-z0-9]/, '_');
@@ -170,6 +171,20 @@
 
         this.exists = function () {
             return this.tab.length > 0;
+        };
+
+        this.isClosed = function () {
+            return this.tab.attr('data-closed') === 'true';
+        };
+
+        this.close = function () {
+            this.tab.attr('data-closed', true);
+            this.tab.addClass('closed');
+        };
+
+        this.unClose = function () {
+            this.tab.attr('data-closed', false);
+            this.tab.removeClass('closed');
         };
 
         this.clear = function () {
@@ -380,15 +395,19 @@
         if (room.Private === true) {
             $room.addClass('locked');
         }
+        if (room.Closed === true) {
+            $room.addClass('closed');
+        }
 
         // Do a little animation
         $room.animate({ backgroundColor: '#e5e5e5' }, 800);
     }
 
 
-    function addRoom(roomName) {
+    function addRoom(roomViewModel) {
         // Do nothing if the room exists
-        var room = getRoomElements(roomName),
+        var roomName = roomViewModel.Name,
+            room = getRoomElements(roomViewModel.Name),
             roomId = null,
             viewModel = null,
             $messages = null,
@@ -405,10 +424,11 @@
         // Add the tab
         viewModel = {
             id: roomId,
-            name: roomName
+            name: roomName,
+            closed: roomViewModel.Closed
         };
 
-        templates.tab.tmpl(viewModel).appendTo($tabs);
+        templates.tab.tmpl(viewModel).data('name', roomName).appendTo($tabs);
 
         $messages = $('<ul/>').attr('id', 'messages-' + roomId)
                               .addClass('messages')
@@ -969,9 +989,11 @@
                 switch (key) {
                     case Keys.Up:
                         cycleMessage(ui.events.prevMessage);
+                        ev.preventDefault();
                         break;
                     case Keys.Down:
                         cycleMessage(ui.events.nextMessage);
+                        ev.preventDefault();
                         break;
                     case Keys.Esc:
                         $(this).val('');
@@ -980,6 +1002,12 @@
                         triggerSend();
                         ev.preventDefault();
                         return false;
+                    case Keys.Space:
+                        // Check for "/r " to reply to last private message
+                        if ($(this).val() === "/r" && lastPrivate) {
+                            ui.setMessage("/msg " + lastPrivate);
+                        }
+                        break;
                 }
             });
 
@@ -1110,6 +1138,8 @@
                 triggerFocus();
                 room.makeActive();
 
+                ui.toggleMessageSection(room.isClosed());
+
                 document.location.hash = '#/rooms/' + roomName;
                 $ui.trigger(ui.events.activeRoomChanged, [roomName]);
                 return true;
@@ -1121,6 +1151,11 @@
             var room = getRoomElements(roomName);
 
             room.setLocked();
+        },
+        setRoomClosed: function (roomName) {
+            var room = getRoomElements(roomName);
+
+            room.close();
         },
         updateLobbyRoomCount: updateLobbyRoomCount,
         updateUnread: function (roomName, isMentioned) {
@@ -1160,16 +1195,21 @@
                                          .html(' (' + this.Count + ')')
                                          .data('count', this.Count),
                     $locked = $('<span/>').addClass('lock'),
+                    $readonly = $('<span/>').addClass('readonly'),
                     $li = $('<li/>').addClass('room')
                           .attr('data-room', this.Name)
                           .data('name', this.Name)
                           .append($locked)
+                          .append($readonly)
                           .append($name)
                           .append($count)
                           .appendTo(lobby.users);
 
                 if (this.Private) {
                     $li.addClass('locked');
+                }
+                if (this.Closed) {
+                    $li.addClass('closed');
                 }
             });
 
@@ -1349,6 +1389,11 @@
                 $message = null,
                 isMention = message.highlight;
 
+            // bounce out of here if the room is closed
+            if (room.isClosed()) {
+                return;
+            }
+
             if ($previousMessage.length > 0) {
                 previousUser = $previousMessage.data('name');
                 previousTimestamp = new Date($previousMessage.data('timestamp') || new Date());
@@ -1423,7 +1468,7 @@
         addPrivateMessage: function (content, type) {
             var rooms = getAllRoomElements();
             for (var r in rooms) {
-                if (rooms[r].getName() != undefined) {
+                if (rooms[r].getName() != undefined && rooms[r].isClosed() === false) {
                     this.addMessage(content, type, rooms[r].getName());
                 }
             }
@@ -1616,11 +1661,40 @@
                  .text('');
             room.updateUserStatus($user);
         },
+        setLastPrivate: function (userName) {
+            lastPrivate = userName;
+        },
         shouldCollapseContent: shouldCollapseContent,
         collapseRichContent: collapseRichContent,
         showGravatarProfile: function (profile) {
             var room = getCurrentRoomElements();
             templates.gravatarprofile.tmpl(profile).appendTo(room.messages);
+        },
+        toggleMessageSection: function (disabledIt) {
+            if (disabledIt) {
+                // disable button and textarea
+                $newMessage.attr('disabled', 'disabled');
+                $submitButton.attr('disabled', 'disabled');
+
+            } else {
+                // re-enable textarea button
+                $newMessage.attr('disabled', '');
+                $newMessage.removeAttr('disabled');
+
+                // re-enable submit button
+                $submitButton.attr('disabled', '');
+                $submitButton.removeAttr('disabled');
+            }
+        },
+        closeRoom: function (roomName) {
+            var room = getRoomElements(roomName);
+
+            room.close();
+        },
+        unCloseRoom: function (roomName) {
+            var room = getRoomElements(roomName);
+
+            room.unClose();
         }
     };
 
