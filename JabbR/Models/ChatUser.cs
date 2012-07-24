@@ -46,6 +46,8 @@ namespace JabbR.Models
         // Private rooms this user is allowed to go into
         public virtual ICollection<ChatRoom> AllowedRooms { get; set; }
 
+        public bool IsBanned { get; set; }
+
         public ChatUser()
         {
             ConnectedClients = new SafeCollection<ChatClient>();

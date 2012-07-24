@@ -408,6 +408,8 @@
     };
 
     chat.logOut = function (rooms) {
+        console.log('stuff');
+        console.log(rooms);
         ui.setActiveRoom('Lobby');
 
         // Close all rooms

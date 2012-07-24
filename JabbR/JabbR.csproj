@@ -819,6 +819,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BanCommand.cs" />
+    <Compile Include="Migrations\201206241630599_BannedUser.cs" />
+    <Compile Include="Migrations\201206241630599_BannedUser.Designer.cs">
+      <DependentUpon>201206241630599_BannedUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebApi\Model\ErrorModel.cs" />
     <Compile Include="Infrastructure\HttpRequestExtensions.cs" />
     <Compile Include="WebApi\MessagesController.cs" />

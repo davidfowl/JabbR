@@ -27,7 +27,6 @@ namespace JabbR.Commands
             ChatUser targetUser = context.Repository.VerifyUser(targetUserName);
 
             context.Service.KickUser(callingUser, targetUser, room);
-
             context.NotificationService.KickUser(targetUser, room);
 
             context.Repository.CommitChanges();
