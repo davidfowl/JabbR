@@ -525,6 +525,25 @@ namespace JabbR
             Caller.setPassword();
         }
 
+        void INotificationService.BanUser(ChatUser targetUser)
+        {
+            var rooms = targetUser.Rooms.Select(x => x.Name);
+	
+            foreach (var room in rooms)
+            {
+                foreach (var client in targetUser.ConnectedClients)
+                {
+                    // Kick the user from this room
+                    Clients[client.Id].kick(room);
+	
+                    // Remove the user from this the room group so he doesn't get the leave message
+                    Groups.Remove(client.Id, room).Wait();
+                }
+            }
+
+            Clients[targetUser.ConnectedClients.First().Id].logOut(rooms);
+        }
+
         void INotificationService.KickUser(ChatUser targetUser, ChatRoom room)
         {
             foreach (var client in targetUser.ConnectedClients)

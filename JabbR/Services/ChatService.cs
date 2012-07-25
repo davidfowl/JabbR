@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -906,6 +906,18 @@ namespace JabbR.Services
             _repository.CommitChanges();
         }
 
+        public void BanUser(ChatUser admin, ChatUser targetUser)
+        {
+            EnsureAdmin(admin);
+
+            if (targetUser.IsAdmin)
+            {
+                throw new InvalidOperationException("You cannot ban another Admin.");
+            }
+
+            targetUser.IsBanned = true;
+            _repository.CommitChanges();
+        }
 
         internal static void ValidateNote(string note, string noteTypeName = "note", int? maxLength = null)
         {
