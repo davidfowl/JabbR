@@ -31,7 +31,9 @@
         $updatePopup = null,
         $window = $(window),
         $document = $(document),
+        $lobbyRoomFilterForm = null,
         $roomFilterInput = null,
+        $closedRoomFilter = null,
         updateTimeout = 15000,
         $richness = null,
         lastPrivate = null;
@@ -46,6 +48,10 @@
 
     function getRoomPreferenceKey(roomName) {
         return '_room_' + roomName;
+    }
+
+    function showClosedRoomsInLobby() {
+        return $closedRoomFilter.is(':checked');
     }
 
     function Room($tab, $usersContainer, $usersOwners, $usersActive, $usersIdle, $messages, $roomTopic) {
@@ -220,7 +226,7 @@
                       .hide();
 
             if (this.isLobby()) {
-                $roomFilterInput.hide();
+                $lobbyRoomFilterForm.hide();
             }
         };
 
@@ -252,7 +258,7 @@
                       .show();
 
             if (this.isLobby()) {
-                $roomFilterInput.show();
+                $lobbyRoomFilterForm.show();
             }
             // if no unread since last separator
             // remove previous separator
@@ -797,7 +803,9 @@
             $login = $('#jabbr-login');
             $updatePopup = $('#jabbr-update');
             focus = true;
-            $roomFilterInput = $('#users-filter');
+            $lobbyRoomFilterForm = $('#users-filter-form'),
+            $roomFilterInput = $('#users-filter'),
+            $closedRoomFilter = $('#users-filter-closed');
             templates = {
                 userlist: $('#new-userlist-template'),
                 user: $('#new-user-template'),
@@ -884,7 +892,7 @@
             });
 
             // handle click on names in chat / room list
-            var prepareMessage = function(ev) {
+            var prepareMessage = function (ev) {
                 var message = $newMessage.val().trim();
 
                 // If it was a message to another person, replace that
@@ -1028,6 +1036,26 @@
                 $downloadDialog.modal('hide');
             });
 
+            $closedRoomFilter.click(function () {
+                var room = getCurrentRoomElements(),
+                    show = $(this).is(':checked');
+
+                // bounce on any room other than lobby
+                if (!room.isLobby()) {
+                    return false;
+                }
+
+                // hide the closed rooms from lobby list
+                if (show) {
+                    room.users.find('.closed').show();
+                } else {
+                    room.users.find('.closed').hide();
+                }
+
+                // clear the search text and update search list
+                ui.$roomFilter.update();
+            });
+
             $window.blur(function () {
                 ui.focus = false;
                 $ui.trigger(ui.events.blurit);
@@ -1139,7 +1167,14 @@
             loadPreferences();
 
             // Initilize liveUpdate plugin for room search
-            ui.$roomFilter = $roomFilterInput.liveUpdate('#userlist-lobby', true);
+            ui.$roomFilter = $roomFilterInput.liveUpdate('#userlist-lobby', function ($theListItem) {
+                if ($theListItem.hasClass('closed') && !showClosedRoomsInLobby()) {
+                    return;
+                }
+
+                // show it
+                $theListItem.show();
+            });
 
             // Start cycling the messages once the document has finished loading.
             cycleMessages();
@@ -1281,16 +1316,17 @@
         },
         populateLobbyRooms: function (rooms) {
             var lobby = getLobby(),
+                showClosedRooms = $closedRoomFilter.is(':checked'),
             // sort lobby by room open ascending then count descending
-            sorted = rooms.sort(function (a, b) {
-                if (a.Closed && !b.Closed) {
-                    return 1;
-                } else if (b.Closed && !a.Closed) {
-                    return -1;
-                }
+                sorted = rooms.sort(function (a, b) {
+                    if (a.Closed && !b.Closed) {
+                        return 1;
+                    } else if (b.Closed && !a.Closed) {
+                        return -1;
+                    }
 
-                return a.Count > b.Count ? -1 : 1;
-            });
+                    return a.Count > b.Count ? -1 : 1;
+                });
 
             lobby.users.empty();
 
@@ -1316,12 +1352,15 @@
                 }
                 if (this.Closed) {
                     $li.addClass('closed');
+                    if (!showClosedRooms) {
+                        $li.hide();
+                    }
                 }
             });
 
             if (lobby.isActive()) {
                 // update cache of room names
-                $roomFilterInput.show();
+                $lobbyRoomFilterForm.show();
             }
 
             ui.$roomFilter.update();
