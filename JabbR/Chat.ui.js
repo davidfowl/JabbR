@@ -21,7 +21,7 @@
         templates = null,
         focus = true,
         commands = [],
-        Keys = { Up: 38, Down: 40, Esc: 27, Enter: 13, Slash: 47 },
+        Keys = { Up: 38, Down: 40, Esc: 27, Enter: 13, Slash: 47, Space: 32, Tab: 9 },
         scrollTopThreshold = 75,
         toast = window.chat.toast,
         preferences = null,
@@ -31,9 +31,12 @@
         $updatePopup = null,
         $window = $(window),
         $document = $(document),
+        $lobbyRoomFilterForm = null,
         $roomFilterInput = null,
+        $closedRoomFilter = null,
         updateTimeout = 15000,
-        $richness = null;
+        $richness = null,
+        lastPrivate = null;
 
     function getRoomId(roomName) {
         return escape(roomName.toLowerCase()).replace(/[^a-z0-9]/, '_');
@@ -45,6 +48,10 @@
 
     function getRoomPreferenceKey(roomName) {
         return '_room_' + roomName;
+    }
+
+    function showClosedRoomsInLobby() {
+        return $closedRoomFilter.is(':checked');
     }
 
     function Room($tab, $usersContainer, $usersOwners, $usersActive, $usersIdle, $messages, $roomTopic) {
@@ -96,6 +103,14 @@
 
         this.hasUnread = function () {
             return this.tab.hasClass('unread');
+        };
+
+        this.hasMessages = function () {
+            return this.tab.data('messages');
+        };
+
+        this.updateMessages = function (value) {
+            this.tab.data('messages', value);
         };
 
         this.getUnread = function () {
@@ -153,6 +168,11 @@
         };
 
         this.scrollToBottom = function () {
+            // IE will repaint if we do the Chrome bugfix and look jumpy
+            if ($.browser.webkit) {
+                // Chrome fix for hiding and showing scroll areas
+                this.messages.scrollTop(0);
+            }
             this.messages.scrollTop(this.messages[0].scrollHeight);
         };
 
@@ -170,6 +190,20 @@
 
         this.exists = function () {
             return this.tab.length > 0;
+        };
+
+        this.isClosed = function () {
+            return this.tab.attr('data-closed') === 'true';
+        };
+
+        this.close = function () {
+            this.tab.attr('data-closed', true);
+            this.tab.addClass('closed');
+        };
+
+        this.unClose = function () {
+            this.tab.attr('data-closed', false);
+            this.tab.removeClass('closed');
         };
 
         this.clear = function () {
@@ -192,7 +226,7 @@
                       .hide();
 
             if (this.isLobby()) {
-                $roomFilterInput.hide();
+                $lobbyRoomFilterForm.hide();
             }
         };
 
@@ -224,7 +258,7 @@
                       .show();
 
             if (this.isLobby()) {
-                $roomFilterInput.show();
+                $lobbyRoomFilterForm.show();
             }
             // if no unread since last separator
             // remove previous separator
@@ -380,15 +414,19 @@
         if (room.Private === true) {
             $room.addClass('locked');
         }
+        if (room.Closed === true) {
+            $room.addClass('closed');
+        }
 
         // Do a little animation
         $room.animate({ backgroundColor: '#e5e5e5' }, 800);
     }
 
 
-    function addRoom(roomName) {
+    function addRoom(roomViewModel) {
         // Do nothing if the room exists
-        var room = getRoomElements(roomName),
+        var roomName = roomViewModel.Name,
+            room = getRoomElements(roomViewModel.Name),
             roomId = null,
             viewModel = null,
             $messages = null,
@@ -405,10 +443,11 @@
         // Add the tab
         viewModel = {
             id: roomId,
-            name: roomName
+            name: roomName,
+            closed: roomViewModel.Closed
         };
 
-        templates.tab.tmpl(viewModel).appendTo($tabs);
+        templates.tab.tmpl(viewModel).data('name', roomName).appendTo($tabs);
 
         $messages = $('<ul/>').attr('id', 'messages-' + roomId)
                               .addClass('messages')
@@ -462,8 +501,11 @@
                 return;
             }
 
-            // If you're we're near the top, raise the event
-            if ($(this).scrollTop() <= scrollTopThreshold) {
+            // If you're we're near the top, raise the event, but if the scroll
+            // bar is small enough that we're at the bottom edge, ignore it.
+            // We have to use the ui version because the room object above is
+            // not fully initialized, so there are no messages.
+            if ($(this).scrollTop() <= scrollTopThreshold && !ui.isNearTheEnd(roomId)) {
                 var $child = $messages.children('.message:first');
                 if ($child.length > 0) {
                     messageId = $child.attr('id')
@@ -730,17 +772,17 @@
         //lets store any events to be triggered as constants here to aid intellisense and avoid
         //string duplication everywhere
         events: {
-            closeRoom: 'closeRoom',
-            prevMessage: 'prevMessage',
-            openRoom: 'openRoom',
-            nextMessage: 'nextMessage',
-            activeRoomChanged: 'activeRoomChanged',
-            scrollRoomTop: 'scrollRoomTop',
-            typing: 'typing',
-            sendMessage: 'sendMessage',
-            focusit: 'focusit',
-            blurit: 'blurit',
-            preferencesChanged: 'preferencesChanged'
+            closeRoom: 'jabbr.ui.closeRoom',
+            prevMessage: 'jabbr.ui.prevMessage',
+            openRoom: 'jabbr.ui.openRoom',
+            nextMessage: 'jabbr.ui.nextMessage',
+            activeRoomChanged: 'jabbr.ui.activeRoomChanged',
+            scrollRoomTop: 'jabbr.ui.scrollRoomTop',
+            typing: 'jabbr.ui.typing',
+            sendMessage: 'jabbr.ui.sendMessage',
+            focusit: 'jabbr.ui.focusit',
+            blurit: 'jabbr.ui.blurit',
+            preferencesChanged: 'jabbr.ui.preferencesChanged'
         },
 
         initialize: function (state) {
@@ -761,14 +803,17 @@
             $login = $('#jabbr-login');
             $updatePopup = $('#jabbr-update');
             focus = true;
-            $roomFilterInput = $('#users-filter');
+            $lobbyRoomFilterForm = $('#users-filter-form'),
+            $roomFilterInput = $('#users-filter'),
+            $closedRoomFilter = $('#users-filter-closed');
             templates = {
                 userlist: $('#new-userlist-template'),
                 user: $('#new-user-template'),
                 message: $('#new-message-template'),
                 notification: $('#new-notification-template'),
                 separator: $('#message-separator-template'),
-                tab: $('#new-tab-template')
+                tab: $('#new-tab-template'),
+                gravatarprofile: $('#gravatar-profile-template')
             };
 
             if (toast.canToast()) {
@@ -825,6 +870,51 @@
                     ui.expandNotifications($notification);
                 }
             });
+
+            // handle tab cycling - we skip the lobby when cycling
+            $document.on('keydown', function (ev) {
+                if (ev.keyCode === Keys.Tab && $newMessage.val() === "") {
+                    var current = getCurrentRoomElements(),
+                        index = current.tab.index(),
+                        tabCount = $tabs.children().length - 1;
+
+                    if (!ev.shiftKey) {
+                        // Next tab
+                        index = index % tabCount + 1;
+                    } else {
+                        // Prev tab
+                        index = (index - 1) || tabCount;
+                    }
+
+                    ui.setActiveRoom($tabs.children().eq(index).data('name'));
+                    $newMessage.focus();
+                }
+            });
+
+            // handle click on names in chat / room list
+            var prepareMessage = function (ev) {
+                var message = $newMessage.val().trim();
+
+                // If it was a message to another person, replace that
+                if (message.indexOf('/msg') === 0) {
+                    message = message.replace(/^\/msg \S+/, '');
+                }
+
+                // Re-focus because we lost it on the click
+                $newMessage.focus();
+
+                // Do not convert this to a message if it is a command
+                if (message[0] === '/') {
+                    return false;
+                }
+
+                // Prepend our target username
+                message = '/msg ' + $(this).text().trim() + ' ' + message;
+                ui.setMessage(message);
+                return false;
+            }
+            $document.on('click', '.users li.user .name', prepareMessage);
+            $document.on('click', '.message .left .name', prepareMessage);
 
             $submitButton.click(function (ev) {
                 triggerSend();
@@ -946,6 +1036,26 @@
                 $downloadDialog.modal('hide');
             });
 
+            $closedRoomFilter.click(function () {
+                var room = getCurrentRoomElements(),
+                    show = $(this).is(':checked');
+
+                // bounce on any room other than lobby
+                if (!room.isLobby()) {
+                    return false;
+                }
+
+                // hide the closed rooms from lobby list
+                if (show) {
+                    room.users.find('.closed').show();
+                } else {
+                    room.users.find('.closed').hide();
+                }
+
+                // clear the search text and update search list
+                ui.$roomFilter.update();
+            });
+
             $window.blur(function () {
                 ui.focus = false;
                 $ui.trigger(ui.events.blurit);
@@ -967,10 +1077,14 @@
                 var key = ev.keyCode || ev.which;
                 switch (key) {
                     case Keys.Up:
-                        cycleMessage(ui.events.prevMessage);
+                        if (cycleMessage(ui.events.prevMessage)) {
+                            ev.preventDefault();
+                        }
                         break;
                     case Keys.Down:
-                        cycleMessage(ui.events.nextMessage);
+                        if (cycleMessage(ui.events.nextMessage)) {
+                            ev.preventDefault();
+                        }
                         break;
                     case Keys.Esc:
                         $(this).val('');
@@ -979,14 +1093,23 @@
                         triggerSend();
                         ev.preventDefault();
                         return false;
+                    case Keys.Space:
+                        // Check for "/r " to reply to last private message
+                        if ($(this).val() === "/r" && lastPrivate) {
+                            ui.setMessage("/msg " + lastPrivate);
+                        }
+                        break;
                 }
             });
 
+            // Returns true if a cycle was triggered
             function cycleMessage(messageHistoryDirection) {
                 var currentMessage = $newMessage[0].value;
                 if (currentMessage.length === 0 || lastCycledMessage === currentMessage) {
                     $ui.trigger(messageHistoryDirection);
+                    return true;
                 }
+                return false;
             }
 
             // Auto-complete for user names
@@ -1044,7 +1167,14 @@
             loadPreferences();
 
             // Initilize liveUpdate plugin for room search
-            ui.$roomFilter = $roomFilterInput.liveUpdate('#userlist-lobby', true);
+            ui.$roomFilter = $roomFilterInput.liveUpdate('#userlist-lobby', function ($theListItem) {
+                if ($theListItem.hasClass('closed') && !showClosedRoomsInLobby()) {
+                    return;
+                }
+
+                // show it
+                $theListItem.show();
+            });
 
             // Start cycling the messages once the document has finished loading.
             cycleMessages();
@@ -1109,6 +1239,8 @@
                 triggerFocus();
                 room.makeActive();
 
+                ui.toggleMessageSection(room.isClosed());
+
                 document.location.hash = '#/rooms/' + roomName;
                 $ui.trigger(ui.events.activeRoomChanged, [roomName]);
                 return true;
@@ -1120,6 +1252,11 @@
             var room = getRoomElements(roomName);
 
             room.setLocked();
+        },
+        setRoomClosed: function (roomName) {
+            var room = getRoomElements(roomName);
+
+            room.close();
         },
         updateLobbyRoomCount: updateLobbyRoomCount,
         updateUnread: function (roomName, isMentioned) {
@@ -1138,6 +1275,40 @@
                 room.scrollToBottom();
             }
         },
+        watchMessageScroll: function (messageIds, roomName) {
+            // Given an array of message ids, if there is any embedded content
+            // in it, it may cause the window to scroll off of the bottom, so we
+            // can watch for that and correct it.
+            messageIds = $.map(messageIds, function (id) { return '#m-' + id; });
+
+            var $messages = $(messageIds.join(',')),
+                $content = $messages.expandableContent(),
+                room = getRoomElements(roomName),
+                nearTheEndBefore = room.messages.isNearTheEnd(),
+                scrollTopBefore = room.messages.scrollTop();
+
+            if (nearTheEndBefore && $content.length > 0) {
+                // Note that the load event does not bubble, so .on() is not
+                // suitable here.
+                $content.load(function (event) {
+                    // If we used to be at the end and our scrollTop() did not
+                    // change, then we can safely call scrollToBottom() without
+                    // worrying about interrupting the user. We skip this if the
+                    // room is already at the end in the event of multiple
+                    // images loading at the same time.
+                    if (!room.messages.isNearTheEnd() && scrollTopBefore === room.messages.scrollTop()) {
+                        room.scrollToBottom();
+                        // Reset our scrollTopBefore so we know we are allowed
+                        // to move it again if another image loads and the user
+                        // hasn't touched it
+                        scrollTopBefore = room.messages.scrollTop();
+                    }
+
+                    // unbind the event from this object after it executes
+                    $(this).unbind(event);
+                });
+            }
+        },
         isNearTheEnd: function (roomName) {
             var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
 
@@ -1145,10 +1316,17 @@
         },
         populateLobbyRooms: function (rooms) {
             var lobby = getLobby(),
-            // sort lobby by room count descending
-            sorted = rooms.sort(function (a, b) {
-                return a.Count > b.Count ? -1 : 1;
-            });
+                showClosedRooms = $closedRoomFilter.is(':checked'),
+            // sort lobby by room open ascending then count descending
+                sorted = rooms.sort(function (a, b) {
+                    if (a.Closed && !b.Closed) {
+                        return 1;
+                    } else if (b.Closed && !a.Closed) {
+                        return -1;
+                    }
+
+                    return a.Count > b.Count ? -1 : 1;
+                });
 
             lobby.users.empty();
 
@@ -1159,10 +1337,12 @@
                                          .html(' (' + this.Count + ')')
                                          .data('count', this.Count),
                     $locked = $('<span/>').addClass('lock'),
+                    $readonly = $('<span/>').addClass('readonly'),
                     $li = $('<li/>').addClass('room')
                           .attr('data-room', this.Name)
                           .data('name', this.Name)
                           .append($locked)
+                          .append($readonly)
                           .append($name)
                           .append($count)
                           .appendTo(lobby.users);
@@ -1170,11 +1350,17 @@
                 if (this.Private) {
                     $li.addClass('locked');
                 }
+                if (this.Closed) {
+                    $li.addClass('closed');
+                    if (!showClosedRooms) {
+                        $li.hide();
+                    }
+                }
             });
 
             if (lobby.isActive()) {
                 // update cache of room names
-                $roomFilterInput.show();
+                $lobbyRoomFilterForm.show();
             }
 
             ui.$roomFilter.update();
@@ -1260,6 +1446,15 @@
             $user.find('.gravatar')
                  .attr('src', src);
         },
+        showGravatarProfile: function (profile) {
+            var room = getCurrentRoomElements(),
+                nearEnd = ui.isNearTheEnd();
+
+            this.appendMessage(templates.gravatarprofile.tmpl(profile), room);
+            if (nearEnd) {
+                ui.scrollToBottom();
+            }
+        },
         removeUser: function (user, roomName) {
             var room = getRoomElements(roomName),
                 $user = room.getUser(user.Name);
@@ -1273,6 +1468,11 @@
             var room = getRoomElements(roomName),
                 $user = room.getUser(userViewModel.name),
                 timeout = null;
+
+            // if the user is somehow missing from room, add them
+            if ($user.length === 0) {
+                ui.addUser(userViewModel, roomName);
+            }
 
             // Do not show typing indicator for current user
             if (userViewModel.name === ui.getUserName()) {
@@ -1301,12 +1501,25 @@
                 $previousMessage = null,
                 $current = null,
                 previousUser = null,
-                previousTimestamp = new Date();
+                previousTimestamp = new Date().addDays(1); // Tomorrow so we always see a date line
 
             if (messages.length === 0) {
                 // Mark this list as full
                 $messages.data('full', true);
                 return;
+            }
+
+            // If our top message is a date header, it might be incorrect, so we
+            // check to see if we should remove it so that it can be inserted
+            // again at a more appropriate time.
+            if ($target.is('.list-header.date-header')) {
+                var postedDate = new Date($target.text()).toDate();
+                var lastPrependDate = messages[messages.length - 1].date.toDate();
+
+                if (!lastPrependDate.diffDays(postedDate)) {
+                    $target.remove();
+                    $target = $messages.children().first();
+                }
             }
 
             // Populate the old messages
@@ -1320,7 +1533,11 @@
 
                 if (this.date.toDate().diffDays(previousTimestamp.toDate())) {
                     ui.addMessageBeforeTarget(this.date.toLocaleDateString(), 'list-header', $target)
+                      .addClass('date-header')
                       .find('.right').remove(); // remove timestamp on date indicator
+
+                    // Force a user name to show after the header
+                    previousUser = null;
                 }
 
                 // Determine if we need to show the user
@@ -1336,6 +1553,14 @@
                 $previousMessage = $('#m-' + this.id);
             });
 
+            // If our old top message is a message from the same user as the
+            // last message in our prepended history, we can remove information
+            // and continue
+            if ($target.is('.message') && $target.data('name') === $previousMessage.data('name')) {
+                $target.find('.left').children().not('.state').remove();
+                $previousMessage.addClass('continue');
+            }
+
             // Scroll to the bottom element so the user sees there's more messages
             $target[0].scrollIntoView();
         },
@@ -1343,14 +1568,24 @@
             var room = getRoomElements(roomName),
                 $previousMessage = room.messages.children().last(),
                 previousUser = null,
-                previousTimestamp = new Date(),
+                previousTimestamp = new Date().addDays(1), // Tomorrow so we always see a date line
                 showUserName = true,
                 $message = null,
                 isMention = message.highlight;
 
+            // bounce out of here if the room is closed
+            if (room.isClosed()) {
+                return;
+            }
+
             if ($previousMessage.length > 0) {
                 previousUser = $previousMessage.data('name');
                 previousTimestamp = new Date($previousMessage.data('timestamp') || new Date());
+            }
+
+            // Force a user name to show if a header will be displayed
+            if (message.date.toDate().diffDays(previousTimestamp.toDate())) {
+                previousUser = null;
             }
 
             // Determine if we need to show the user name next to the message
@@ -1372,12 +1607,7 @@
                 room.addSeparator();
             }
 
-            if (message.date.toDate().diffDays(previousTimestamp.toDate())) {
-                ui.addMessage(message.date.toLocaleDateString(), 'list-header', roomName)
-                  .find('.right').remove(); // remove timestamp on date indicator
-            }
-
-            templates.message.tmpl(message).appendTo(room.messages);
+            this.appendMessage(templates.message.tmpl(message), room);
 
             if (room.isInitialized()) {
                 if (isMention) {
@@ -1422,7 +1652,7 @@
         addPrivateMessage: function (content, type) {
             var rooms = getAllRoomElements();
             for (var r in rooms) {
-                if (rooms[r].getName() != undefined) {
+                if (rooms[r].getName() != undefined && rooms[r].isClosed() === false) {
                     this.addMessage(content, type, rooms[r].getName());
                 }
             }
@@ -1453,8 +1683,9 @@
                 nearEnd = room.isNearTheEnd(),
                 $element = null;
 
-            $element = ui.prepareNotificationMessage(content, type)
-                         .appendTo(room.messages);
+            $element = ui.prepareNotificationMessage(content, type);
+
+            this.appendMessage($element, room);
 
             if (type === 'notification' && room.isLobby() === false) {
                 ui.collapseNotifications($element);
@@ -1465,6 +1696,29 @@
             }
 
             return $element;
+        },
+        appendMessage: function (newMessage, room) {
+            // Determine if we need to show a new date header: Two conditions
+            // for instantly skipping are if this message is a date header, or
+            // if the room only contains non-chat messages and we're adding a
+            // non-chat message.
+            var isMessage = $(newMessage).is('.message');
+            if (!$(newMessage).is('.date-header') && (isMessage || room.hasMessages())) {
+                var lastMessage = room.messages.find('li[data-timestamp]').last(),
+                    lastDate = new Date(lastMessage.data('timestamp')),
+                    thisDate = new Date($(newMessage).data('timestamp'));
+
+                if (!lastMessage.length || thisDate.toDate().diffDays(lastDate.toDate())) {
+                    ui.addMessage(thisDate.toLocaleDateString(), 'date-header list-header', room.getName())
+                      .find('.right').remove(); // remove timestamp on date indicator
+                }
+            }
+
+            if (isMessage) {
+                room.updateMessages(true);
+            }
+
+            $(newMessage).appendTo(room.messages);
         },
         hasFocus: function () {
             return ui.focus;
@@ -1615,8 +1869,37 @@
                  .text('');
             room.updateUserStatus($user);
         },
+        setLastPrivate: function (userName) {
+            lastPrivate = userName;
+        },
         shouldCollapseContent: shouldCollapseContent,
-        collapseRichContent: collapseRichContent
+        collapseRichContent: collapseRichContent,
+        toggleMessageSection: function (disabledIt) {
+            if (disabledIt) {
+                // disable button and textarea
+                $newMessage.attr('disabled', 'disabled');
+                $submitButton.attr('disabled', 'disabled');
+
+            } else {
+                // re-enable textarea button
+                $newMessage.attr('disabled', '');
+                $newMessage.removeAttr('disabled');
+
+                // re-enable submit button
+                $submitButton.attr('disabled', '');
+                $submitButton.removeAttr('disabled');
+            }
+        },
+        closeRoom: function (roomName) {
+            var room = getRoomElements(roomName);
+
+            room.close();
+        },
+        unCloseRoom: function (roomName) {
+            var room = getRoomElements(roomName);
+
+            room.unClose();
+        }
     };
 
     if (!window.chat) {

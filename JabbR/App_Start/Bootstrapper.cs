@@ -156,12 +156,6 @@ namespace JabbR.App_Start
         {
             try
             {
-                var afkUsers = repository.Users.Online().Where(u => u.IsAfk);
-                foreach (var u in afkUsers)
-                {
-                    u.Status = (int)UserStatus.Offline;
-                }
-
                 repository.RemoveAllClients();
                 repository.CommitChanges();
             }
@@ -241,20 +235,12 @@ namespace JabbR.App_Start
             var clients = connectionManager.GetHubContext<Chat>().Clients;
             var inactiveUsers = new List<ChatUser>();
 
-            IQueryable<ChatUser> users = from u in repo.Users.Online()
-                                         where !u.IsAfk
-                                         select u;
+            IQueryable<ChatUser> users = repo.Users.Online();
 
             foreach (var user in users)
             {
                 var status = (UserStatus)user.Status;
                 var elapsed = DateTime.UtcNow - user.LastActivity;
-
-                if (elapsed.TotalMinutes > 30)
-                {
-                    // After 30 minutes of inactivity make the user afk
-                    user.IsAfk = true;
-                }
 
                 if (elapsed.TotalMinutes > 15)
                 {

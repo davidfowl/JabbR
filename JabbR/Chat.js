@@ -65,19 +65,26 @@
                         ui.setRoomOwner(this, room);
                     });
 
+                    var messageIds = [];
                     $.each(roomInfo.RecentMessages, function () {
                         var viewModel = getMessageViewModel(this);
 
+                        messageIds.push(viewModel.id);
                         ui.addChatMessage(viewModel, room);
                     });
 
                     ui.changeRoomTopic(roomInfo);
+
                     // mark room as initialized to differentiate messages
                     // that are added after initial population
                     ui.setInitialized(room);
                     ui.scrollToBottom(room);
 
                     d.resolveWith(chat);
+
+                    // Watch the messages after the defer, since room messages
+                    // may be appended if we are just joining the room
+                    ui.watchMessageScroll(messageIds, room);
                 })
                 .fail(function () {
                     d.rejectWith(chat);
@@ -181,10 +188,13 @@
 
     // When the /join command gets raised this is called
     chat.joinRoom = function (room) {
-        var added = ui.addRoom(room.Name);
+        var added = ui.addRoom(room);
         ui.setActiveRoom(room.Name);
         if (room.Private) {
             ui.setRoomLocked(room.Name);
+        }
+        if (room.Closed) {
+            ui.setRoomClosed(room.Name);
         }
 
         if (added) {
@@ -211,9 +221,12 @@
             };
 
         $.each(rooms, function (index, room) {
-            ui.addRoom(room.Name);
+            ui.addRoom(room);
             if (room.Private) {
                 ui.setRoomLocked(room.Name);
+            }
+            if (room.Closed) {
+                ui.setRoomClosed(room.Name);
             }
         });
         ui.setUserName(chat.name);
@@ -255,6 +268,23 @@
     chat.roomClosed = function (room) {
         populateLobbyRooms();
         ui.addMessage('Room \'' + room + '\' is now closed', 'notification', this.activeRoom);
+
+        ui.closeRoom(room);
+
+        if (this.activeRoom === room) {
+            ui.toggleMessageSection(true);
+        }
+    };
+
+    chat.roomUnClosed = function (room) {
+        populateLobbyRooms();
+        ui.addMessage('Room \'' + room + '\' is now open', 'notification', this.activeRoom);
+
+        ui.unCloseRoom(room);
+
+        if (this.activeRoom === room) {
+            ui.toggleMessageSection(false);
+        }
     };
 
     chat.addOwner = function (user, room) {
@@ -282,36 +312,25 @@
     };
 
     chat.addMessageContent = function (id, content, room) {
-        var nearTheEndBefore = ui.isNearTheEnd(room);
-
         scrollIfNecessary(function () {
             ui.addChatMessageContent(id, content, room);
         }, room);
 
         updateUnread(room, false /* isMentioned: this is outside normal messages and user shouldn't be mentioned */);
 
-        // Adding external content can sometimes take a while to load
-        // Since we don't know when it'll become full size in the DOM
-        // we're just going to wait a little bit and hope for the best :) (still a HACK tho)
-        window.setTimeout(function () {
-            var nearTheEndAfter = ui.isNearTheEnd(room);
-            if (nearTheEndBefore && nearTheEndAfter) {
-                ui.scrollToBottom();
-            }
-        }, 850);
+        ui.watchMessageScroll([id], room);
     };
 
     chat.addMessage = function (message, room) {
         var viewModel = getMessageViewModel(message);
 
-        // Update your message when it comes from the server
-        if (ui.messageExists(viewModel.id)) {
-            ui.replaceMessage(viewModel);
-            return;
-        }
-
         scrollIfNecessary(function () {
-            ui.addChatMessage(viewModel, room);
+            // Update your message when it comes from the server
+            if (ui.messageExists(viewModel.id)) {
+                ui.replaceMessage(viewModel);
+            } else {
+                ui.addChatMessage(viewModel, room);
+            }
         }, room);
 
         var isMentioned = viewModel.highlight === 'highlight';
@@ -452,6 +471,10 @@
             ui.addMessage('Note: ' + userInfo.Note, 'list-item');
         }
 
+        $.getJSON('https://secure.gravatar.com/' + userInfo.Hash + '.json?callback=?', function (profile) {
+            ui.showGravatarProfile(profile.entry[0]);
+        });
+
         chat.showUsersOwnedRoomList(userInfo.Name, userInfo.OwnedRooms);
     };
 
@@ -552,6 +575,7 @@
         if (isSelf({ Name: to })) {
             // Force notification for direct messages
             ui.notify(true);
+            ui.setLastPrivate(from);
         }
 
         ui.addPrivateMessage('<emp>*' + from + '* &raquo; *' + to + '*</emp> ' + message, 'pm');

@@ -12,15 +12,24 @@
     string realm = ConfigurationManager.AppSettings["fedauth.realm"];
 
     bool showWaadSelector = !String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace) && !Request.IsAuthenticated;
+
+    string sha = ConfigurationManager.AppSettings["releaseSha"];
+    string branch = ConfigurationManager.AppSettings["releaseBranch"];
+    string time = ConfigurationManager.AppSettings["releaseTime"];
+    bool showReleaseDetails = !String.IsNullOrEmpty(sha) && !String.IsNullOrEmpty(branch) && !String.IsNullOrEmpty(time);
+
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>JabbR</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <meta name="description" content="A real-time chat application. IRC without the R." />
     <meta name="keywords" content="chat,realtime chat,signalr,jabbr" />
+    <link href="/Content/images/logo32.png" rel="icon" type="image/png" sizes="32x32">
+    <link href="/Content/images/logo64.png" rel="icon" type="image/png" sizes="64x64">
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" sizes="16x16">
     <%= Bundle.Css()
             .Add("~/Chat.css",
                   "~/Chat.nuget.css",
@@ -31,7 +40,6 @@
                   "~/Content/bootstrap.min.css",
                   "~/Content/emoji20.css",
                   "~/Content/IdentityProviderSelector.css")
-            .ForceRelease()
             .Render("~/Content/JabbR_#.css")
   %>
 
@@ -154,8 +162,9 @@
         </div>
     </script>
     <script id="new-tab-template" type="text/x-jquery-tmpl">
-        <li id="tabs-${id}" class="room" data-name="${name}" role="tab">
+        <li id="tabs-${id}" class="room" data-name="${name}" data-closed="${closed}" role="tab">
             <span class="lock"></span>
+            <span class="readonly"></span>
             <button> 
                 <span class="content">${name}</span>
             </button>
@@ -215,30 +224,26 @@
         </div>   
     </script>
     <!-- /Github Issus Content Provider -->
-     <!-- /Windows Azure Active Directory Identity Provider Selector-->
-    <script id="waad-idp-selector" type="text/x-jquery-tmpl">
-        <div id="waad-login" class="modal hide fade">
-            <div class="modal-header">
-              <a class="close" data-dismiss="modal">&times;</a>
-              <h3>JabbR Login</h3>
+    <!--Gravatar Profile Template for Who command-->
+    <script id="gravatar-profile-template" type="text/x-jquery-tmpl">
+        <div class="collapsible_content">
+            <div class="collapsible_pin">
             </div>
-            <div class="modal-body">
-              <div id="waadEmbed">
-                {{if IdentityProviders.length == 0}}
-                    <p>No identity providers were configured in Windows Azure Active Directory</p>
-                {{else}}
-                <ul>
-                    {{each IdentityProviders}}
-                        <li><a href="${LoginUrl}" title="Login with ${Name}">${Name}</a></li>
-                    {{/each}}
-                </ul>
-                {{/if}}
-              </div>
+            <h3 class="collapsible_title">Gravatar Profile: ${profileUrl} (click to show/hide)
+            </h3>
+            <div class="collapsible_box">
+                <div class="gravatar_${hash} gravatarProfile">
+                    <div class="user">
+                        <img src="${thumbnailUrl}">
+                        <span class="name">${preferredUsername}</span> (${name.formatted})
+                        <p><a href="${profileUrl}" target="_blank">${profileUrl}</a></p>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
-     <!-- /Windows Azure Active Directory Identity Provider Selector-->
-</head>
+    <!--/Gravatar Profile Template-->
+     <!-- /Windows Azure Active Directory Identity Provider Selector-->    <script id="waad-idp-selector" type="text/x-jquery-tmpl">        <div id="waad-login" class="modal hide fade">            <div class="modal-header">              <a class="close" data-dismiss="modal">&times;</a>              <h3>JabbR Login</h3>            </div>            <div class="modal-body">              <div id="waadEmbed">                {{if IdentityProviders.length == 0}}                    <p>No identity providers were configured in Windows Azure Active Directory</p>                {{else}}                <ul>                    {{each IdentityProviders}}                        <li><a href="${LoginUrl}" title="Login with ${Name}">${Name}</a></li>                    {{/each}}                </ul>                {{/if}}              </div>            </div>        </div>    </script>     <!-- /Windows Azure Active Directory Identity Provider Selector--></head>
 <body>
   <section id="page" role="application">
     <header id="heading" role="heading">
@@ -249,10 +254,8 @@
           Powered by <a href="https://github.com/SignalR/SignalR" target="_blank">SignalR</a>
         </div>
       </div>
-      <a href="https://github.com/davidfowl/JabbR" class="forkme" target="_blank">
-        </a>
-          <div style="clear: both">
-    </div>
+      
+      <div style="clear: both"></div>
     <nav>
       <ul id="tabs" role="tablist">
         <li id="tabs-lobby" class="current lobby" data-name="Lobby" role="tab">
@@ -267,7 +270,11 @@
       <ul id="messages-lobby" class="messages current" role="log">
       </ul>
       <form id="users-filter-form" action="#">
-      <input id="users-filter" class="filter" type="text" />
+        <input id="users-filter" class="filter" type="text" />
+        <label id="users-filter-closed-area">
+          <input id="users-filter-closed" type="checkbox" />
+          Show Closed Rooms?
+        </label>
       </form>
       <ul id="userlist-lobby" class="users current">
       </ul>
@@ -287,6 +294,15 @@
       </div>
       </form>
     </div>
+    <% if (showReleaseDetails) { %>
+    <div id="releaseArea">
+        <p id="releaseTag">
+            Deployed from <a target="_blank" href="https://github.com/davidfowl/JabbR/commit/<%:sha %>" title="View the commit."><%:sha.Substring(0, 10) %></a>
+            on <a target="_blank" href="https://github.com/davidfowl/JabbR/branches/<%:branch %>" title="View the branch."><%:branch %></a> 
+            at <%:time %>.
+        </p>
+    </div>
+    <% } %>
     <audio src="Content/sounds/notification.wav" id="noftificationSound" hidden="hidden" aria-hidden="true">
     </audio>
     <section id="popups" aria-hidden="true" aria-haspopup="true">
@@ -349,37 +365,35 @@
   </section> 
   <%= Bundle.JavaScript()
             .Add("~/Scripts/jquery-1.7.min.js",
-            "~/Scripts/json2.min.js",
-        "~/Scripts/bootstrap.js",
-        "~/Scripts/jquery.KeyTips.js",
-        "~/Scripts/jquery-ui-1.8.17.min.js",
-        "~/Scripts/jquery.signalR-0.5.2.min.js")
-            .ForceRelease()
+                "~/Scripts/json2.min.js",
+                "~/Scripts/bootstrap.js",
+                "~/Scripts/jquery.KeyTips.js",
+                "~/Scripts/jquery-ui-1.8.17.min.js",
+                "~/Scripts/jquery.signalR-0.5.2.min.js")
             .Render("~/Scripts/JabbR1_#.js")
   %>
   <script type="text/javascript" src='<%= ResolveClientUrl("~/signalr/hubs") %>'></script>
   <%= Bundle.JavaScript()
             .Add("~/Scripts/jQuery.tmpl.min.js",
-        "~/Scripts/jquery.cookie.js",
-        "~/Scripts/jquery.autotabcomplete.js",
-        "~/Scripts/jquery.timeago.0.10.js",
-        "~/Scripts/jquery.captureDocumentWrite.min.js",
-        "~/Scripts/jquery.sortElements.js",
-        "~/Scripts/quicksilver.js",
-        "~/Scripts/jquery.livesearch.js",
-        "~/Scripts/Markdown.Converter.js",
-        "~/Scripts/jquery.history.js",
-        "~/Chat.utility.js",
-        "~/Chat.emoji.js",
-        "~/Chat.toast.js",
-        "~/Chat.ui.js",
-        "~/Chat.documentOnWrite.js",
-        "~/Chat.twitter.js",
-        "~/Chat.pinnedWindows.js",
-        "~/Chat.githubissues.js",
-        "~/Chat.js",
-        "~/Scripts/waad.selector.js")
-            .ForceRelease()
+                "~/Scripts/jquery.cookie.js",
+                "~/Scripts/jquery.autotabcomplete.js",
+                "~/Scripts/jquery.timeago.0.10.js",
+                "~/Scripts/jquery.captureDocumentWrite.min.js",
+                "~/Scripts/jquery.sortElements.js",
+                "~/Scripts/quicksilver.js",
+                "~/Scripts/jquery.livesearch.js",
+                "~/Scripts/Markdown.Converter.js",
+                "~/Scripts/jquery.history.js",
+                "~/Chat.utility.js",
+                "~/Chat.emoji.js",
+                "~/Chat.toast.js",
+                "~/Chat.ui.js",
+                "~/Chat.documentOnWrite.js",
+                "~/Chat.twitter.js",
+                "~/Chat.pinnedWindows.js",
+                "~/Chat.githubissues.js",
+                "~/Chat.js",
+                "~/Scripts/waad.selector.js")
             .Render("~/Scripts/JabbR2_#.js")
   %>
 </body>

@@ -607,7 +607,7 @@ namespace JabbR.Services
             return client;
         }
 
-        public ChatUser DisconnectClient(string clientId)
+        public void DisconnectClient(string clientId)
         {
             // Remove this client from the list of user's clients
             ChatClient client = _repository.GetClientById(clientId, includeUser: true);
@@ -615,7 +615,7 @@ namespace JabbR.Services
             // No client tracking this user
             if (client == null)
             {
-                return null;
+                return;
             }
 
             // Get the user for this client
@@ -634,8 +634,6 @@ namespace JabbR.Services
                 _repository.Remove(client);
                 _repository.CommitChanges();
             }
-
-            return user;
         }
 
         private void EnsureUserNameIsAvailable(string userName)
@@ -840,18 +838,6 @@ namespace JabbR.Services
                 throw new InvalidOperationException(String.Format("{0} is already closed.", targetRoom.Name));
             }
 
-            // Make sure the (owner) user is not in the room.
-            if (targetRoom.Users.Contains(user))
-            {
-                throw new InvalidOperationException("You are trying to close a room which you are still in. Please leave the room before closing it.");
-            }
-
-            // Kick all existing users in the room.
-            foreach (var targetUser in targetRoom.Users.ToList())
-            {
-                LeaveRoom(targetUser, targetRoom);
-            }
-
             // Make the room closed.
             targetRoom.Closed = true;
 
@@ -950,7 +936,7 @@ namespace JabbR.Services
                     "Sorry, but the country ISO code you requested doesn't exist. Please refer to http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a proper list of country ISO codes.");
             }
         }
-
+         
         internal static string GetCountry(string isoCode)
         {
             if (String.IsNullOrEmpty(isoCode))
