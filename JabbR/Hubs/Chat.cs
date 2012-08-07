@@ -786,6 +786,11 @@ namespace JabbR
 
             var rooms = user.Rooms.Select(r => r.Name);
 
+            if (!string.IsNullOrEmpty(_settings.FedAuthIdentityProviderUrl))
+            {
+                FederatedIdentity.FederatedIdentityHelper.LogOff();
+            }
+
             Caller.logOut(rooms);
         }
 

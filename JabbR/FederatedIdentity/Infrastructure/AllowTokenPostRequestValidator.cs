@@ -1,12 +1,11 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Util;
-using JabbR.App_Start;
-using JabbR.Services;
 using Microsoft.IdentityModel.Protocols.WSFederation;
-using Ninject;
 
-namespace JabbR.Auth
+namespace JabbR.FederatedIdentity.Infrastructure
 {
     public class AllowTokenPostRequestValidator : RequestValidator
     {
@@ -14,13 +13,6 @@ namespace JabbR.Auth
                                                      RequestValidationSource requestValidationSource,
                                                      string collectionKey, out int validationFailureIndex)
         {
-            var settings = Bootstrapper.Kernel.Get<IApplicationSettings>();
-            if (string.IsNullOrEmpty(settings.FedAuthIdentityProviderUrl))
-            {
-                return base.IsValidRequestString(context, value, requestValidationSource, collectionKey,
-                                             out validationFailureIndex);
-            }
-
             validationFailureIndex = 0;
 
             if (requestValidationSource == RequestValidationSource.Form &&

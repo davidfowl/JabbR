@@ -55,6 +55,14 @@ namespace JabbR.Services
             }
         }
 
+        public string FedAuthReplyUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["fedauth.replyUrl"];
+            }
+        }
+
         public string FedAuthCertificateThumbprint
         {
             get
