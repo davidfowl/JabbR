@@ -5,6 +5,13 @@
     string appName = ConfigurationManager.AppSettings["auth.appName"];
     string apiKey = ConfigurationManager.AppSettings["auth.apiKey"];
     string googleAnalytics = ConfigurationManager.AppSettings["googleAnalytics"];
+    
+    // Windows Azure Active Directory
+    string waadSelectorEnabled = ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"];
+    string waadNamespace = ConfigurationManager.AppSettings["fedauth.waad.serviceNamespace"];
+    string realm = ConfigurationManager.AppSettings["fedauth.realm"];
+
+    bool showWaadSelector = !String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace) && !Request.IsAuthenticated;
 
     string sha = ConfigurationManager.AppSettings["releaseSha"];
     string branch = ConfigurationManager.AppSettings["releaseBranch"];
@@ -30,7 +37,8 @@
                   "~/Chat.dictionary.css",
                   "~/Content/KeyTips.css",
                   "~/Content/bootstrap.min.css",
-                  "~/Content/emoji20.css")
+                  "~/Content/emoji20.css",
+                  "~/Content/IdentityProviderSelector.css")
             .Render("~/Content/JabbR_#.css")
   %>
 
@@ -69,6 +77,24 @@
         })();
     </script>
     <% } %>
+
+    <% if (showWaadSelector)
+       { %>
+    <script type="text/javascript">
+        (function () {
+            function isReady() {
+                window.waadSelector('<%: waadNamespace %>', '<%: realm  %>');
+            };
+
+            if (document.addEventListener) {
+                document.addEventListener("DOMContentLoaded", isReady, false);
+            } else {
+                window.attachEvent('onload', isReady);
+            }
+        })();
+    </script>
+    <% } %>
+  
     <% if (!String.IsNullOrEmpty(googleAnalytics)) { %>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -223,7 +249,29 @@
         </div>
     </script>
     <!--/Gravatar Profile Template-->
-</head>
+    <!-- /Windows Azure Active Directory Identity Provider Selector-->    
+    <script id="waad-idp-selector" type="text/x-jquery-tmpl">        
+    <div id="waad-login" class="modal hide fade">            
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h3>JabbR Login</h3>
+        </div>
+        <div class="modal-body">
+            <div id="waadEmbed">
+                {{if IdentityProviders.length == 0}}
+                <p>No identity providers were configured in Windows Azure Active Directory</p>                
+                {{else}}
+                <ul>
+                {{each IdentityProviders}}
+                    <li><a href="${LoginUrl}" title="Login with ${Name}">${Name}</a></li>
+                {{/each}}
+                </ul>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    </script>
+    <!-- /Windows Azure Active Directory Identity Provider Selector--></head>
 <body>
   <section id="page" role="application">
     <header id="heading" role="heading">
@@ -286,7 +334,7 @@
     <% } %>
     <audio src="Content/sounds/notification.wav" id="noftificationSound" hidden="hidden" aria-hidden="true">
     </audio>
-    <section aria-hidden="true" aria-haspopup="true">
+    <section id="popups" aria-hidden="true" aria-haspopup="true">
       <div id="disconnect-dialog" class="modal hide fade">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">&times;</a>
@@ -397,7 +445,8 @@
                 "~/Chat.twitter.js",
                 "~/Chat.pinnedWindows.js",
                 "~/Chat.githubissues.js",
-                "~/Chat.js")
+                "~/Chat.js",
+                "~/Scripts/waad.selector.js")
             .Render("~/Scripts/JabbR2_#.js")
   %>
 </body>

@@ -77,6 +77,10 @@
       <HintPath>..\packages\Jurassic.2.1.1\lib\Jurassic.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -111,6 +115,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20515.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
@@ -143,9 +148,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebActivator, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
+      <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
     </Reference>
     <Reference Include="Yahoo.Yui.Compressor">
       <HintPath>..\packages\YUICompressor.NET.1.7.1.0\lib\net35\Yahoo.Yui.Compressor.dll</HintPath>
@@ -765,6 +770,7 @@
     <Content Include="Chat.githubissues.js" />
     <Content Include="Chat.githubissues.css" />
     <Content Include="Chat.nuget.css" />
+    <Content Include="Content\IdentityProviderSelector.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\images\big-logo.png" />
     <Content Include="Content\images\logo32.png" />
@@ -776,6 +782,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="robots.txt" />
+    <Content Include="Scripts\waad.selector.js" />
     <Content Include="Scripts\jquery.history.js" />
     <Content Include="Scripts\jquery-1.7-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.js" />
@@ -819,14 +826,26 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\FederatedIdentityBootstrapper.cs" />
     <Compile Include="Commands\CommandMetaData.cs" />
     <Compile Include="Commands\WelcomeCommand.cs" />
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="ContentProviders\SpotifyContentProvider.cs" />
+    <Compile Include="FederatedIdentity\FederatedIdentityConfiguration.cs" />
+    <Compile Include="FederatedIdentity\FederatedIdentityHelper.cs" />
+    <Compile Include="FederatedIdentity\Infrastructure\AllowTokenPostRequestValidator.cs" />
+    <Compile Include="FederatedIdentity\Infrastructure\CustomIssuerNameRegistry.cs" />
+    <Compile Include="FederatedIdentity\Infrastructure\CustomSessionAuthenticationModule.cs" />
+    <Compile Include="FederatedIdentity\Infrastructure\CustomWSFederationAuthenticationModule.cs" />
+    <Compile Include="FederatedIdentity\Infrastructure\CustomWSFederationAuthenticationModule.Hooks.cs" />
+    <Compile Include="FederatedIdentity\Infrastructure\MachineKeySessionSecurityTokenHandler.cs" />
     <Compile Include="Migrations\201206201924146_RoomWelcome.cs" />
     <Compile Include="Migrations\201206201924146_RoomWelcome.Designer.cs">
       <DependentUpon>201206201924146_RoomWelcome.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\ApplicationSettingsExtensions.cs" />
+    <Compile Include="Services\IdentityLinker.cs" />
+    <Compile Include="Services\IIdentityLinker.cs" />
     <Compile Include="WebApi\Model\ErrorModel.cs" />
     <Compile Include="Infrastructure\HttpRequestExtensions.cs" />
     <Compile Include="WebApi\MessagesController.cs" />

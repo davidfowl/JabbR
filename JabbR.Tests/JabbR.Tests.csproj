@@ -76,6 +76,7 @@
     <Compile Include="ChatServiceFacts.cs" />
     <Compile Include="CommandManagerFacts.cs" />
     <Compile Include="ApiFrontPageControllerFacts.cs" />
+    <Compile Include="IdentityLinkerFacts.cs" />
     <Compile Include="TextTransformFacts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryStringCollectionTests.cs" />
