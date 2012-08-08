@@ -1,5 +1,5 @@
-﻿using System.Configuration;
-using System;
+﻿using System;
+using System.Configuration;
 
 namespace JabbR.Services
 {

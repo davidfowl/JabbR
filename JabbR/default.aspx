@@ -6,12 +6,13 @@
     string apiKey = ConfigurationManager.AppSettings["auth.apiKey"];
     string googleAnalytics = ConfigurationManager.AppSettings["googleAnalytics"];
     
-    // Windows Azure Active Directory
+    // Federated Authentication
+    string identityProviderUrl = ConfigurationManager.AppSettings["fedauth.identityProviderUrl"];
     string waadSelectorEnabled = ConfigurationManager.AppSettings["fedauth.waad.selectorEnabled"];
     string waadNamespace = ConfigurationManager.AppSettings["fedauth.waad.serviceNamespace"];
     string realm = ConfigurationManager.AppSettings["fedauth.realm"];
 
-    bool showWaadSelector = !String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace) && !Request.IsAuthenticated;
+    bool showWaadSelector = !String.IsNullOrEmpty(waadSelectorEnabled) && bool.Parse(waadSelectorEnabled) && !String.IsNullOrEmpty(waadNamespace);
 
     string sha = ConfigurationManager.AppSettings["releaseSha"];
     string branch = ConfigurationManager.AppSettings["releaseBranch"];
@@ -78,12 +79,24 @@
     </script>
     <% } %>
 
-    <% if (showWaadSelector)
-       { %>
+    <% if (!String.IsNullOrEmpty(identityProviderUrl)) { %>
     <script type="text/javascript">
         (function () {
             function isReady() {
-                window.waadSelector('<%: waadNamespace %>', '<%: realm  %>');
+                var authCookie = window.JSON.parse($.cookie('jabbr.state'));
+                if (authCookie && authCookie.userId)
+                    return;
+
+                var selectorEnabled = <%: waadSelectorEnabled %>;
+                var waadNamespace = '<%: waadNamespace %>';
+                var realm = '<%: realm  %>';
+                var identityProviderUrl = '<%: identityProviderUrl %>';
+                if (selectorEnabled && waadNamespace) {
+                    window.waadSelector(waadNamespace, realm);
+                } else {
+                    var wsFedSignIn = identityProviderUrl + '?wa=wsignin1.0&wtrealm=' + escape(realm);
+                    document.location.href = wsFedSignIn;
+                }
             };
 
             if (document.addEventListener) {

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Util;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 
-namespace JabbR.FederatedIdentity.Infrastructure
+namespace JabbR.FederatedIdentity
 {
     public class AllowTokenPostRequestValidator : RequestValidator
     {

@@ -826,19 +826,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\FederatedIdentityBootstrapper.cs" />
+    <Compile Include="FederatedIdentity\Login.ashx.cs">
+      <DependentUpon>Login.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Commands\CommandMetaData.cs" />
     <Compile Include="Commands\WelcomeCommand.cs" />
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="ContentProviders\SpotifyContentProvider.cs" />
-    <Compile Include="FederatedIdentity\FederatedIdentityConfiguration.cs" />
-    <Compile Include="FederatedIdentity\FederatedIdentityHelper.cs" />
-    <Compile Include="FederatedIdentity\Infrastructure\AllowTokenPostRequestValidator.cs" />
-    <Compile Include="FederatedIdentity\Infrastructure\CustomIssuerNameRegistry.cs" />
-    <Compile Include="FederatedIdentity\Infrastructure\CustomSessionAuthenticationModule.cs" />
-    <Compile Include="FederatedIdentity\Infrastructure\CustomWSFederationAuthenticationModule.cs" />
-    <Compile Include="FederatedIdentity\Infrastructure\CustomWSFederationAuthenticationModule.Hooks.cs" />
-    <Compile Include="FederatedIdentity\Infrastructure\MachineKeySessionSecurityTokenHandler.cs" />
+    <Compile Include="FederatedIdentity\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Migrations\201206201924146_RoomWelcome.cs" />
     <Compile Include="Migrations\201206201924146_RoomWelcome.Designer.cs">
       <DependentUpon>201206201924146_RoomWelcome.cs</DependentUpon>
@@ -1095,6 +1090,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Chat.emoji.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FederatedIdentity\Login.ashx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
