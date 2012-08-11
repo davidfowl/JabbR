@@ -2261,3 +2261,27 @@ li.clearfix
     background-color: #E5E5E5;
     color: #00103F;
 }
+
+
+/**** HADOUKEN ASSETS ****/
+.hadouken
+{
+    width:320px;
+    height:320px;
+    background:url('Content/images/hadouken-ball.png') no-repeat;
+    z-index:9999999;
+    position:fixed;
+    top:19%;
+    left:-320px;
+}
+
+.ryu
+{
+    width:748px;
+    height:744px;
+    background:url('Content/images/ryu.png') no-repeat;
+    z-index:9999999;
+    position:fixed;
+    top:10%;
+    left:-1100px;
+}
