@@ -676,6 +676,7 @@
     <Content Include="Content\images\flags.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\hadouken-ball.png" />
     <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\lockwhite.png" />
     <Content Include="Content\images\icons-18-black.png" />
@@ -689,6 +690,7 @@
     <Content Include="Content\images\question-icon.png" />
     <Content Include="Content\images\richness-off.png" />
     <Content Include="Content\images\richness-on.png" />
+    <Content Include="Content\images\ryu.png" />
     <Content Include="Content\images\toast-off.png" />
     <Content Include="Content\images\toast-on.png" />
     <Content Include="Content\images\pop-in-icon.png" />
@@ -705,6 +707,7 @@
     <Content Include="Content\KeyTips.css" />
     <Content Include="Content\popup-back.gif" />
     <Content Include="Content\qunit.css" />
+    <Content Include="Content\sounds\hadouken_sound_effect.mp3" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />

@@ -800,6 +800,30 @@
             pendingMessages[id] = messageCompleteTimeout;
         }
 
+        if ($.trim(msg).toLowerCase() === "/hadouken") {
+            var hadouken = $('<div class="hadouken"></div>'), ryu = $('<div class="ryu"></div>');
+            $("body").append(hadouken, ryu);
+            $(hadouken).animate({ left: $(window).width() + 400 },
+                                2000,
+                                "linear",
+                                function () { $(hadouken).remove(); });
+            $(ryu).animate({ left: -400 },
+                                600,
+                                "linear",
+                                function () { setTimeout(function () { $(ryu).remove(); }, 1000); });
+
+            var audio = document.createElement("audio");
+            audio.src = "Content/sounds/hadouken_sound_effect.mp3";
+            audio.addEventListener("ended", function () {
+                if ($(audio).length) {
+                    $(audio).remove();
+                }
+            }, false);
+            audio.play();
+
+            return true;
+        }
+
         chat.send(clientMessage)
             .done(function (requiresUpdate) {
                 if (requiresUpdate === true) {
