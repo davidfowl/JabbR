@@ -74,12 +74,12 @@ namespace JabbR
                 return false;
             }
 
-            // Migrate all users to use new auth
-            if (!String.IsNullOrEmpty(_settings.AuthApiKey) &&
-                String.IsNullOrEmpty(user.Identity))
+            // Migrate all users to use the non-default auth (janrain or fedauth)
+            if (_settings.AllowNullIdentity(user))
             {
                 return false;
             }
+
 
             // Update some user values
             _service.UpdateActivity(user, Context.ConnectionId, UserAgent);
