@@ -467,7 +467,11 @@
         else if (userInfo.Note) {
             ui.addMessage('Note: ' + userInfo.Note, 'list-item');
         }
-
+        
+        if (userInfo.Id) {
+            ui.addMessage('Id: ' + userInfo.Id + " (don't share this!)", 'list-item');
+        }
+        
         if (userInfo.Hash) {
             $.getJSON('https://secure.gravatar.com/' + userInfo.Hash + '.json?callback=?', function(profile) {
                 ui.showGravatarProfile(profile.entry[0]);

@@ -775,8 +775,11 @@ namespace JabbR
         {
             string userId = GetUserId();
 
+            bool displayUserId = userId == user.Id;
+
             Caller.showUserInfo(new
             {
+                Id = displayUserId ? user.Id : string.Empty,
                 Name = user.Name,
                 OwnedRooms = user.OwnedRooms
                     .Allowed(userId)
