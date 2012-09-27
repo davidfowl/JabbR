@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using JabbR.ContentProviders.Core;
+﻿using JabbR.ContentProviders.Core;
 using JabbR.Infrastructure;
-using System.Text.RegularExpressions;
-using SignalR.Hosting.Common;
+using System;
+using System.Threading.Tasks;
 
 namespace JabbR.ContentProviders
 {
