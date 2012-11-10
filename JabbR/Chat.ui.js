@@ -839,14 +839,6 @@
                 commandhelp: $('#command-help-template')
             };
 
-            if (toast.canToast()) {
-                $toast.show();
-            }
-            else {
-                $richness.css({ left: '55px' });
-                $downloadIcon.css({ left: '90px' });
-            }
-
             // DOM events
             $document.on('click', 'h3.collapsible_title', function () {
                 var $message = $(this).closest('.message'),
