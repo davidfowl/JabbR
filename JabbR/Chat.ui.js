@@ -845,8 +845,6 @@
             else {
                 $richness.css({ left: '55px' });
                 $downloadIcon.css({ left: '90px' });
-                // We need to set the toast setting to false
-                preferences.canToast = false;
             }
 
             // DOM events
