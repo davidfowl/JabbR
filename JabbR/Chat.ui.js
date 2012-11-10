@@ -1042,6 +1042,7 @@
 
             $(toast).bind('toast.focus', function (ev, room) {
                 window.focus();
+                ui.setActiveRoom(room);
             });
 
             $downloadIcon.click(function () {
