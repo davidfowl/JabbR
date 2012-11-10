@@ -1,30 +1,26 @@
 ﻿/// <reference path="Scripts/jquery-1.7.js" />
-(function($) {
+/// <reference path="Scripts/toastr.js" />
+(function ($) {
     "use strict";
 
-    var ToastStatus = { Allowed: 0, NotConfigured: 1, Blocked: 2 },
-        toastTimeOut = 10000,
-        chromeToast = null,
-        toastRoom = null;
+    var toastTimeOut = 10000,
+        chromeToast = null;
 
-    var toast = {
+    var chromePolyfill = {
+        ToastStatus: { Allowed: 0, NotConfigured: 1, Blocked: 2 },
         canToast: function () {
-            // we can toast if webkitNotifications exist and the user hasn't explicitly denied
-            return window.webkitNotifications && window.webkitNotifications.checkPermission() !== ToastStatus.Blocked;
+            // we can toast if the user hasn't explicitly denied
+            return window.webkitNotifications.checkPermission() !== this.ToastStatus.Blocked;
         },
         ensureToast: function (preferences) {
-            if (window.webkitNotifications &&
-                window.webkitNotifications.checkPermission() === ToastStatus.NotConfigured) {
+            if (window.webkitNotifications.checkPermission() === this.ToastStatus.NotConfigured) {
                 preferences.canToast = false;
             }
         },
-        toastMessage: function(message, roomName) {
-            if (!window.webkitNotifications ||
-                window.webkitNotifications.checkPermission() !== ToastStatus.Allowed) {
+        toastMessage: function (message, roomName) {
+            if (window.webkitNotifications.checkPermission() !== this.ToastStatus.Allowed) {
                 return;
             }
-
-            toastRoom = roomName;
 
             // Hide any previously displayed toast
             toast.hideToast();
@@ -42,46 +38,67 @@
 
             chromeToast.onclick = function () {
                 toast.hideToast();
-                                
+
                 // Trigger the focus event
-                $(toast).trigger('toast.focus', [toastRoom]);
+                $(toast).trigger('toast.focus', [roomName]);
             };
 
             chromeToast.show();
         },
-        hideToast: function() {
+        hideToast: function () {
             if (chromeToast && chromeToast.cancel) {
                 chromeToast.cancel();
             }
         },
-        enableToast: function(callback) {
+        enableToast: function (callback) {
             var deferred = $.Deferred();
-            if (window.webkitNotifications) {
-                // If not configured, request permission
-                if (window.webkitNotifications.checkPermission() === ToastStatus.NotConfigured) {
-                    window.webkitNotifications.requestPermission(function () {
-                        if (window.webkitNotifications.checkPermission()) {
-                            deferred.reject();
-                        }
-                        else {
-                            deferred.resolve();
-                        }
-                    });
-                }
-                else if (window.webkitNotifications.checkPermission() === ToastStatus.Allowed) {
-                    // If we're allowed then just resolve here
-                    deferred.resolve();
-                }
-                else {
-                    // We don't have permission
-                    deferred.reject();
-                }
+            // If not configured, request permission
+            if (window.webkitNotifications.checkPermission() === this.ToastStatus.NotConfigured) {
+                window.webkitNotifications.requestPermission(function () {
+                    if (window.webkitNotifications.checkPermission()) {
+                        deferred.reject();
+                    }
+                    else {
+                        deferred.resolve();
+                    }
+                });
+            }
+            else if (window.webkitNotifications.checkPermission() === this.ToastStatus.Allowed) {
+                // If we're allowed then just resolve here
+                deferred.resolve();
+            }
+            else {
+                // We don't have permission
+                deferred.reject();
             }
 
             return deferred;
         }
     };
-    
+
+    var toastrPolyfill = {
+        canToast: function () {
+            return true;
+        },
+        ensureToast: function (preferences) {
+            preferences.canToast = true;
+        },
+        toastMessage: function (message, roomName) {
+            var overrides = {}
+            overrides.timeOut = toastTimeOut;
+            toastr.info(message.message, message.trimmedName, overrides);
+        },
+        hideToast: function () {
+        },
+        enableToast: function (callback) {
+            var deferred = $.Deferred();
+            deferred.resolve();
+            return deferred;
+        }
+    };
+
+    var toast = window.webkitNotifications ? chromePolyfill : toastrPolyfill;
+
     if (!window.chat) {
         window.chat = {};
     }
