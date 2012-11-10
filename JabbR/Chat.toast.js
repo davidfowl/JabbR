@@ -27,7 +27,7 @@
 
             chromeToast = window.webkitNotifications.createNotification(
                 'Content/images/logo32.png',
-                message.trimmedName,
+                roomName + ' : ' + message.trimmedName,
                 $('<div/>').html(message.message).text());
 
             chromeToast.ondisplay = function () {
@@ -84,9 +84,9 @@
             preferences.canToast = true;
         },
         toastMessage: function (message, roomName) {
-            var overrides = {}
+            var overrides = {};
             overrides.timeOut = toastTimeOut;
-            toastr.info(message.message, message.trimmedName, overrides);
+            toastr.info(message.message, roomName + ' : ' + message.trimmedName, overrides);
         },
         hideToast: function () {
         },
