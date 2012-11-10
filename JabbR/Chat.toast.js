@@ -86,6 +86,9 @@
         toastMessage: function (message, roomName) {
             var overrides = {};
             overrides.timeOut = toastTimeOut;
+            overrides.onclick = function () {
+                $(toast).trigger('toast.focus', [roomName]);
+            }
             toastr.info(message.message, roomName + ' : ' + message.trimmedName, overrides);
         },
         hideToast: function () {
