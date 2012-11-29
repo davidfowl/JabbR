@@ -31,6 +31,7 @@
             .Add("~/Content/KeyTips.css")
             .Add("~/Content/bootstrap.min.css")
             .Add("~/Content/emoji20.css")
+            .Add("~/Content/toastr.css")
             .Render("~/Content/JabbR_#.css")
   %>
 
@@ -391,6 +392,7 @@
             .Add("~/Scripts/jquery.history.js")
             .Add("~/Chat.utility.js")
             .Add("~/Chat.emoji.js")
+            .Add("~/Scripts/toastr.js")
             .Add("~/Chat.toast.js")
             .Add("~/Chat.ui.js")
             .Add("~/Chat.documentOnWrite.js")

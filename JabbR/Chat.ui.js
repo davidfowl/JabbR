@@ -839,16 +839,6 @@
                 commandhelp: $('#command-help-template')
             };
 
-            if (toast.canToast()) {
-                $toast.show();
-            }
-            else {
-                $richness.css({ left: '55px' });
-                $downloadIcon.css({ left: '90px' });
-                // We need to set the toast setting to false
-                preferences.canToast = false;
-            }
-
             // DOM events
             $document.on('click', 'h3.collapsible_title', function () {
                 var $message = $(this).closest('.message'),
@@ -1044,6 +1034,7 @@
 
             $(toast).bind('toast.focus', function (ev, room) {
                 window.focus();
+                ui.setActiveRoom(room);
             });
 
             $downloadIcon.click(function () {
