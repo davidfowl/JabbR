@@ -127,11 +127,11 @@ namespace JabbR.Nancy
 
             Get["/unlink/{providerName}"] = param =>
                 {
-                    var provider = param["providerName"];
+                    string provider = param["providerName"].ToString();
                     ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
 
                     var identity = user.Identities.ToList()
-                        .Find(ident => ident.ProviderName.Equals(provider.ToString(), StringComparison.InvariantCultureIgnoreCase));
+                        .Find(ident => ident.ProviderName.Equals(provider, StringComparison.InvariantCultureIgnoreCase));
                     
                     if (identity != null)
                     {
@@ -139,7 +139,7 @@ namespace JabbR.Nancy
 
                         return Response.AsRedirect("~/account");
                     }
-                    ModelValidationResult.AddError("_FORM", String.Format("Unable to find identity for provider: {0}.", provider.ToString()));
+                    ModelValidationResult.AddError("_FORM", String.Format("Unable to find identity for provider: {0}.", provider));
                     return View["index", new ProfilePageViewModel(user, authService.Providers)];
                 };
         }
