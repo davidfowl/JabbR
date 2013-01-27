@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
@@ -145,6 +146,22 @@ namespace JabbR.Nancy
                     AddValidationError("_FORM", ex.Message);
                     return View["register", ModelValidationResult];
                 }
+            };
+
+            Post["/unlink"] = param =>
+            {
+                string provider = Request.Form.provider;
+                ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
+
+                var identity = user.Identities.FirstOrDefault(ident => ident.ProviderName == provider);
+                    
+                if (identity != null)
+                {
+                    repository.Remove(identity);
+
+                    return Response.AsRedirect("~/account");
+                }
+                return HttpStatusCode.BadRequest;
             };
         }
 
