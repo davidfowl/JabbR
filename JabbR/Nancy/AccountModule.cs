@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
@@ -123,6 +124,24 @@ namespace JabbR.Nancy
                     return View["register", ModelValidationResult];
                 }
             };
+
+            Get["/unlink/{providerName}"] = param =>
+                {
+                    var provider = param["providerName"];
+                    ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
+
+                    var identity = user.Identities.ToList()
+                        .Find(ident => ident.ProviderName.Equals(provider.ToString(), StringComparison.InvariantCultureIgnoreCase));
+                    
+                    if (identity != null)
+                    {
+                        repository.Remove(identity);
+
+                        return Response.AsRedirect("~/account");
+                    }
+                    ModelValidationResult.AddError("_FORM", String.Format("Unable to find identity for provider: {0}.", provider.ToString()));
+                    return View["index", new ProfilePageViewModel(user, authService.Providers)];
+                };
         }
 
         private LoginViewModel GetLoginViewModel(IApplicationSettings applicationSettings, IJabbrRepository repository,
