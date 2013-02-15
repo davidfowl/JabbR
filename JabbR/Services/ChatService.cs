@@ -708,6 +708,13 @@ namespace JabbR.Services
             _repository.CommitChanges();
         }
 
+        public void ToggleConnectionMessage(ChatUser user, ChatRoom room)
+        {
+            EnsureOwnerOrAdmin(user, room);
+            room.IsConnectionMessageDisplayed = !room.IsConnectionMessageDisplayed;
+            _repository.CommitChanges();
+        }
+
         public void AddAdmin(ChatUser admin, ChatUser targetUser)
         {
             // Ensure the user is admin

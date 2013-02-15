@@ -29,6 +29,7 @@ namespace JabbR.Services
         void OpenRoom(ChatUser user, ChatRoom targetRoom);
         void ChangeTopic(ChatUser user, ChatRoom room, string newTopic);
         void ChangeWelcome(ChatUser user, ChatRoom room, string newWelcome);
+        void ToggleConnectionMessage(ChatUser user, ChatRoom room);
         void AppendMessage(string id, string content);
 
         // Admin commands

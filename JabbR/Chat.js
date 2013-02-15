@@ -355,13 +355,13 @@
         updateUnread(room, isMentioned);
     };
 
-    chat.client.addUser = function (user, room, isOwner) {
+    chat.client.addUser = function (user, room, isOwner, isConnectionMessageDisplayed) {
         var viewModel = getUserViewModel(user, isOwner);
 
         var added = ui.addUser(viewModel, room);
 
         if (added) {
-            if (!isSelf(user)) {
+            if (!isSelf(user) && isConnectionMessageDisplayed) {
                 ui.addMessage(user.Name + ' just entered ' + room, 'notification', room);
             }
         }
@@ -535,6 +535,12 @@
         }
     };
 
+    chat.client.connectionMessageStateChanged = function(roomName, isDisplayed) {
+        var state = isDisplayed ? '' : '*not*';
+        var message = 'You have changed this room\'s connection message state to: connection messages will ' + state + ' be displayed.';
+        ui.addMessage(message, 'notification', roomName);
+    };
+
     // Called when you have added or cleared a flag
     chat.client.flagChanged = function (isCleared, country) {
         var action = isCleared ? 'cleared' : 'set';
@@ -623,7 +629,7 @@
         ui.addMessage('*' + from + ' nudged ' + (to ? 'you' : 'the room'), to ? 'pm' : 'notification');
     };
 
-    chat.client.leave = function (user, room) {
+    chat.client.leave = function (user, room, isConnectionMessageDisplayed) {
         if (isSelf(user)) {
             ui.setActiveRoom('Lobby');
             ui.removeRoom(room);
@@ -631,7 +637,9 @@
         }
         else {
             ui.removeUser(user, room);
-            ui.addMessage(user.Name + ' left ' + room, 'notification', room);
+            if (isConnectionMessageDisplayed) {
+                ui.addMessage(user.Name + ' left ' + room, 'notification', room);
+            }
         }
     };
 

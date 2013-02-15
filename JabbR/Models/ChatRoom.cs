@@ -20,6 +20,8 @@ namespace JabbR.Models
         [StringLength(200)]
         public string Welcome { get; set; }
 
+        public bool IsConnectionMessageDisplayed { get; set; }
+
         // Private rooms
         public bool Private { get; set; }
         public virtual ICollection<ChatUser> AllowedUsers { get; set; }
