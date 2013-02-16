@@ -1,5 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -10,7 +11,7 @@ namespace JabbR.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Join which room?");
+                throw new InvalidOperationException(LanguageResources.JoinWhichRoom);
             }
 
             // Extract arguments

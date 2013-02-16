@@ -1,9 +1,10 @@
-﻿using System;
-using JabbR.Infrastructure;
+﻿using JabbR.Infrastructure;
 using JabbR.Models;
+using JabbR.Resources;
 using JabbR.Services;
 using Nancy;
 using Nancy.Authentication.WorldDomination;
+using System;
 using WorldDomination.Web.Authentication;
 
 namespace JabbR.Nancy
@@ -49,7 +50,7 @@ namespace JabbR.Nancy
 
                         // If a user is already logged in, then we know they could only have gotten here via the account page,
                         // so we will redirect them there
-                        nancyModule.AddAlertMessage("success", String.Format("Successfully linked {0} account.", providerName));
+                        nancyModule.AddAlertMessage("success", String.Format(LanguageResources.SuccessfullyLinkedXAccount, providerName));
                         return nancyModule.Response.AsRedirect("~/account/#identityProviders");
                     }
                     else
@@ -84,7 +85,7 @@ namespace JabbR.Nancy
                 else if (loggedInUser != null && user != loggedInUser)
                 {
                     // You can't link an account that's already attached to another user
-                    nancyModule.AddAlertMessage("error", String.Format("This {0} account has already been linked to another user.", providerName));
+                    nancyModule.AddAlertMessage("error", String.Format(LanguageResources.ThisXAccountHasAlreadyBeenLinkedToAnotherUser, providerName));
                     
                     // If a user is logged in then we know they got here from the account page, and we should redirect them back there
                     return nancyModule.Response.AsRedirect("~/account/#identityProviders");

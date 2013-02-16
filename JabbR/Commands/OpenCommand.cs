@@ -1,6 +1,7 @@
-﻿using System;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 using System.Linq;
-using JabbR.Models;
 
 namespace JabbR.Commands
 {
@@ -11,7 +12,7 @@ namespace JabbR.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Which room do you want to open?");
+                throw new InvalidOperationException(LanguageResources.WhichRoomDoYouWantToOpen);
             }
 
             string roomName = args[0];

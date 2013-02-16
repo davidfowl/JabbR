@@ -1,9 +1,9 @@
-﻿using System;
+﻿using JabbR.Services;
+using JabbR.Resources;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
-using JabbR.Models;
-using JabbR.Services;
 
 namespace JabbR.Commands
 {
@@ -101,11 +101,11 @@ namespace JabbR.Commands
             }
             catch (CommandNotFoundException)
             {
-                throw new InvalidOperationException(String.Format("'{0}' is not a valid command.", commandName));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAValidCommand, commandName));
             }
             catch (CommandAmbiguityException e)
             {
-                throw new InvalidOperationException(String.Format("'{0}' is ambiguous: {1}.", commandName, String.Join(", ", e.Ambiguities)));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsAmbiguousY, commandName, String.Join(", ", e.Ambiguities)));
             }
 
             command.Execute(context, callerContext, args);

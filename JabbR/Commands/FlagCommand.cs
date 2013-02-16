@@ -1,6 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
 using JabbR.Services;
+using System;
 
 namespace JabbR.Commands
 {

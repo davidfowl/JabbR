@@ -19,12 +19,12 @@
         </div>
         <div class="control-group">
             <div class="controls">
-                <button type="submit" class="btn">Sign in</button>
+                <button type="submit" class="btn">@Resources.LanguageResources.SignIn</button>
             </div>
         </div>
         <div class="control-group">
             <div class="controls">
-                <a href="@Url.Content("~/account/register")">Register</a> if you don't have an account.
+                <a href="@Url.Content("~/account/register")">@Resources.LanguageResources.Register</a> @Resources.LanguageResources.IfYouDontHaveAnAccount
             </div>
         </div>
         @Html.AntiForgeryToken()

@@ -1,5 +1,4 @@
-﻿using JabbR.Models;
-using JabbR.Services;
+﻿using JabbR.Services;
 
 namespace JabbR.Commands
 {

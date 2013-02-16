@@ -1,16 +1,17 @@
+using JabbR.Commands;
+using JabbR.ContentProviders.Core;
+using JabbR.Infrastructure;
+using JabbR.Models;
+using JabbR.Resources;
+using JabbR.Services;
+using JabbR.ViewModels;
+using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using JabbR.Commands;
-using JabbR.ContentProviders.Core;
-using JabbR.Infrastructure;
-using JabbR.Models;
-using JabbR.Services;
-using JabbR.ViewModels;
-using Microsoft.AspNet.SignalR;
-using Newtonsoft.Json;
 
 namespace JabbR
 {
@@ -134,7 +135,7 @@ namespace JabbR
             // here?
             if (room.Closed)
             {
-                throw new InvalidOperationException(String.Format("You cannot post messages to '{0}'. The room is closed.", message.Room));
+                throw new InvalidOperationException(String.Format(LanguageResources.YouCannotPostMessagesToXTheRoomIsClosed, message.Room));
             }
 
             // Update activity *after* ensuring the user, this forces them to be active
@@ -223,9 +224,9 @@ namespace JabbR
         public object GetShortcuts()
         {
             return new[] {
-                new { Name = "Tab or Shift + Tab", Category = "shortcut", Description = "Go to the next open room tab or Go to the previous open room tab." },
-                new { Name = "Alt + L", Category = "shortcut", Description = "Go to the Lobby."},
-                new { Name = "Alt + Number", Category = "shortcut", Description = "Go to specific Tab."}
+                new { Name = LanguageResources.TabOrShiftPlusTab, Category = "shortcut", Description = LanguageResources.GoToTheNextOpenRoomTabOrGoToThePreviousOpenRoomTab },
+                new { Name = LanguageResources.AltPlusL, Category = "shortcut", Description = LanguageResources.GoToTheLobby},
+                new { Name = LanguageResources.AltPlusNumber, Category = "shortcut", Description = LanguageResources.GoToSpecificTab}
             };
         }
 
@@ -289,8 +290,8 @@ namespace JabbR
                 Owners = from u in room.Owners.Online()
                          select u.Name,
                 RecentMessages = recentMessages.Select(m => new MessageViewModel(m)),
-                Topic = room.Topic ?? "",
-                Welcome = room.Welcome ?? "",
+                Topic = room.Topic ?? string.Empty,
+                Welcome = room.Welcome ?? string.Empty,
                 Closed = room.Closed
             };
         }
@@ -751,7 +752,7 @@ namespace JabbR
 
             foreach (var client in user.ConnectedClients)
             {
-                Clients.Client(client.Id).sendPrivateMessage(user.Name, targetUser.Name, "nudged " + targetUser.Name);
+                Clients.Client(client.Id).sendPrivateMessage(user.Name, targetUser.Name, string.Format(LanguageResources.NudgedX, targetUser.Name));
             }
         }
 
@@ -841,7 +842,7 @@ namespace JabbR
         void INotificationService.ChangeWelcome(ChatUser user, ChatRoom room)
         {
             bool isWelcomeCleared = String.IsNullOrWhiteSpace(room.Welcome);
-            var parsedWelcome = room.Welcome ?? "";
+            var parsedWelcome = room.Welcome ?? string.Empty;
             foreach (var client in user.ConnectedClients)
             {
                 Clients.Client(client.Id).welcomeChanged(isWelcomeCleared, parsedWelcome);

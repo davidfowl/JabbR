@@ -1,6 +1,7 @@
-﻿using System;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 using System.Linq;
-using JabbR.Models;
 
 namespace JabbR.Commands
 {
@@ -11,14 +12,14 @@ namespace JabbR.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Who are you trying to kick?");
+                throw new InvalidOperationException(LanguageResources.WhoAreYouTryingToKick);
             }
 
             ChatRoom room = context.Repository.VerifyUserRoom(context.Cache, callingUser, callerContext.RoomName);
 
             if (context.Repository.GetOnlineUsers(room).Count() == 1)
             {
-                throw new InvalidOperationException("You're the only person in here...");
+                throw new InvalidOperationException(LanguageResources.YoureTheOnlyPersonInHere);
             }
 
             string targetUserName = args[0];

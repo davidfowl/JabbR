@@ -1,9 +1,9 @@
+using JabbR.Models;
+using JabbR.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using JabbR.Infrastructure;
-using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -283,12 +283,12 @@ namespace JabbR.Services
         {
             if (name.Equals("Lobby", StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException("Lobby is not a valid chat room.");
+                throw new InvalidOperationException(LanguageResources.LobbyIsNotAValidChatRoom);
             }
 
             if (!IsValidRoomName(name))
             {
-                throw new InvalidOperationException(String.Format("'{0}' is not a valid room name.", name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAValidRoomName, name));
             }
 
             var room = new ChatRoom
@@ -319,7 +319,7 @@ namespace JabbR.Services
                 }
                 if (!IsUserAllowed(room, user))
                 {
-                    throw new InvalidOperationException(String.Format("Unable to join {0}. This room is locked and you don't have permission to enter. If you have an invite code, make sure to enter it in the /join command", room.Name));
+                    throw new InvalidOperationException(String.Format(LanguageResources.UnableToJoinXThisRoomIsLockedAndYouDontHavePermissionToEnterIfYouHaveAnInviteCodeMakeSureToEnterItInTheJoinCommand, room.Name));
                 }
             }
 
@@ -335,7 +335,7 @@ namespace JabbR.Services
             EnsureOwnerOrAdmin(user, room);
             if (!room.Private)
             {
-                throw new InvalidOperationException("Only private rooms can have invite codes");
+                throw new InvalidOperationException(LanguageResources.OnlyPrivateRoomsCanHaveInviteCodes);
             }
 
             // Set the invite code and save
@@ -403,7 +403,7 @@ namespace JabbR.Services
             if (targetRoom.Owners.Contains(targetUser))
             {
                 // If the target user is already an owner, then throw
-                throw new InvalidOperationException(String.Format("'{0}' is already an owner of '{1}'.", targetUser.Name, targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsAlreadyAnOwnerOfY, targetUser.Name, targetRoom.Name));
             }
 
             // Make the user an owner
@@ -432,7 +432,7 @@ namespace JabbR.Services
             if (!targetRoom.Owners.Contains(targetUser))
             {
                 // If the target user is not an owner, then throw
-                throw new InvalidOperationException(String.Format("'{0}' is not an owner of '{1}'.", targetUser.Name, targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAnownerOfY, targetUser.Name, targetRoom.Name));
             }
 
             // Remove user as owner of room
@@ -446,24 +446,24 @@ namespace JabbR.Services
 
             if (targetUser == user)
             {
-                throw new InvalidOperationException("Why would you want to kick yourself?");
+                throw new InvalidOperationException(LanguageResources.WhyWouldYouWantToKickYourself);
             }
 
             if (!_repository.IsUserInRoom(_cache, targetUser, targetRoom))
             {
-                throw new InvalidOperationException(String.Format("'{0}' isn't in '{1}'.", targetUser.Name, targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsntInY, targetUser.Name, targetRoom.Name));
             }
 
             // only admin can kick admin
             if (!user.IsAdmin && targetUser.IsAdmin)
             {
-                throw new InvalidOperationException("You cannot kick an admin. Only admin can kick admin.");
+                throw new InvalidOperationException(LanguageResources.YouCannotKickAnAdminOnlyAdminCanKickAdmin);
             }
 
             // If this user isn't the creator/admin AND the target user is an owner then throw
             if (targetRoom.Creator != user && targetRoom.Owners.Contains(targetUser) && !user.IsAdmin)
             {
-                throw new InvalidOperationException("Owners cannot kick other owners. Only the room creator can kick an owner.");
+                throw new InvalidOperationException(LanguageResources.OwnersCannotKickOtherOwnersOnlyTheRoomCreatorCanKickAnOwner);
             }
 
             LeaveRoom(targetUser, targetRoom);
@@ -541,7 +541,7 @@ namespace JabbR.Services
         {
             if (!user.IsAdmin)
             {
-                throw new InvalidOperationException("You are not an admin");
+                throw new InvalidOperationException(LanguageResources.YouAreNotAnAdmin);
             }
         }
 
@@ -549,7 +549,7 @@ namespace JabbR.Services
         {
             if (!room.Owners.Contains(user) && !user.IsAdmin)
             {
-                throw new InvalidOperationException("You are not an owner of room '" + room.Name + "'");
+                throw new InvalidOperationException(string.Format(LanguageResources.YouAreNotAnOwnerOfRoomX, room.Name));
             }
         }
 
@@ -557,7 +557,7 @@ namespace JabbR.Services
         {
             if (!room.Owners.Contains(user))
             {
-                throw new InvalidOperationException("You are not an owner of room '" + room.Name + "'");
+                throw new InvalidOperationException(string.Format(LanguageResources.YouAreNotAnOwnerOfRoomX, room.Name));
             }
         }
 
@@ -565,7 +565,7 @@ namespace JabbR.Services
         {
             if (user != room.Creator)
             {
-                throw new InvalidOperationException("You are not the creator of " + room.Name);
+                throw new InvalidOperationException(string.Format(LanguageResources.YouAreNotTheCreatorOfX , room.Name));
             }
         }
 
@@ -573,7 +573,7 @@ namespace JabbR.Services
         {
             if (user != room.Creator && !user.IsAdmin)
             {
-                throw new InvalidOperationException("You are not the creator of room '" + room.Name + "'");
+                throw new InvalidOperationException(string.Format(LanguageResources.YouAreNotTheCreatorOfX, room.Name));
             }
         }
 
@@ -583,12 +583,12 @@ namespace JabbR.Services
 
             if (!targetRoom.Private)
             {
-                throw new InvalidOperationException(String.Format("{0} is not a private room.", targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAPrivateRoom, targetRoom.Name));
             }
 
             if (targetUser.AllowedRooms.Contains(targetRoom))
             {
-                throw new InvalidOperationException(String.Format("{0} is already allowed for {1}.", targetUser.Name, targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsAlreadyAllowedForY, targetUser.Name, targetRoom.Name));
             }
 
             targetRoom.AllowedUsers.Add(targetUser);
@@ -603,29 +603,29 @@ namespace JabbR.Services
 
             if (targetUser == user)
             {
-                throw new InvalidOperationException("Why would you want to unallow yourself?");
+                throw new InvalidOperationException(LanguageResources.WhyWouldYouWantToUnallowYourself);
             }
 
             if (!targetRoom.Private)
             {
-                throw new InvalidOperationException(String.Format("{0} is not a private room.", targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAPrivateRoom, targetRoom.Name));
             }
 
             if (!targetUser.AllowedRooms.Contains(targetRoom))
             {
-                throw new InvalidOperationException(String.Format("{0} isn't allowed to access {1}.", targetUser.Name, targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsntAllowedToAccessY, targetUser.Name, targetRoom.Name));
             }
 
             // only admin can unallow admin
             if (!user.IsAdmin && targetUser.IsAdmin)
             {
-                throw new InvalidOperationException("You cannot unallow an admin. Only admin can unallow admin.");
+                throw new InvalidOperationException(LanguageResources.YouCannotUnallowAnAdminOnlyAdminCanUnallowAdmin);
             }
 
             // If this user isn't the creator and the target user is an owner then throw
             if (targetRoom.Creator != user && targetRoom.Owners.Contains(targetUser) && !user.IsAdmin)
             {
-                throw new InvalidOperationException("Owners cannot unallow other owners. Only the room creator can unallow an owner.");
+                throw new InvalidOperationException(LanguageResources.OwnersCannotUnallowOtherOwnersOnlyTheRoomCreatorCanUnallowAnOwner);
             }
 
             targetRoom.AllowedUsers.Remove(targetUser);
@@ -643,7 +643,7 @@ namespace JabbR.Services
 
             if (targetRoom.Private)
             {
-                throw new InvalidOperationException(String.Format("{0} is already locked.", targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsAlreadyLocked, targetRoom.Name));
             }
 
             // Make the room private
@@ -671,7 +671,7 @@ namespace JabbR.Services
 
             if (targetRoom.Closed)
             {
-                throw new InvalidOperationException(String.Format("{0} is already closed.", targetRoom.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsAlreadyClosed, targetRoom.Name));
             }
 
             // Make the room closed.
@@ -686,7 +686,7 @@ namespace JabbR.Services
 
             if (!targetRoom.Closed)
             {
-                throw new InvalidOperationException(string.Format("{0} is already open.", targetRoom.Name));
+                throw new InvalidOperationException(string.Format(LanguageResources.XIsAlreadyOpen, targetRoom.Name));
             }
 
             // Open the room
@@ -716,7 +716,7 @@ namespace JabbR.Services
             if (targetUser.IsAdmin)
             {
                 // If the target user is already an admin, then throw
-                throw new InvalidOperationException(String.Format("'{0}' is already an admin.", targetUser.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsAlreadyAnAdmin, targetUser.Name));
             }
 
             // Make the user an admin
@@ -732,7 +732,7 @@ namespace JabbR.Services
             if (!targetUser.IsAdmin)
             {
                 // If the target user is NOT an admin, then throw
-                throw new InvalidOperationException(String.Format("'{0}' is not an admin.", targetUser.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAnAdmin, targetUser.Name));
             }
 
             // Make the user an admin
@@ -746,7 +746,7 @@ namespace JabbR.Services
 
             if (targetUser.IsAdmin)
             {
-                throw new InvalidOperationException("You cannot ban another Admin.");
+                throw new InvalidOperationException(LanguageResources.YouCannotBanAnotherAdmin);
             }
 
             targetUser.IsBanned = true;
@@ -761,7 +761,7 @@ namespace JabbR.Services
                 note.Length > lengthToValidateFor)
             {
                 throw new InvalidOperationException(
-                    String.Format("Sorry, but your {1} is too long. Can please keep it under {0} characters.",
+                    String.Format(LanguageResources.SorryButYourXIsTooLongCanPleaseKeepItUnderYCharacters,
                         lengthToValidateFor, noteTypeName));
             }
         }
@@ -782,7 +782,7 @@ namespace JabbR.Services
             if (String.IsNullOrWhiteSpace(country))
             {
                 throw new InvalidOperationException(
-                    "Sorry, but the country ISO code you requested doesn't exist. Please refer to http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a proper list of country ISO codes.");
+                    LanguageResources.SorryButTheCountryISOCodeYouRequestedDoesntExistPleaseReferToUrlForAProperListOfCountryISOCodes);
             }
         }
          

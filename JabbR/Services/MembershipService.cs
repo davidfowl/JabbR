@@ -1,8 +1,9 @@
-﻿using System;
+﻿using JabbR.Infrastructure;
+using JabbR.Models;
+using JabbR.Resources;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using JabbR.Infrastructure;
-using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -62,7 +63,7 @@ namespace JabbR.Services
         {
             if (!IsValidUserName(userName))
             {
-                throw new InvalidOperationException(String.Format("'{0}' is not a valid user name.", userName));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAValidUsername, userName));
             }
 
             if (String.IsNullOrEmpty(password))
@@ -108,12 +109,12 @@ namespace JabbR.Services
         {
             if (!IsValidUserName(newUserName))
             {
-                throw new InvalidOperationException(String.Format("'{0}' is not a valid user name.", newUserName));
+                throw new InvalidOperationException(String.Format(LanguageResources.XIsNotAValidUsername, newUserName));
             }
 
             if (user.Name.Equals(newUserName, StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException("That's already your username...");
+                throw new InvalidOperationException(LanguageResources.ThatsAlreadyYourUsername);
             }
 
             EnsureUserNameIsAvailable(newUserName);
@@ -132,7 +133,7 @@ namespace JabbR.Services
         {
             if (user.HashedPassword != oldPassword.ToSha256(user.Salt))
             {
-                throw new InvalidOperationException("Passwords don't match.");
+                throw new InvalidOperationException(LanguageResources.PasswordsDontMatch);
             }
 
             ValidatePassword(newPassword);
@@ -144,7 +145,7 @@ namespace JabbR.Services
         {
             if (String.IsNullOrEmpty(password) || password.Length < 6)
             {
-                throw new InvalidOperationException("Your password must be at least 6 characters.");
+                throw new InvalidOperationException(LanguageResources.YourPasswordMustBeAtLeast6Characters);
             }
         }
 
@@ -195,17 +196,17 @@ namespace JabbR.Services
 
         internal static void ThrowUserExists(string userName)
         {
-            throw new InvalidOperationException(String.Format("Username {0} already taken, please pick a new one using '/nick nickname'.", userName));
+            throw new InvalidOperationException(String.Format(LanguageResources.UsernameXAlreadyTakenPleasePickANewOneUsingNickNickname, userName));
         }
 
         internal static void ThrowPasswordIsRequired()
         {
-            throw new InvalidOperationException("A password is required.");
+            throw new InvalidOperationException(LanguageResources.APasswordIsRequired);
         }
 
         internal static void ThrowProviderAndIdentityExist(string providerName, string identity)
         {
-            throw new InvalidOperationException(String.Format("Identity {0} already taken with Provider {1}, please login with a different provider/identity combination.", identity, providerName));
+            throw new InvalidOperationException(String.Format(LanguageResources.IdentityXAlreadyTakenWithProviderYPleaseLoginWithADifferentProviderIdentityCombination, identity, providerName));
         }
     }
 }

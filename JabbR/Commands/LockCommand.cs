@@ -1,5 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -10,7 +11,7 @@ namespace JabbR.Commands
         {
             if (args.Length  == 0)
             {
-                throw new InvalidOperationException("Which room do you want to lock?");
+                throw new InvalidOperationException(LanguageResources.WhichRoomDoYouWantToLock);
             }
 
             string roomName = args[0];

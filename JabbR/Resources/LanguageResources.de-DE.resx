@@ -1,0 +1,558 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="AltPlusL" xml:space="preserve">
+    <value>Alt + L</value>
+  </data>
+  <data name="AltPlusNumber" xml:space="preserve">
+    <value>Alt + Zahl</value>
+  </data>
+  <data name="APasswordIsRequired" xml:space="preserve">
+    <value>Passwort ist erforderlich.</value>
+  </data>
+  <data name="AppendButItsClosed" xml:space="preserve">
+    <value>aber er ist geschlossen</value>
+  </data>
+  <data name="At" xml:space="preserve">
+    <value>am</value>
+  </data>
+  <data name="AudibleNotifications" xml:space="preserve">
+    <value>Akustische Benachrichtigungen</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="ClickOnAUserToSendMessage" xml:space="preserve">
+    <value>Klicke auf einen Benutzer um ihm eine Nachricht zu senden.</value>
+  </data>
+  <data name="ClickToShowHide" xml:space="preserve">
+    <value>(klicken zum anzeigen/verbergen)</value>
+  </data>
+  <data name="DeployedFrom" xml:space="preserve">
+    <value>Deployed von</value>
+  </data>
+  <data name="DisplayHelp" xml:space="preserve">
+    <value>Hilfe anzeigen</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Herunterladen</value>
+  </data>
+  <data name="DownloadMessages" xml:space="preserve">
+    <value>Nachrichten herunterladen</value>
+  </data>
+  <data name="EmailIsRequired" xml:space="preserve">
+    <value>Email ist erforderlich</value>
+  </data>
+  <data name="EmailWasNotSpecified" xml:space="preserve">
+    <value>Email ist nicht angegeben!</value>
+  </data>
+  <data name="FAQ" xml:space="preserve">
+    <value>F.A.Q.</value>
+  </data>
+  <data name="GoToSpecificTab" xml:space="preserve">
+    <value>Gehe zu bestimmten Tab.</value>
+  </data>
+  <data name="GoToTheLobby" xml:space="preserve">
+    <value>Gehe zur Lobby.</value>
+  </data>
+  <data name="GoToTheNextOpenRoomTabOrGoToThePreviousOpenRoomTab" xml:space="preserve">
+    <value>Gehe zum nächsten oder letzten Tab mit einem offenen Raum.</value>
+  </data>
+  <data name="GravatarProfile" xml:space="preserve">
+    <value>Gravatar Profil</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Hilfe</value>
+  </data>
+  <data name="IdentityXAlreadyTakenWithProviderYPleaseLoginWithADifferentProviderIdentityCombination" xml:space="preserve">
+    <value>Identität {0} wird bereits durch den Anbieter {1} verwendet, bitte logge dich mit einer anderen Identitäts/Anbieter-Kombination ein.</value>
+  </data>
+  <data name="IfYouDontHaveAnAccount" xml:space="preserve">
+    <value>wenn du kein Konto hast.</value>
+  </data>
+  <data name="InviteCodeForThisRoomX" xml:space="preserve">
+    <value>Einladungscode für Raum: {0}</value>
+  </data>
+  <data name="InviteThemToWhichRoom" xml:space="preserve">
+    <value>In welchen Raum wilst du sie einladen?</value>
+  </data>
+  <data name="IsAssigned" xml:space="preserve">
+    <value>ist zugeordnet</value>
+  </data>
+  <data name="JoinWhichRoom" xml:space="preserve">
+    <value>Welchen Raum willst du betreten?</value>
+  </data>
+  <data name="LastDay" xml:space="preserve">
+    <value>Letzter Tag</value>
+  </data>
+  <data name="LastHour" xml:space="preserve">
+    <value>Letzte Stunde</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Letzter Monat</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Letzte Woche</value>
+  </data>
+  <data name="ListUsersInWhichRoom" xml:space="preserve">
+    <value>Von welchem Raum willst du Benutzer anzeigen?</value>
+  </data>
+  <data name="LobbyIsNotAValidChatRoom" xml:space="preserve">
+    <value>Lobby ist kein gültiger Chat-Raum.</value>
+  </data>
+  <data name="LoginFailedCheckYourUsernamePassword" xml:space="preserve">
+    <value>Login fehlgeschlagen. Prüfe deinen Benutzernamen/Passwort.</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Abmelden</value>
+  </data>
+  <data name="MissingPassword" xml:space="preserve">
+    <value>Fehlendes Passwort</value>
+  </data>
+  <data name="MissingUsername" xml:space="preserve">
+    <value>Fehlender Benutzername</value>
+  </data>
+  <data name="NoMilestone" xml:space="preserve">
+    <value>Kein Meilenstein vorhanden</value>
+  </data>
+  <data name="NoRoomSpecified" xml:space="preserve">
+    <value>Kein Raum angegeben.</value>
+  </data>
+  <data name="NudgedX" xml:space="preserve">
+    <value>stuppst {0}</value>
+  </data>
+  <data name="OldPasswordIsRequired" xml:space="preserve">
+    <value>Altes Passwort muss angegeben werden.</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>auf</value>
+  </data>
+  <data name="OnlyPrivateRoomsCanHaveInviteCodes" xml:space="preserve">
+    <value>Nur private Räume haben Einladungscodes.</value>
+  </data>
+  <data name="OpenedThisIssue" xml:space="preserve">
+    <value>öffnete diesen Bug</value>
+  </data>
+  <data name="OwnersCannotKickOtherOwnersOnlyTheRoomCreatorCanKickAnOwner" xml:space="preserve">
+    <value>Besitzer können andere Besitzer nicht rausschmeißen. Nur der Raumersteller kann einen Besitzer rausschmeißen.</value>
+  </data>
+  <data name="OwnersCannotUnallowOtherOwnersOnlyTheRoomCreatorCanUnallowAnOwner" xml:space="preserve">
+    <value>Besitzer können andere Besitzer nicht verbieten. Nur der Raumersteller kann einen Besitzer verbieten.</value>
+  </data>
+  <data name="PasswordIsRequired" xml:space="preserve">
+    <value>Passwort ist erforderlich.</value>
+  </data>
+  <data name="PasswordsDontMatch" xml:space="preserve">
+    <value>Passwörter sind nicht gleich.</value>
+  </data>
+  <data name="PasteClickToShowHide" xml:space="preserve">
+    <value>Einfügen (klicken zum anzeigen/verbergen)</value>
+  </data>
+  <data name="PopupNotifications" xml:space="preserve">
+    <value>Benachrichtigungen anzeigen</value>
+  </data>
+  <data name="RangeValueNotRecognized" xml:space="preserve">
+    <value>Bereichswert wurde nicht erkannt.</value>
+  </data>
+  <data name="RefreshYourBrowserToGetTheLatestAutoUpdateWillTakePlaceIn15conds" xml:space="preserve">
+    <value>Lade die Seite erneut um die neueste Version zu erhalten. Das automatische Update dauert ca. 15 Sekunden.</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrieren</value>
+  </data>
+  <data name="RoomCanOnlyBeNudgedOnceEveryXSeconds" xml:space="preserve">
+    <value>In diesem Raum kann nur alle {0} Sekunden jemand angestuppst werden.</value>
+  </data>
+  <data name="RoomCommands" xml:space="preserve">
+    <value>Raum-Kommandos</value>
+  </data>
+  <data name="RoomNameCannotBeBlank" xml:space="preserve">
+    <value>Raumname darf nicht leer sein!</value>
+  </data>
+  <data name="RoomNameCannotContainSpaces" xml:space="preserve">
+    <value>Raumname darf keine Leerzeichen enthalten.</value>
+  </data>
+  <data name="SelectDateRangeForMessages" xml:space="preserve">
+    <value>Wähle Zeitraum der Nachrichten</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Senden</value>
+  </data>
+  <data name="ShowClosedRooms" xml:space="preserve">
+    <value>Zeige geschlossene Räume?</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="SiteWideCommands" xml:space="preserve">
+    <value>Seitenweite Kommandos</value>
+  </data>
+  <data name="SiteWideShortcuts" xml:space="preserve">
+    <value>Seitenweite Abkürzungen</value>
+  </data>
+  <data name="SorryButTheCountryISOCodeYouRequestedDoesntExistPleaseReferToUrlForAProperListOfCountryISOCodes" xml:space="preserve">
+    <value>Entschuldigung, der angeforderte Länder-ISO-Code existiert nicht. Schaue auf http://de.wikipedia.org/wiki/ISO-3166-1-Kodierliste um eine Liste mit allen gültigen Codes zu finden.</value>
+  </data>
+  <data name="SorryButYourXIsTooLongCanPleaseKeepItUnderYCharacters" xml:space="preserve">
+    <value>Entshuldigung, dein {1} ist zu lang. Bitte nutze maximal {0} Zeichen.</value>
+  </data>
+  <data name="SuccessfullyAddedAPassword" xml:space="preserve">
+    <value>Passwort erfolgreich hinzugefügt.</value>
+  </data>
+  <data name="SuccessfullyChangedYourPassword" xml:space="preserve">
+    <value>Passwort erfolgreich geändert.</value>
+  </data>
+  <data name="SuccessfullyChangedYourUsername" xml:space="preserve">
+    <value>Benutername erfolgreich geändert.</value>
+  </data>
+  <data name="SuccessfullyLinkedXAccount" xml:space="preserve">
+    <value>Konto '{0}' wurde erfolgreich verknüpft.</value>
+  </data>
+  <data name="SuccessfullyUnlinkedXAccount" xml:space="preserve">
+    <value>Verknüpfung mit Konto '{0}' wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="TabOrShiftPlusTab" xml:space="preserve">
+    <value>Tab oder Umschalttaste + Tab</value>
+  </data>
+  <data name="ThatsAlreadyYourUsername" xml:space="preserve">
+    <value>Das ist bereits dein Benutzername...</value>
+  </data>
+  <data name="ThereWasAnErrorContactingTheServerPleaseRefreshInAFewMinutes" xml:space="preserve">
+    <value>Beim kontaktieren des Servers ist ein Fehler passiert, bitte versuche es in wenigen Minuten erneut.</value>
+  </data>
+  <data name="TheRoomXAlreadyExistsAppend" xml:space="preserve">
+    <value>Der Raum '{0}' existiert bereits{1}</value>
+  </data>
+  <data name="TheRoomXIsClosed" xml:space="preserve">
+    <value>Der Raum '{0}' ist geschlossen.</value>
+  </data>
+  <data name="ThisXAccountHasAlreadyBeenLinkedToAnotherUser" xml:space="preserve">
+    <value>Dieses {0} Konto ist bereits mit einem anderen Benutzer verknüpft.</value>
+  </data>
+  <data name="ToggleRichContent" xml:space="preserve">
+    <value>Inhalte umschalten</value>
+  </data>
+  <data name="TypeRoomnameToCreateALinkToARoom" xml:space="preserve">
+    <value>Schreibe #Raumname um einen Link zu dem Raum zu erstellen</value>
+  </data>
+  <data name="UnableToFindRoomX" xml:space="preserve">
+    <value>Konnte Raum '{0}' nicht finden.</value>
+  </data>
+  <data name="UnableToFindUserX" xml:space="preserve">
+    <value>Konnte Benutzer '{0}' nicht finden.</value>
+  </data>
+  <data name="UnableToJoinXThisRoomIsLockedAndYouDontHavePermissionToEnterIfYouHaveAnInviteCodeMakeSureToEnterItInTheJoinCommand" xml:space="preserve">
+    <value>Konte Raum '{0}' nicht betreten. Dieser Raum ist gesperrt oder du besitzt keine Berechtigung ihn zu betreten. Wenn du einen Einladungscode hast versuche ihn mittels des '/join' Kommandos zu betreten.</value>
+  </data>
+  <data name="UnableToLocateRoomX" xml:space="preserve">
+    <value>Konnte Raum {0} nicht finden.</value>
+  </data>
+  <data name="UseJoinRoomToJoinARoom" xml:space="preserve">
+    <value>Benutze '/join room' um einen Raum zu betreten.</value>
+  </data>
+  <data name="UserCanOnlyBeNudgedOnceEveryXSeconds" xml:space="preserve">
+    <value>Benutzer kann nur einmal alle {0} Sekunden angestuppst werden.</value>
+  </data>
+  <data name="UserCommands" xml:space="preserve">
+    <value>Benuzter-Kommandos</value>
+  </data>
+  <data name="UsernameIsRequired" xml:space="preserve">
+    <value>Benutzername ist erforderlich.</value>
+  </data>
+  <data name="UsernamesDontMatch" xml:space="preserve">
+    <value>Benuternamen sind nicht gleich.</value>
+  </data>
+  <data name="UsernameXAlreadyTakenPleasePickANewOneUsingNickNickname" xml:space="preserve">
+    <value>Benutzername '{0}' ist bereits vergeben, bitte wähle einen anderen mit Hilfe '/nick nickname'.</value>
+  </data>
+  <data name="UseTestForTesting" xml:space="preserve">
+    <value>Benutze #test zum testen.</value>
+  </data>
+  <data name="ViewTheBranch" xml:space="preserve">
+    <value>Schaue den Branch an.</value>
+  </data>
+  <data name="ViewTheCommit" xml:space="preserve">
+    <value>Schaue den Commit an.</value>
+  </data>
+  <data name="WeDidntFindAnyoneWithTheUsername" xml:space="preserve">
+    <value>Wir konnten niemanden mit dem Benutzernamen '{0}' finden.</value>
+  </data>
+  <data name="WhatDidYouWantToBroadcast" xml:space="preserve">
+    <value>Was willst du an alle sagen?</value>
+  </data>
+  <data name="WhatDidYouWantToSayToX" xml:space="preserve">
+    <value>Was willst du zu '{0}' sagen?</value>
+  </data>
+  <data name="WhichAdminDoYouWantToRemove" xml:space="preserve">
+    <value>Welchen Administrator willst du entfernen?</value>
+  </data>
+  <data name="WhichOwnerDoYouWantToRemove" xml:space="preserve">
+    <value>Welchen Besitzer willst du entfernen?</value>
+  </data>
+  <data name="WhichRoom" xml:space="preserve">
+    <value>Welcher Raum?</value>
+  </data>
+  <data name="WhichRoomDoYouWantToLock" xml:space="preserve">
+    <value>Welchen Raum willst du sperren?</value>
+  </data>
+  <data name="WhichRoomDoYouWantToOpen" xml:space="preserve">
+    <value>Welchen Raum willst du öffnen?</value>
+  </data>
+  <data name="WhichUserDoYouWantToRevokePersmissionsFrom" xml:space="preserve">
+    <value>Wem willst du die Rechte entziehen?</value>
+  </data>
+  <data name="WhoAreYouTryingSendAPrivateMessageTo" xml:space="preserve">
+    <value>Wem willst du eine private Nachricht schicken?</value>
+  </data>
+  <data name="WhoAreYouTryingToKick" xml:space="preserve">
+    <value>Wenn willst du rausschmeißen?</value>
+  </data>
+  <data name="WhoAreYouTryingToLocate" xml:space="preserve">
+    <value>Wenn versuchst du zu finden?</value>
+  </data>
+  <data name="WhoAreYouTtryingToBan" xml:space="preserve">
+    <value>Wenn willst du verbannen?</value>
+  </data>
+  <data name="WhoDoYouWantToAllow" xml:space="preserve">
+    <value>Wenn willst du zulassen?</value>
+  </data>
+  <data name="WhoDoYouWantToInvite" xml:space="preserve">
+    <value>Wenn willst du einladen?</value>
+  </data>
+  <data name="WhoDoYouWantToMakeAnAdmin" xml:space="preserve">
+    <value>Wenn willst du zum Administratror machen?</value>
+  </data>
+  <data name="WhoDoYouWantToMakeAnOwner" xml:space="preserve">
+    <value>Wenn willst du zum Besitzer machen?</value>
+  </data>
+  <data name="WhyWouldYouWantToKickYourself" xml:space="preserve">
+    <value>Warum willst du dich selbst rausschmeißen?</value>
+  </data>
+  <data name="WhyWouldYouWantToUnallowYourself" xml:space="preserve">
+    <value>Warum willst du dich selbst verbieten?</value>
+  </data>
+  <data name="XIsAlreadyAllowedForY" xml:space="preserve">
+    <value>'{0}' is already allowed for '{1}'.</value>
+  </data>
+  <data name="XIsAlreadyAnAdmin" xml:space="preserve">
+    <value>'{0}' ist bereits Administrator.</value>
+  </data>
+  <data name="XIsAlreadyAnOwnerOfY" xml:space="preserve">
+    <value>'{0}' ist bereits ein Besitzer von '{1}'.</value>
+  </data>
+  <data name="XIsAlreadyClosed" xml:space="preserve">
+    <value>'{0}' ist bereits geschlossen.</value>
+  </data>
+  <data name="XIsAlreadyLocked" xml:space="preserve">
+    <value>'{0}' ist bereits gesperrt.</value>
+  </data>
+  <data name="XIsAlreadyOpen" xml:space="preserve">
+    <value>'{0}' ist bereits offen.</value>
+  </data>
+  <data name="XIsAmbiguousY" xml:space="preserve">
+    <value>'{0}' ist zweideutig: {1}.</value>
+  </data>
+  <data name="XIsNotAnAdmin" xml:space="preserve">
+    <value>'{0}' ist kein Administrator.</value>
+  </data>
+  <data name="XIsNotAnownerOfY" xml:space="preserve">
+    <value>'{0}' ist kein Besitzer von '{1}'.</value>
+  </data>
+  <data name="XIsNotAPrivateRoom" xml:space="preserve">
+    <value>'{0}' ist kein privater Raum.</value>
+  </data>
+  <data name="XIsNotAValidCommand" xml:space="preserve">
+    <value>'{0}' ist kein gültiges Kommando.</value>
+  </data>
+  <data name="XIsNotAValidRoomName" xml:space="preserve">
+    <value>'{0}' ist kein gültiger Raumname.</value>
+  </data>
+  <data name="XIsNotAValidUsername" xml:space="preserve">
+    <value>'{0}' ist kein gültiger Benutername.</value>
+  </data>
+  <data name="XIsntAllowedToAccessY" xml:space="preserve">
+    <value>'{0}' ist es nicht erlaubt Raum '{1}' zu betreten.</value>
+  </data>
+  <data name="XIsntInY" xml:space="preserve">
+    <value>'{0}' ist nicht in '{1}'.</value>
+  </data>
+  <data name="XNudgedYou" xml:space="preserve">
+    <value>{0} hat dich angestuppst.</value>
+  </data>
+  <data name="YouAreNotAnAdmin" xml:space="preserve">
+    <value>Du bist kein Administrator.</value>
+  </data>
+  <data name="YouAreNotAnOwnerOfRoomX" xml:space="preserve">
+    <value>Du bist nicht Besitzer des Raums '{0}'.</value>
+  </data>
+  <data name="YouAreNotTheCreatorOfX" xml:space="preserve">
+    <value>Du bist nicht der Eröffner des Raums '{0}'.</value>
+  </data>
+  <data name="YouCannotBanAnotherAdmin" xml:space="preserve">
+    <value>Du kannst keinen anderen Administrator verbannen.</value>
+  </data>
+  <data name="YouCannotKickAnAdminOnlyAdminCanKickAdmin" xml:space="preserve">
+    <value>Du kannst keinen Administrator rausschmeißen. Nur Administratoren können andere Administratoren rausschmeißen.</value>
+  </data>
+  <data name="YouCannotPostMessagesToXTheRoomIsClosed" xml:space="preserve">
+    <value>Du kannst keine Nachricht in Raum '{0}' schreiben. Der Raum ist geschlossen.</value>
+  </data>
+  <data name="YouCannotUnallowAnAdminOnlyAdminCanUnallowAdmin" xml:space="preserve">
+    <value>Du kannst einen Administrator nicht verbieten. Nur ein Administrator kann einen Administrator verbieten.</value>
+  </data>
+  <data name="YouCannotUnlinkThisAccountBecauseYouWouldLoseYourAbilityToLogin" xml:space="preserve">
+    <value>Du kannst dieses Konto nicht trennen weil du dich sonst nicht mehr einloggen könntest.</value>
+  </data>
+  <data name="YouCantInviteYourself" xml:space="preserve">
+    <value>Du kannst dich nicht selbst einladen!</value>
+  </data>
+  <data name="YouCantNudgeYourself" xml:space="preserve">
+    <value>Du kannst dich nicht selbst anstuppsen!</value>
+  </data>
+  <data name="YouCantPrivateMessageYourself" xml:space="preserve">
+    <value>Du kannst dir nicht selbst eine private Nachricht schicken!</value>
+  </data>
+  <data name="YoureInXButItDoesntExist" xml:space="preserve">
+    <value>Du bist in Raum '{0}' obwohl er gar nicht existiert.</value>
+  </data>
+  <data name="YoureNotInXUseJoinXToJoinIt" xml:space="preserve">
+    <value>Du bist nicht in Raum '{0}'. Benutze '/join {0}' um ihn zu betreten.</value>
+  </data>
+  <data name="YoureNotLoggedIn" xml:space="preserve">
+    <value>Du bist nicht eingeloggt.</value>
+  </data>
+  <data name="YoureTheOnlyPersonInHere" xml:space="preserve">
+    <value>Du bist der einzige hier drin...</value>
+  </data>
+  <data name="YourPasswordMustBeAtLeast6Characters" xml:space="preserve">
+    <value>Dein Passwort muss mindestens 6 Zeichen lang sein.</value>
+  </data>
+  <data name="YouWhat" xml:space="preserve">
+    <value>Was?</value>
+  </data>
+  <data name="TypeAtAtThenPressTABToAutoCompleteNicknames" xml:space="preserve">
+    <value>Schreibe @@ dann drücke TAB um Autovervollständigung für Benutzernamen zu erhalten</value>
+  </data>
+</root>

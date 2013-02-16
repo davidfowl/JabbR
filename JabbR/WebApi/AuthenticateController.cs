@@ -1,11 +1,12 @@
-﻿using System;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using JabbR.Services;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using JabbR.Models;
-using JabbR.Services;
-using Newtonsoft.Json.Linq;
 
 namespace JabbR.WebApi
 {
@@ -44,12 +45,12 @@ namespace JabbR.WebApi
 
             if (String.IsNullOrEmpty(username))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Missing username");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, LanguageResources.MissingUsername);
             }
 
             if (String.IsNullOrEmpty(password))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Missing password");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, LanguageResources.MissingPassword);
             }
 
             ChatUser user = null;

@@ -1,6 +1,7 @@
-﻿using System;
-using JabbR.Infrastructure;
+﻿using JabbR.Infrastructure;
 using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -16,7 +17,7 @@ namespace JabbR.Commands
                 context.Service.SetInviteCode(callingUser, room, RandomUtils.NextInviteCode());
             }
 
-            context.NotificationService.PostNotification(room, callingUser, String.Format("Invite Code for this room: {0}", room.InviteCode));
+            context.NotificationService.PostNotification(room, callingUser, String.Format(LanguageResources.InviteCodeForThisRoomX, room.InviteCode));
         }
     }
 }

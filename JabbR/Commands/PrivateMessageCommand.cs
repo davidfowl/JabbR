@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 using System.Linq;
-using JabbR.Infrastructure;
-using JabbR.Models;
 
 namespace JabbR.Commands
 {
@@ -13,26 +12,26 @@ namespace JabbR.Commands
         {
             if (context.Repository.Users.Count() == 1)
             {
-                throw new InvalidOperationException("You're the only person in here...");
+                throw new InvalidOperationException(LanguageResources.YoureTheOnlyPersonInHere);
             }
 
             if (args.Length == 0 || String.IsNullOrWhiteSpace(args[0]))
             {
-                throw new InvalidOperationException("Who are you trying send a private message to?");
+                throw new InvalidOperationException(LanguageResources.WhoAreYouTryingSendAPrivateMessageTo);
             }
             var toUserName = args[0];
             ChatUser toUser = context.Repository.VerifyUser(toUserName);
 
             if (toUser == callingUser)
             {
-                throw new InvalidOperationException("You can't private message yourself!");
+                throw new InvalidOperationException(LanguageResources.YouCantPrivateMessageYourself);
             }
 
             string messageText = String.Join(" ", args.Skip(1)).Trim();
 
             if (String.IsNullOrEmpty(messageText))
             {
-                throw new InvalidOperationException(String.Format("What did you want to say to '{0}'?", toUser.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.WhatDidYouWantToSayToX, toUser.Name));
             }
 
             context.NotificationService.SendPrivateMessage(callingUser, toUser, messageText);

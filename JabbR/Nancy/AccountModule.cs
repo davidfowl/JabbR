@@ -1,11 +1,12 @@
-﻿using System;
-using System.Linq;
-using JabbR.Infrastructure;
+﻿using JabbR.Infrastructure;
 using JabbR.Models;
+using JabbR.Resources;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Nancy;
 using Nancy.Cookies;
+using System;
+using System.Linq;
 using WorldDomination.Web.Authentication;
 
 namespace JabbR.Nancy
@@ -54,12 +55,12 @@ namespace JabbR.Nancy
 
                 if (String.IsNullOrEmpty(username))
                 {
-                    this.AddValidationError("username", "Name is required");
+                    this.AddValidationError("username", LanguageResources.UsernameIsRequired);
                 }
 
                 if (String.IsNullOrEmpty(password))
                 {
-                    this.AddValidationError("password", "Password is required");
+                    this.AddValidationError("password", LanguageResources.PasswordIsRequired);
                 }
 
                 try
@@ -76,7 +77,7 @@ namespace JabbR.Nancy
                 }
                 catch
                 {
-                    this.AddValidationError("_FORM", "Login failed. Check your username/password.");
+                    this.AddValidationError("_FORM", LanguageResources.LoginFailedCheckYourUsernamePassword);
                     return View["login", GetLoginViewModel(applicationSettings, repository, authService)];
                 }
             };
@@ -122,12 +123,12 @@ namespace JabbR.Nancy
 
                 if (String.IsNullOrEmpty(username))
                 {
-                    this.AddValidationError("username", "Name is required");
+                    this.AddValidationError("username", LanguageResources.UsernameIsRequired);
                 }
 
                 if (String.IsNullOrEmpty(email))
                 {
-                    this.AddValidationError("email", "Email is required");
+                    this.AddValidationError("email", LanguageResources.EmailIsRequired);
                 }
 
                 ValidatePassword(password, confirmPassword);
@@ -160,7 +161,7 @@ namespace JabbR.Nancy
 
                 if (user.Identities.Count == 1 && !user.HasUserNameAndPasswordCredentials())
                 {
-                    this.AddAlertMessage("error", "You cannot unlink this account because you would lose your ability to login.");
+                    this.AddAlertMessage("error", LanguageResources.YouCannotUnlinkThisAccountBecauseYouWouldLoseYourAbilityToLogin);
                     return Response.AsRedirect("~/account/#identityProviders");
                 }
 
@@ -170,7 +171,7 @@ namespace JabbR.Nancy
                 {
                     repository.Remove(identity);
 
-                    this.AddAlertMessage("success", String.Format("Successfully unlinked {0} account.", provider));
+                    this.AddAlertMessage("success", String.Format(LanguageResources.SuccessfullyUnlinkedXAccount, provider));
                     return Response.AsRedirect("~/account/#identityProviders");
                 }
 
@@ -206,7 +207,7 @@ namespace JabbR.Nancy
 
                 if (ModelValidationResult.IsValid)
                 {
-                    this.AddAlertMessage("success", "Successfully added a password.");
+                    this.AddAlertMessage("success", LanguageResources.SuccessfullyAddedAPassword);
                     return Response.AsRedirect("~/account/#changePassword");
                 }
 
@@ -226,7 +227,7 @@ namespace JabbR.Nancy
 
                 if (String.IsNullOrEmpty(oldPassword))
                 {
-                    this.AddValidationError("oldPassword", "Old password is required");
+                    this.AddValidationError("oldPassword", LanguageResources.OldPasswordIsRequired);
                 }
 
                 ValidatePassword(password, confirmPassword);
@@ -248,7 +249,7 @@ namespace JabbR.Nancy
 
                 if (ModelValidationResult.IsValid)
                 {
-                    this.AddAlertMessage("success", "Successfully changed your password.");
+                    this.AddAlertMessage("success", LanguageResources.SuccessfullyChangedYourPassword);
                     return Response.AsRedirect("~/account/#changePassword");
                 }
 
@@ -287,7 +288,7 @@ namespace JabbR.Nancy
                 {
                     notificationService.OnUserNameChanged(user, oldUsername, username);
 
-                    this.AddAlertMessage("success", "Successfully changed your username.");
+                    this.AddAlertMessage("success", LanguageResources.SuccessfullyChangedYourUsername);
                     return Response.AsRedirect("~/account/#changeUsername");
                 }
 
@@ -299,12 +300,12 @@ namespace JabbR.Nancy
         {
             if (String.IsNullOrEmpty(password))
             {
-                this.AddValidationError("password", "Password is required");
+                this.AddValidationError("password", LanguageResources.PasswordIsRequired);
             }
 
             if (!String.Equals(password, confirmPassword))
             {
-                this.AddValidationError("confirmPassword", "Passwords don't match");
+                this.AddValidationError("confirmPassword", LanguageResources.PasswordsDontMatch);
             }
         }
 
@@ -312,12 +313,12 @@ namespace JabbR.Nancy
         {
             if (String.IsNullOrEmpty(username))
             {
-                this.AddValidationError("username", "Username is required");
+                this.AddValidationError("username", LanguageResources.UsernameIsRequired);
             }
 
             if (!String.Equals(username, confirmUsername))
             {
-                this.AddValidationError("confirmUsername", "Usernames don't match");
+                this.AddValidationError("confirmUsername", LanguageResources.UsernamesDontMatch);
             }
         }
 

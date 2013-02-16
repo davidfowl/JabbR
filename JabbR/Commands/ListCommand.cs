@@ -1,6 +1,7 @@
-﻿using System;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 using System.Linq;
-using JabbR.Models;
 
 namespace JabbR.Commands
 {
@@ -11,7 +12,7 @@ namespace JabbR.Commands
         {
             if (args.Length  == 0)
             {
-                throw new InvalidOperationException("List users in which room?");
+                throw new InvalidOperationException(LanguageResources.ListUsersInWhichRoom);
             }
 
             string roomName = args[0];

@@ -26,6 +26,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <JSLintSkip>\Scripts\qunit.js|\Scripts\ba-linkify.min.js|\Scripts\bootstrap.js|\Scripts\bootstrap.min.js|\Scripts\jquery-1.9.0.intellisense.js|\Scripts\jquery-1.9.0.js|\Scripts\jquery-1.9.0.min.js|\Scripts\jquery-migrate-1.0.0.min.js|\Scripts\jquery-ui-1.10.0.js|\Scripts\jquery-ui-1.10.0.min.js|\Scripts\jquery.autotabcomplete.js|\Scripts\jquery.captureDocumentWrite.js|\Scripts\jquery.captureDocumentWrite.min.js|\Scripts\jquery.color.js|\Scripts\jquery.cookie.js|\Scripts\jquery.history.js|\Scripts\jquery.KeyTips.js|\Scripts\jquery.livesearch.js|\Scripts\jquery.signalR.min.js|\Scripts\jquery.sortElements.js|\Scripts\jquery.timeago.0.10.js|\Scripts\jQuery.tmpl.js|\Scripts\jQuery.tmpl.min.js|\Scripts\json2.js|\Scripts\Markdown.Converter.js|\Scripts\modernizr.js|\Scripts\quicksilver.js</JSLintSkip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -836,6 +837,14 @@
     <EmbeddedResource Include="Migrations\201301262237296_FixProviderName.resx">
       <DependentUpon>201301262237296_FixProviderName.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LanguageResources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LanguageResources.de-DE.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LanguageResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LanguageResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\ba-linkify.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -891,6 +900,16 @@
     <Content Include="Views\Account\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resources\LanguageResources.de-DE.Designer.cs">
+      <DependentUpon>LanguageResources.de-DE.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\LanguageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LanguageResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\CryptoHelper.cs" />
     <Compile Include="Infrastructure\IdentityUtility.cs" />
     <Compile Include="Infrastructure\AlertMessageStore.cs" />

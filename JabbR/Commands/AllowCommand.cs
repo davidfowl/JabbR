@@ -1,5 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -10,7 +11,7 @@ namespace JabbR.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Who do you want to allow?");
+                throw new InvalidOperationException(LanguageResources.WhoDoYouWantToAllow);
             }
 
             string targetUserName = args[0];
@@ -19,7 +20,7 @@ namespace JabbR.Commands
 
             if (args.Length == 1)
             {
-                throw new InvalidOperationException("Which room?");
+                throw new InvalidOperationException(LanguageResources.WhichRoom);
             }
 
             string roomName = args[1];

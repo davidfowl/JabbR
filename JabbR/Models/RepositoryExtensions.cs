@@ -1,7 +1,8 @@
-﻿using System;
+﻿using JabbR.Services;
+using JabbR.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using JabbR.Services;
 
 namespace JabbR.Models
 {
@@ -29,7 +30,7 @@ namespace JabbR.Models
         {
             if (String.IsNullOrEmpty(roomName))
             {
-                throw new InvalidOperationException("Use '/join room' to join a room.");
+                throw new InvalidOperationException(LanguageResources.UseJoinRoomToJoinARoom);
             }
 
             roomName = ChatService.NormalizeRoomName(roomName);
@@ -38,12 +39,12 @@ namespace JabbR.Models
 
             if (room == null)
             {
-                throw new InvalidOperationException(String.Format("You're in '{0}' but it doesn't exist.", roomName));
+                throw new InvalidOperationException(String.Format(LanguageResources.YoureInXButItDoesntExist, roomName));
             }
 
             if (!repository.IsUserInRoom(cache, user, room))
             {
-                throw new InvalidOperationException(String.Format("You're not in '{0}'. Use '/join {0}' to join it.", roomName));
+                throw new InvalidOperationException(String.Format(LanguageResources.YoureNotInXUseJoinXToJoinIt, roomName));
             }
 
             return room;
@@ -69,7 +70,7 @@ namespace JabbR.Models
             if (user == null)
             {
                 // The user isn't logged in 
-                throw new InvalidOperationException("You're not logged in.");
+                throw new InvalidOperationException(LanguageResources.YoureNotLoggedIn);
             }
 
             return user;
@@ -79,7 +80,7 @@ namespace JabbR.Models
         {
             if (String.IsNullOrWhiteSpace(roomName))
             {
-                throw new InvalidOperationException("Room name cannot be blank!");
+                throw new InvalidOperationException(LanguageResources.RoomNameCannotBeBlank);
             }
 
             roomName = ChatService.NormalizeRoomName(roomName);
@@ -88,12 +89,12 @@ namespace JabbR.Models
 
             if (room == null)
             {
-                throw new InvalidOperationException(String.Format("Unable to find room '{0}'", roomName));
+                throw new InvalidOperationException(String.Format(LanguageResources.UnableToFindRoomX, roomName));
             }
 
             if (room.Closed && mustBeOpen)
             {
-                throw new InvalidOperationException(String.Format("The room '{0}' is closed", roomName));
+                throw new InvalidOperationException(String.Format(LanguageResources.TheRoomXIsClosed, roomName));
             }
 
             return room;
@@ -107,7 +108,7 @@ namespace JabbR.Models
 
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format("Unable to find user '{0}'.", userName));
+                throw new InvalidOperationException(String.Format(LanguageResources.UnableToFindUserX, userName));
             }
 
             return user;

@@ -1,6 +1,7 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
 using JabbR.Services;
+using System;
 
 namespace JabbR.Commands
 {
@@ -21,7 +22,7 @@ namespace JabbR.Commands
 
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format("We didn't find anyone with the username {0}", name));
+                throw new InvalidOperationException(String.Format(LanguageResources.WeDidntFindAnyoneWithTheUsername, name));
             }
 
             context.NotificationService.ShowUserInfo(user);

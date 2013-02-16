@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -11,7 +11,7 @@ namespace JabbR.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Who are you trying to ban?");
+                throw new InvalidOperationException(LanguageResources.WhoAreYouTtryingToBan);
             }
 
             string targetUserName = args[0];

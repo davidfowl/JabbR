@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -13,7 +13,7 @@ namespace JabbR.Commands
 
             if (args.Length  == 0)
             {
-                throw new InvalidOperationException("You what?");
+                throw new InvalidOperationException(LanguageResources.YouWhat);
             }
 
             var content = String.Join(" ", args);

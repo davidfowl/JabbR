@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using JabbR.Infrastructure;
+﻿using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -14,7 +12,7 @@ namespace JabbR.Commands
 
             if (String.IsNullOrEmpty(messageText))
             {
-                throw new InvalidOperationException("What did you want to broadcast?");
+                throw new InvalidOperationException(LanguageResources.WhatDidYouWantToBroadcast);
             }
 
             context.NotificationService.BroadcastMessage(callingUser, messageText);

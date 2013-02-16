@@ -1,5 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -10,7 +11,7 @@ namespace JabbR.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Who are you trying to locate?");
+                throw new InvalidOperationException(LanguageResources.WhoAreYouTryingToLocate);
             }
 
             string targetUserName = args[0];

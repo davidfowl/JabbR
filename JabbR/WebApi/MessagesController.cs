@@ -1,13 +1,14 @@
-﻿using System;
+﻿using JabbR.Infrastructure;
+using JabbR.Models;
+using JabbR.Resources;
+using JabbR.Services;
+using JabbR.WebApi.Model;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using JabbR.Infrastructure;
-using JabbR.Models;
-using JabbR.Services;
-using JabbR.WebApi.Model;
 
 namespace JabbR.WebApi
 {
@@ -49,7 +50,7 @@ namespace JabbR.WebApi
                     start = DateTime.MinValue;
                     break;
                 default:
-                    return Request.CreateJabbrErrorMessage(HttpStatusCode.BadRequest, "range value not recognized");
+                    return Request.CreateJabbrErrorMessage(HttpStatusCode.BadRequest, LanguageResources.RangeValueNotRecognized);
             }
 
             var filenamePrefix = room + ".";
@@ -76,7 +77,7 @@ namespace JabbR.WebApi
             if (chatRoom.Private)
             {
                 // TODO: Allow viewing messages using auth token
-                return Request.CreateJabbrErrorMessage(HttpStatusCode.NotFound, String.Format("Unable to locate room {0}.", chatRoom.Name), filenamePrefix);
+                return Request.CreateJabbrErrorMessage(HttpStatusCode.NotFound, String.Format(LanguageResources.UnableToLocateRoomX, chatRoom.Name), filenamePrefix);
             }
 
             var messages = _repository.GetMessagesByRoom(chatRoom)

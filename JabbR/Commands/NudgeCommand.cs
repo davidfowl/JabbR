@@ -1,6 +1,7 @@
-﻿using System;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 using System.Linq;
-using JabbR.Models;
 
 namespace JabbR.Commands
 {
@@ -33,7 +34,7 @@ namespace JabbR.Commands
             }
             else
             {
-                throw new InvalidOperationException(String.Format("Room can only be nudged once every {0} seconds", betweenNudges.TotalSeconds));
+                throw new InvalidOperationException(String.Format(LanguageResources.RoomCanOnlyBeNudgedOnceEveryXSeconds, betweenNudges.TotalSeconds));
             }
         }
 
@@ -41,7 +42,7 @@ namespace JabbR.Commands
         {
             if (context.Repository.Users.Count() == 1)
             {
-                throw new InvalidOperationException("You're the only person in here...");
+                throw new InvalidOperationException(LanguageResources.YoureTheOnlyPersonInHere);
             }
 
             var toUserName = args[0];
@@ -50,15 +51,15 @@ namespace JabbR.Commands
 
             if (toUser == callingUser)
             {
-                throw new InvalidOperationException("You can't nudge yourself!");
+                throw new InvalidOperationException(LanguageResources.YouCantNudgeYourself);
             }
 
-            string messageText = String.Format("{0} nudged you", callingUser);
+            string messageText = String.Format(LanguageResources.XNudgedYou, callingUser);
 
             var betweenNudges = TimeSpan.FromSeconds(60);
             if (toUser.LastNudged.HasValue && toUser.LastNudged > DateTime.Now.Subtract(betweenNudges))
             {
-                throw new InvalidOperationException(String.Format("User can only be nudged once every {0} seconds", betweenNudges.TotalSeconds));
+                throw new InvalidOperationException(String.Format(LanguageResources.UserCanOnlyBeNudgedOnceEveryXSeconds, betweenNudges.TotalSeconds));
             }
 
             toUser.LastNudged = DateTime.Now;

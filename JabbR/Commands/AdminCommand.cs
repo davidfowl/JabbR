@@ -1,5 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -9,7 +10,7 @@ namespace JabbR.Commands
         {
             if (!callingUser.IsAdmin)
             {
-                throw new InvalidOperationException("You are not an admin.");
+                throw new InvalidOperationException(LanguageResources.YouAreNotAnAdmin);
             }
 
             ExecuteAdminOperation(context, callerContext, callingUser, args);

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using JabbR.Infrastructure;
+﻿using JabbR.Infrastructure;
 using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -14,7 +14,7 @@ namespace JabbR.Commands
 
             if (String.IsNullOrWhiteSpace(email))
             {
-                throw new InvalidOperationException("Email was not specified!");
+                throw new InvalidOperationException(LanguageResources.EmailWasNotSpecified);
             }
 
             string hash = email.ToLowerInvariant().ToMD5();

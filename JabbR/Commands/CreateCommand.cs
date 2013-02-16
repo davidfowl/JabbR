@@ -1,5 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -10,27 +11,27 @@ namespace JabbR.Commands
         {
             if (args.Length > 1)
             {
-                throw new InvalidOperationException("Room name cannot contain spaces.");
+                throw new InvalidOperationException(LanguageResources.RoomNameCannotContainSpaces);
             }
 
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("No room specified.");
+                throw new InvalidOperationException(LanguageResources.NoRoomSpecified);
             }
 
             string roomName = args[0];
             if (String.IsNullOrWhiteSpace(roomName))
             {
-                throw new InvalidOperationException("No room specified.");
+                throw new InvalidOperationException(LanguageResources.NoRoomSpecified);
             }
 
             ChatRoom room = context.Repository.GetRoomByName(roomName);
 
             if (room != null)
             {
-                throw new InvalidOperationException(String.Format("The room '{0}' already exists{1}",
+                throw new InvalidOperationException(String.Format(LanguageResources.TheRoomXAlreadyExistsAppend,
                     roomName,
-                    room.Closed ? " but it's closed" : String.Empty));
+                    room.Closed ? LanguageResources.AppendButItsClosed : String.Empty));
             }
 
             // Create the room, then join it

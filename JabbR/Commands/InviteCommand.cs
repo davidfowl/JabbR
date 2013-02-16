@@ -1,5 +1,6 @@
-﻿using System;
-using JabbR.Models;
+﻿using JabbR.Models;
+using JabbR.Resources;
+using System;
 
 namespace JabbR.Commands
 {
@@ -10,7 +11,7 @@ namespace JabbR.Commands
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Who do you want to invite?");
+                throw new InvalidOperationException(LanguageResources.WhoDoYouWantToInvite);
             }
 
             string targetUserName = args[0];
@@ -19,12 +20,12 @@ namespace JabbR.Commands
 
             if (targetUser == callingUser)
             {
-                throw new InvalidOperationException("You can't invite yourself!");
+                throw new InvalidOperationException(LanguageResources.YouCantInviteYourself);
             }
 
             if (args.Length == 1)
             {
-                throw new InvalidOperationException("Invite them to which room?");
+                throw new InvalidOperationException(LanguageResources.InviteThemToWhichRoom);
             }
 
             string roomName = args[1];
