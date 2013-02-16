@@ -535,9 +535,10 @@
         }
     };
 
-    chat.client.connectionMessageStateChanged = function(roomName, isDisplayed) {
+    chat.client.connectionMessageStateChanged = function (user, roomName, isDisplayed) {
+        var target = isSelf(user) ? 'You have' : user.Name + ' has';
         var state = isDisplayed ? '' : '*not*';
-        var message = 'You have changed this room\'s connection message state to: connection messages will ' + state + ' be displayed.';
+        var message = target + ' changed this room\'s connection message state to: connection messages will ' + state + ' be displayed.';
         ui.addMessage(message, 'notification', roomName);
     };
 

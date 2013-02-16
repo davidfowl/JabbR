@@ -851,9 +851,8 @@ namespace JabbR
 
         void INotificationService.ToggleConnectionMessage(ChatUser user, ChatRoom room)
         {
-            Clients.Group(room.Name).connectionMessageStateChanged(room.Name, room.IsConnectionMessageDisplayed, user.Name);
-
-            Clients.Group(room.Name).toggleConnectionMessage(room.IsConnectionMessageDisplayed);
+            var userViewModel = new UserViewModel(user);
+            Clients.Group(room.Name).connectionMessageStateChanged(userViewModel, room.Name, room.IsConnectionMessageDisplayed);
         }
 
         void INotificationService.AddAdmin(ChatUser targetUser)
