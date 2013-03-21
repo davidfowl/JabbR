@@ -922,7 +922,7 @@
                 multiline: $('#multiline-content-template')
             };
             $reloadMessageNotification = $('#reloadMessageNotification');
-            $fileUploadButton = $('#upload-file-button');
+            $fileUploadButton = $('.upload-button');
             $hiddenFile = $('#hidden-file');
             $uploadForm = $('#upload');
             $fileRoom = $('#file-room');
@@ -1328,6 +1328,7 @@
 
             // Handle file uploads
             $fileUploadButton.click(function () {
+                alert('fileuploadclick');
                 $hiddenFile.click();
             });
 
