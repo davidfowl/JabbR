@@ -2654,6 +2654,171 @@ namespace JabbR.Test
 
                 Assert.Throws<InvalidOperationException>(() => commandManager.TryHandleCommand("/invite dfowler"));
             }
+
+            [Fact]
+            public void CannotInviteOwnUserInMultipleUsers ()
+            {
+                var repository = new InMemoryRepository ();
+                var cache = new Mock<ICache> ().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1"
+                };
+                repository.Add (user);
+                var user2 = new ChatUser
+                {
+                    Name = "dfowler2",
+                    Id = "2"
+                };
+                repository.Add (user2);
+                var user3 = new ChatUser
+                {
+                    Name = "dfowler3",
+                    Id = "3"
+                };
+                repository.Add (user3);
+                var service = new ChatService (cache, repository);
+                var notificationService = new Mock<INotificationService> ();
+                var commandManager = new CommandManager ("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                Assert.Throws<InvalidOperationException> (() => commandManager.TryHandleCommand ("/invite dfowler2 dfowler"));
+            }
+
+            [Fact]
+            public void CanInviteSingleUser ()
+            {
+                var repository = new InMemoryRepository ();
+                var cache = new Mock<ICache> ().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1"
+                };
+                repository.Add (user);
+                var user2 = new ChatUser
+                {
+                    Name = "dfowler2",
+                    Id = "2"
+                };
+                repository.Add (user2);
+                var room = new ChatRoom
+                {
+                    Name = "room"
+                };
+                room.Users.Add (user);
+                user.Rooms.Add (room);
+                repository.Add (room);
+                var service = new ChatService (cache, repository);
+                var notificationService = new Mock<INotificationService> ();
+                var commandManager = new CommandManager ("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                Assert.True (commandManager.TryHandleCommand ("/invite dfowler2 room"));
+                notificationService.Verify (
+                    x => x.Invite (It.Is<ChatUser> (u => u.Id == "1"), It.Is<ChatUser> (u => u.Name == "dfowler2"), It.Is<ChatRoom> (r => r.Name == "room")));
+            }
+
+            [Fact]
+            public void CanInviteMultipleUsers ()
+            {
+                var repository = new InMemoryRepository ();
+                var cache = new Mock<ICache> ().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1"
+                };
+                repository.Add (user);
+                var user2 = new ChatUser
+                {
+                    Name = "dfowler2",
+                    Id = "2"
+                };
+                repository.Add (user2);
+                var user3 = new ChatUser
+                {
+                    Name = "dfowler3",
+                    Id = "3"
+                };
+                repository.Add (user3);
+                var room = new ChatRoom
+                {
+                    Name = "room"
+                };
+                room.Users.Add (user);
+                user.Rooms.Add (room);
+                repository.Add (room);
+                var service = new ChatService (cache, repository);
+                var notificationService = new Mock<INotificationService> ();
+                var commandManager = new CommandManager ("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                Assert.True (commandManager.TryHandleCommand ("/invite dfowler2 dfowler3 room"));
+                notificationService.Verify (
+                    x => x.Invite (It.Is<ChatUser> (u => u.Id == "1"), It.Is<ChatUser> (u => u.Name == "dfowler2"), It.Is<ChatRoom> (r => r.Name == "room")));
+                notificationService.Verify (
+                    x => x.Invite (It.Is<ChatUser> (u => u.Id == "1"), It.Is<ChatUser> (u => u.Name == "dfowler3"), It.Is<ChatRoom> (r => r.Name == "room")));
+            }
+
+            [Fact]
+            public void ThrowsIfMultipleUsersButNoRoom ()
+            {
+                var repository = new InMemoryRepository ();
+                var cache = new Mock<ICache> ().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1"
+                };
+                repository.Add (user);
+                var user2 = new ChatUser
+                {
+                    Name = "dfowler2",
+                    Id = "2"
+                };
+                repository.Add (user2);
+                var user3 = new ChatUser
+                {
+                    Name = "dfowler3",
+                    Id = "3"
+                };
+                repository.Add (user3);
+                var room = new ChatRoom
+                {
+                    Name = "room"
+                };
+                room.Users.Add (user);
+                user.Rooms.Add (room);
+                repository.Add (room);
+                var service = new ChatService (cache, repository);
+                var notificationService = new Mock<INotificationService> ();
+                var commandManager = new CommandManager ("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                Assert.Throws<InvalidOperationException> (() => commandManager.TryHandleCommand ("/invite dfowler2 dfowler3"));
+            }
         }
 
         public class NudgeCommand
