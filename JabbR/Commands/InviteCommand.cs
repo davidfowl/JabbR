@@ -56,7 +56,9 @@ namespace JabbR.Commands
             ChatRoom targetRoom = context.Repository.VerifyRoom(roomName);
 
             foreach (var targetUser in targetUsers)
+            {
                 context.NotificationService.Invite(callingUser, targetUser, targetRoom);
+            }
         }
     }
 }
