@@ -2281,7 +2281,21 @@ li.clearfix
 		left: -40px;
 	}
 	.message .left .userInfo {
-		display:none;
+		z-index: 100;
+		left: 42px;
+        padding: 8px 12px 7px 12px;
+		visibility: hidden;
+        opacity: 0;
+        -webkit-transform: translate3d(-10px, 0, 0);
+        -moz-transform: translate3d(-10px, 0, 0);
+        -ms-transform: translate3d(-10px, 0, 0);
+        -o-transform: translate3d(-10px, 0, 0);
+        transform: translate3d(-10px, 0, 0);
+        -webkit-transition: visibility 0 1.2s,opacity 0.1s 1s,-webkit-transform 0.2s 1s;
+        -webkit-transition-delay: linear,ease-out,cubic-bezier(0, 0.3, 0.16, 1);
+        -moz-transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,-moz-transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
+        -o-transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,-o-transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
+        transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
 	}
 }
   
