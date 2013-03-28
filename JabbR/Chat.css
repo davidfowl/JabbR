@@ -184,14 +184,15 @@ form#send-message {
   {
     list-style-type: none;
     position: relative;
-    margin: 0 0 0 39px;
+    margin: 0 0 0 110px;
   }
 
     .messages li.message
     {
         position: relative;
-        margin: 0 0 0 39px;
+        margin: 0 0 0 220px;
         border: 1px solid rgba(0,0,0,0.1);
+		border-right: 3px solid transparent;
         border-top-width: 0;
         background-color: whitesmoke;
     }
@@ -222,7 +223,7 @@ form#send-message {
 
         .messages li img.gravatar
         {
-            position: relative;
+            position: absolute;
             display: inline-block;
             width: 30px;
             height: 30px;
@@ -736,8 +737,9 @@ li.error
   .message .left
   {
     position: absolute;
-    top: 3px;
-    left: -40px;
+    top: 0;
+    left: -218px;
+	width: 240px;
     color: #999999;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -771,10 +773,10 @@ li.error
     .message .left .userInfo
     {
         position: absolute;
-        z-index: 100;
         top: 0px;
-        left: 42px;
-        padding: 8px 12px 7px 12px;
+        left: 35px;
+		width:150px;
+        padding: 5px 12px 7px 12px;
         color: white;
         font-weight: normal;
         text-shadow: none;
@@ -783,18 +785,6 @@ li.error
         overflow: hidden;
         text-overflow: ellipsis;
         border-radius: 4px;
-        visibility: hidden;
-        opacity: 0;
-        -webkit-transform: translate3d(-10px, 0, 0);
-        -moz-transform: translate3d(-10px, 0, 0);
-        -ms-transform: translate3d(-10px, 0, 0);
-        -o-transform: translate3d(-10px, 0, 0);
-        transform: translate3d(-10px, 0, 0);
-        -webkit-transition: visibility 0 1.2s,opacity 0.1s 1s,-webkit-transform 0.2s 1s;
-        -webkit-transition-delay: linear,ease-out,cubic-bezier(0, 0.3, 0.16, 1);
-        -moz-transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,-moz-transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
-        -o-transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,-o-transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
-        transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
     }
 
   .message.failed .left .state
@@ -817,9 +807,8 @@ li.error
 
   .message .middle
   {
-    margin: 0;
+    margin-right: 90px;
     padding: 4px 20px 4px 10px;
-    border-right: 3px solid transparent;
     text-rendering: optimizeLegibility;
     word-wrap: break-word;
     -webkit-hyphens: auto;
@@ -2269,6 +2258,33 @@ li.clearfix
     background-position: -80px -165px;
   }
 
+@media (max-width:800px){
+	.messages li.message {
+		margin: 0 0 0 155px;
+	}
+	.message .left {
+		width:30px;
+		left: -150px;
+	}
+	.message .left .userInfo {
+		width:80px
+	}
+}
+
+
+@media (max-width:700px){
+	.messages li.message {
+		margin: 0 0 0 45px;
+	}
+	.message .left {
+		width:30px;
+		left: -40px;
+	}
+	.message .left .userInfo {
+		display:none;
+	}
+}
+  
 @media screen and (max-width:480px)
 {
   .messages
@@ -2870,7 +2886,7 @@ h3.userlist-header
 }
 
 #room-actions {
-    margin-right: 10px;
+    margin: 5px;
     display: none;
 }
 
