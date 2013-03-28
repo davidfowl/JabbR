@@ -1,12 +1,11 @@
 ﻿body
 {
-  font-family: Lucida Grande, Trebuchet MS;
+  font-family: "Open Sans","Lucida Sans Unicode","Lucida Grande",Helvetica,sans-serif;
   font-size: 13px;
   background-color: #e5e5e5;
 }
 
 input, button, select, textarea {
-  font-family: Lucida Grande, Trebuchet MS;
   font-size: 13px;
 }
 
@@ -88,16 +87,15 @@ form#send-message {
     position: absolute;
     top: 60px;
     left: 0;
-    padding-top: 10px;
     width: 100%;
-    height: 30px;
+    height: 40px;
     -webkit-box-shadow: 0px 0px 2px 1px #888;
        -moz-box-shadow: 0px 0px 2px 1px #888;
             box-shadow: 0px 0px 2px 1px #888;
     background: #e5e5e5; /* Old browsers */
     background: -moz-linear-gradient(top,  #e5e5e5 0%, #cccccc 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #e5e5e5 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+    background: -webkit-linear-gradient(bottom, rgb(0, 170, 255) 0%,rgb(255, 255, 255) 7%);
     background: -o-linear-gradient(top,  #e5e5e5 0%,#cccccc 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top,  #e5e5e5 0%,#cccccc 100%); /* IE10+ */
     background: linear-gradient(to bottom,  #e5e5e5 0%,#cccccc 100%); /* W3C */
@@ -149,7 +147,6 @@ form#send-message {
   #heading h1
   {
     margin-left: 5px;
-    font-family: 'Lucida Grande', 'Trebuchet MS';
     line-height: normal;
     font-size: 20px;
   }
@@ -180,32 +177,65 @@ form#send-message {
   position: absolute;
   top: 55px;
   bottom: 40px;
-  background-color: #fff;
+  background-color: whitesmoke;
 }
 
   .messages li
   {
     list-style-type: none;
     position: relative;
-    margin: 0px;
+    margin: 0 0 0 39px;
   }
 
     .messages li.message
     {
-      padding: 0px;
-      border-left: 175px solid #f1f1f1; /* background color for left column (user info) */
+        position: relative;
+        margin: 0 0 0 39px;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-top-width: 0;
+        background-color: whitesmoke;
     }
 
-    .messages li.message.my-message {
-        border-color: #E4ECF1;
-    }
+        .messages li.message.first:before
+        {
+            content: "";
+            position: absolute;
+            left: -5px;
+            top: 12px;
+            width: 8px;
+            height: 8px;
+            background: inherit;
+            border-bottom: inherit;
+            border-left: inherit;
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
 
-    .messages li img.gravatar
-    {
-      height: 16px;
-      width: 16px;
-      display: inline-block;
-    }
+        .messages li.message.my-message
+        {
+            text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+            background-color: #f0f0f0;
+        }
+
+        .messages li img.gravatar
+        {
+            position: relative;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.1),0 1px 1px rgba(255,255,255,0.3);
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.25, 0.08, 0.1, 0.98);
+            -moz-transition: -moz-transform 0.2s cubic-bezier(0.25, 0.08, 0.1, 0.98);
+            -o-transition: -o-transform 0.2s cubic-bezier(0.25, 0.08, 0.1, 0.98);
+            transition: transform 0.2s cubic-bezier(0.25, 0.08, 0.1, 0.98);
+        }
 
 .message img 
 {
@@ -216,7 +246,7 @@ form#send-message {
 .roomTopic
 {
   position: absolute;
-  margin-left: 5px;
+  margin: 10px;
 }
 
 .users
@@ -584,7 +614,6 @@ li.room
 
 #new-message
 {
-  font-family: Trebuchet MS;
   font-size: 13px;
   border: 1px solid #ccc;
   width: 100%;
@@ -706,16 +735,66 @@ li.error
 
   .message .left
   {
-    float: left;
-    width: 170px; /* width should exclude padding */
-    padding: 5px;
-    margin-left: -175px;
-  }
+    position: absolute;
+    top: 3px;
+    left: -40px;
+    color: #999999;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
 
-    .message .left .name
+    .message .left:hover .avatar
     {
-      font-weight: bold;
-      cursor: pointer;
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+
+    .message .left:hover .userInfo
+    {
+        visibility: visible;
+        opacity: 1;
+        -webkit-transform: translate3d(0px, 0, 0);
+        -moz-transform: translate3d(0px, 0, 0);
+        -ms-transform: translate3d(0px, 0, 0);
+        -o-transform: translate3d(0px, 0, 0);
+        transform: translate3d(0px, 0, 0);
+        -webkit-transition-delay: 0;
+        -moz-transition-delay: 0;
+        -o-transition-delay: 0;
+        transition-delay: 0;
+    }
+
+    .message .left .userInfo
+    {
+        position: absolute;
+        z-index: 100;
+        top: 0px;
+        left: 42px;
+        padding: 8px 12px 7px 12px;
+        color: white;
+        font-weight: normal;
+        text-shadow: none;
+        background-color: #4d4d4d;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-radius: 4px;
+        visibility: hidden;
+        opacity: 0;
+        -webkit-transform: translate3d(-10px, 0, 0);
+        -moz-transform: translate3d(-10px, 0, 0);
+        -ms-transform: translate3d(-10px, 0, 0);
+        -o-transform: translate3d(-10px, 0, 0);
+        transform: translate3d(-10px, 0, 0);
+        -webkit-transition: visibility 0 1.2s,opacity 0.1s 1s,-webkit-transform 0.2s 1s;
+        -webkit-transition-delay: linear,ease-out,cubic-bezier(0, 0.3, 0.16, 1);
+        -moz-transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,-moz-transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
+        -o-transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,-o-transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
+        transition: visibility 0 1.2s linear,opacity 0.1s 1s ease-out,transform 0.2s 1s cubic-bezier(0, 0.3, 0.16, 1);
     }
 
   .message.failed .left .state
@@ -738,10 +817,32 @@ li.error
 
   .message .middle
   {
-    margin-right: 95px;
-    padding: 5px;
+    margin: 0;
+    padding: 4px 20px 4px 10px;
+    border-right: 3px solid transparent;
+    text-rendering: optimizeLegibility;
     word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
   }
+
+    .message .middle.first
+    {
+        padding-top: 10px;
+        border-top-right-radius: inherit;
+    }
+
+    .message .middle:last-of-type
+    {
+        padding-bottom: 10px;
+        border-bottom-right-radius: inherit;
+    }
+
+    .message .middle a.left:hover
+    {
+        cursor: alias;
+    }
 
 .messages li .right
 {
@@ -751,6 +852,11 @@ li.error
   right: 0px;
   width: 85px;
 }
+  .messages li .right.first
+  {
+    padding-top: 10px;
+    border-top-right-radius: inherit;
+  }
 
   .messages li .right .time
   {
@@ -2192,22 +2298,6 @@ li.clearfix
       display: none;
     }
 
-  .message .left
-  {
-    float: inherit;
-    width: inherit;
-    margin-left: inherit;
-  }
-
-  .message .middle
-  {
-    position: relative;
-    top: 0.5em;
-    margin-bottom: 10px;
-    margin-right: 0px;
-    padding: 5px;
-  }
-
   #tabs
   {
     overflow: auto;
@@ -2720,7 +2810,6 @@ h3.userlist-header
     margin: 16px 0 0 0;
     cursor: pointer;
     font-weight: normal;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .modal, .modal-header
