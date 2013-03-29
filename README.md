@@ -60,3 +60,4 @@ Inline image and content support for your favorite sites:
 
 #### And if you ever happen to get lost...
     Type /? - to show the full list of JabbR Commands
+	
