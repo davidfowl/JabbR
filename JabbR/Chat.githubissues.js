@@ -30,6 +30,30 @@
         }
     };
 
+    window.addGitHubIssueComment = function (comment) {
+        //github-issues-comment-template
+        
+        var nearEnd = ui.isNearTheEnd(),
+            elements = null;
+
+        elements = $('div.git-hub-issue-' + comment.id)
+            .removeClass('git-hub-issue-' + comment.id);
+
+
+        comment.body = chat.utility.markdownToHtml(chat.utility.encodeHtml(comment.body));
+        // Process the template, and add it in to the div.
+        $('#github-issues-comment-template').tmpl(comment).appendTo(elements);
+
+        // After the string has been added to the template etc, remove any existing targets and re-add with _blank
+        $('a', elements).removeAttr('target').attr('target', '_blank');
+
+        $('.js-relative-date').timeago();
+        // If near the end, scroll.
+        if (nearEnd) {
+            ui.scrollToBottom();
+        }
+    };
+
     window.addGitHubIssuesUser = function (user) {
         var elements = $("a.github-issue-user-" + user.data.login);
         elements.attr("href", user.data.html_url);
