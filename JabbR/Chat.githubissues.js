@@ -30,6 +30,46 @@
         }
     };
 
+    window.addGitHubIssueComment = function () {
+        //github-issues-comment-template
+        var comment = {
+            "id": 15574151,
+            "url": "https://api.github.com/repos/octocat/Hello-World/issues/comments/1",
+            "html_url": "https://github.com/octocat/Hello-World/issues/1347#issuecomment-1",
+            "body": "Me too",
+            "user": {
+                "login": "octocat",
+                "id": 1,
+                "avatar_url": "http://i0.wp.com/thematictheme.com/wp-content/uploads/2012/07/octocat.png?resize=64%2C64",
+                "gravatar_id": "somehexcode",
+                "url": "https://api.github.com/users/octocat"
+            },
+            "created_at": "2011-04-14T16:00:49Z",
+            "updated_at": "2011-04-14T16:00:49Z"
+        };
+        
+        var nearEnd = ui.isNearTheEnd(),
+            elements = null;
+
+        elements = $('div.git-hub-issue-' + comment.id)
+            .removeClass('git-hub-issue-' + comment.id);
+
+
+        comment.body = chat.utility.markdownToHtml(chat.utility.encodeHtml(comment.body));
+        // Process the template, and add it in to the div.
+        $('#github-issues-comment-template').tmpl(comment).appendTo(elements);
+
+        console.log(elements);
+        // After the string has been added to the template etc, remove any existing targets and re-add with _blank
+        $('a', elements).removeAttr('target').attr('target', '_blank');
+
+        $('.js-relative-date').timeago();
+        // If near the end, scroll.
+        if (nearEnd) {
+            ui.scrollToBottom();
+        }
+    };
+
     window.addGitHubIssuesUser = function (user) {
         var elements = $("a.github-issue-user-" + user.data.login);
         elements.attr("href", user.data.html_url);
