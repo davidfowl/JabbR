@@ -2002,6 +2002,21 @@ li.clearfix {
     .users .details .name {
         width: 105px;
     }
+
+    #send-message {
+        right: 200px;
+    }
+
+    .upload-button {
+        display: inline-block;
+        position: absolute;
+        right: 270px;
+        bottom: 10px;
+        margin: 0 3px;
+        padding: 5px;
+        overflow: hidden;
+    }
+
 }
 
 
@@ -2035,7 +2050,19 @@ li.clearfix {
     .users .details .name {
         width: 55px;
     }
-
+    
+    #send-message {
+        right: 5px;
+    }
+    .upload-button {
+        display: inline-block;
+        position: absolute;
+        right: 75px;
+        bottom: 10px;
+        margin: 0 3px;
+        padding: 5px;
+        overflow: hidden;
+    }
 }
 
 @media screen and (max-width:480px) {
