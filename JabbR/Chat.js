@@ -19,7 +19,8 @@
         typingTimeoutId = null,
         $ui = $(ui),
         messageSendingDelay = 1500,
-        pendingMessages = {};
+        pendingMessages = {},
+        privateRooms = null;
 
     function failPendingMessages() {
         for (var id in pendingMessages) {
@@ -132,7 +133,7 @@
             // Populate the user list with room names
             chat.server.getRooms()
                 .done(function (rooms) {
-                    ui.populateLobbyRooms(rooms);
+                    ui.populateLobbyRooms(rooms, privateRooms);
                 });
         }
         catch (e) {
@@ -254,9 +255,10 @@
     };
 
     // Called when a returning users join chat
-    chat.client.logOn = function (rooms) {
-        var activeRoom = this.state.activeRoom,
-            loadRooms = function () {
+    chat.client.logOn = function (rooms, myRooms) {
+        privateRooms = myRooms;
+
+           var loadRooms = function () {
                 $.each(rooms, function (index, room) {
                     if (chat.state.activeRoom !== room.Name) {
                         populateRoom(room.Name);
@@ -274,9 +276,6 @@
             }
         });
         ui.setUserName(chat.state.name);
-        ui.addMessage('Welcome back ' + chat.state.name, 'notification', 'lobby');
-        ui.addMessage('You can join any of the rooms on the right', 'notification', 'lobby');
-        ui.addMessage('Type /logout to log out of chat', 'notification', 'lobby');
 
         // Process any urls that may contain room names
         ui.run();

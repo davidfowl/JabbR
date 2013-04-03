@@ -275,7 +275,8 @@ namespace JabbR
                 Name = r.Name,
                 Count = r.Users.Count(u => u.Status != (int)UserStatus.Offline),
                 Private = r.Private,
-                Closed = r.Closed
+                Closed = r.Closed,
+                Topic = r.Topic
             }).ToList();
 
             return rooms;
@@ -373,6 +374,7 @@ namespace JabbR
             }
 
             var rooms = new List<RoomViewModel>();
+            var privateRooms = new List<LobbyRoomViewModel>();
             var userViewModel = new UserViewModel(user);
             var ownedRooms = user.OwnedRooms.Select(r => r.Key);
 
@@ -398,10 +400,23 @@ namespace JabbR
                 }
             }
 
+
             if (!reconnecting)
             {
+                foreach (var r in user.AllowedRooms)
+                {
+                    privateRooms.Add(new LobbyRoomViewModel
+                    {
+                        Name = r.Name,
+                        Count = _repository.GetOnlineUsers(r).Count(),
+                        Private = r.Private,
+                        Closed = r.Closed,
+                        Topic = r.Topic
+                    });
+                }
+
                 // Initialize the chat with the rooms the user is in
-                Clients.Caller.logOn(rooms);
+                Clients.Caller.logOn(rooms, privateRooms);
             }
         }
 
