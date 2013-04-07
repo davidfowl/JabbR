@@ -4,8 +4,8 @@
 /// <reference path="Chat.toast.js" />
 /// <reference path="Scripts/livestamp.min.js" />
 
-/*global Emoji:true*/
-(function ($, window, document, utility) {
+/*jshint bitwise:false */
+(function ($, window, document, utility, emoji, linkify) {
     "use strict";
 
     var $chatArea = null,
@@ -26,14 +26,11 @@
         templates = null,
         focus = true,
         readOnly = false,
-        commands = [],
-        shortcuts = [],
         Keys = { Up: 38, Down: 40, Esc: 27, Enter: 13, Slash: 47, Space: 32, Tab: 9, Question: 191 },
         scrollTopThreshold = 75,
         toast = window.chat.toast,
         preferences = null,
         $login = null,
-        name,
         lastCycledMessage = null,
         $helpPopup = null,
         $helpBody = null,
@@ -83,7 +80,7 @@
         roomLoadingTimeout = null;
 
     function getRoomNameFromHash(hash) {
-        if (hash.length && hash[0] == '/') {
+        if (hash.length && hash[0] === '/') {
             hash = hash.substr(1);
         }
 
@@ -376,14 +373,14 @@
             var oldParentList = $user.parent('ul');
             $user.appendTo(list);
             this.setListState(list);
-            if (typeof oldParentList !== undefined) {
+            if (oldParentList.length > 0) {
                 this.setListState(oldParentList);
             }
             this.sortList(list);
         };
 
         this.appearsInList = function ($user, list) {
-            return $user.parent('ul').attr('id') == list.attr('id');
+            return $user.parent('ul').attr('id') === list.attr('id');
         };
 
         this.updateUserStatus = function ($user) {
@@ -789,7 +786,7 @@
     }
 
     function toggleRichness($element, roomName) {
-        var blockRichness = roomName ? getRoomPreference(roomName, 'blockRichness') : preferences['blockRichness'];
+        var blockRichness = roomName ? getRoomPreference(roomName, 'blockRichness') : preferences.blockRichness;
 
         if (blockRichness === true) {
             $element.addClass('off');
@@ -866,7 +863,7 @@
         focus = true;
 
         if (msg) {
-            if (msg.toLowerCase() == '/login') {
+            if (msg.toLowerCase() === '/login') {
                 ui.showLogin();
             }
             else {
@@ -931,6 +928,7 @@
         } else {
             $flag.hide();
         }
+
         if (userViewModel.country) {
             $flag.attr('title', userViewModel.country);
         }
@@ -942,10 +940,13 @@
         var topicHtml = topic === '' ? 'You\'re chatting in ' + roomViewModel.Name : ui.processContent(topic);
         var roomTopic = room.roomTopic;
         var isVisibleRoom = getCurrentRoomElements().getName() === roomViewModel.Name;
+
         if (isVisibleRoom) {
             roomTopic.hide();
         }
+
         roomTopic.html(topicHtml);
+
         if (isVisibleRoom) {
             roomTopic.fadeIn(2000);
         }
@@ -1097,8 +1098,7 @@
 
             // DOM events
             $document.on('click', 'h3.collapsible_title', function () {
-                var $message = $(this).closest('.message'),
-                    nearEnd = ui.isNearTheEnd();
+                var nearEnd = ui.isNearTheEnd();
 
                 $(this).next().toggle(0, function () {
                     if (nearEnd) {
@@ -1213,7 +1213,7 @@
             // handle click on names in chat / room list
             var prepareMessage = function (ev) {
                 if (readOnly) {
-                    return;
+                    return false;
                 }
 
                 var message = $newMessage.val().trim();
@@ -1454,12 +1454,11 @@
                             return getRoomsNames();
 
                         case '/':
-                            var commands = ui.getCommands();
                             return ui.getCommands()
                                          .map(function (cmd) { return cmd.Name + ' '; });
 
                         case ':':
-                            return Emoji.getIcons();
+                            return emoji.getIcons();
                         default:
                             return [];
                     }
@@ -1895,7 +1894,6 @@
                 $messages = room.messages,
                 $target = $messages.children().first(),
                 $previousMessage = null,
-                $current = null,
                 previousUser = null,
                 previousTimestamp = new Date().addDays(1); // Tomorrow so we always see a date line
 
@@ -1919,7 +1917,7 @@
             }
 
             // Populate the old messages
-            $.each(messages, function (index) {
+            $.each(messages, function () {
                 processMessage(this, roomName);
 
                 if ($previousMessage) {
@@ -2003,7 +2001,7 @@
                 room.addSeparator();
             }
 
-            var $message = this.appendMessage(templates.message.tmpl(message), room);
+            $message = this.appendMessage(templates.message.tmpl(message), room);
 
             if (message.htmlContent) {
                 ui.addChatMessageContent(message.id, message.htmlContent, room.getName());
@@ -2407,7 +2405,7 @@
         processContent: function (content) {
             content = content || '';
 
-            var hasNewline = content.indexOf('\n') != -1;
+            var hasNewline = content.indexOf('\n') !== -1;
 
             if (hasNewline) {
                 // Multiline detection
@@ -2456,4 +2454,4 @@
         window.chat = {};
     }
     window.chat.ui = ui;
-})(jQuery, window, window.document, window.chat.utility);
+})(jQuery, window, window.document, window.chat.utility, window.Emoji, window.linkify);

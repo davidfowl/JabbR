@@ -4,6 +4,7 @@
 /// <reference path="Chat.ui.js" />
 /// <reference path="Scripts/moment.min.js" />
 
+/*jshint */
 (function ($, connection, window, ui, utility) {
     "use strict";
 
@@ -16,7 +17,6 @@
         loadingHistory = false,
         checkingStatus = false,
         typing = false,
-        typingTimeoutId = null,
         $ui = $(ui),
         messageSendingDelay = 1500,
         pendingMessages = {},
@@ -181,7 +181,7 @@
             date: message.When.fromJsonDate(),
             highlight: re.test(message.Content) ? 'highlight' : '',
             isOwn: re.test(message.User.name),
-            isMine: message.User.Name == chat.state.name
+            isMine: message.User.Name === chat.state.name
         };
     }
 
@@ -486,7 +486,7 @@
         var lastActivityDate = userInfo.LastActivity.fromJsonDate();
         var status = "Currently " + userInfo.Status;
         if (userInfo.IsAfk) {
-            status += userInfo.Status == 'Active' ? ' but ' : ' and ';
+            status += userInfo.Status === 'Active' ? ' but ' : ' and ';
             status += ' is Afk';
         }
         ui.addMessage('User information for ' + userInfo.Name +
