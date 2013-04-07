@@ -392,11 +392,11 @@ form#send-message {
     text-overflow: ellipsis;
     float: left;
     padding-right: 2px;
-    width: 135px;
+    width: 159px;
 }
 
 .user .details.admin .name-container .name {
-    width: 90px;
+    width: 141px;
 }
 
 .user .details .name-container .admin {
@@ -409,8 +409,9 @@ form#send-message {
 
 .users li {
     margin-left: 0;
-    padding: 8px 6px;
+    padding: 2px 6px;
     list-style: none;
+    border-bottom: 1px solid rgb(240, 240, 240);
 }
 
     .users li:hover {
@@ -464,9 +465,19 @@ form#send-message {
         margin-right: 20px;
     }
 
+.user.idle {
+    opacity: 0.4;
+    background-color: rgb(240, 240, 240);
+}
+
+.user.idle .idle-since{
+    color:#000;
+}
+
 .user-status-container {
     width: 15px;
     float: left;
+    display:none;
 }
 
 .user-status {
@@ -1026,6 +1037,7 @@ li.clearfix {
     position: relative;
     float: right;
     margin-top: 4px;
+    width: 16px;
 }
 
 .flag {
@@ -2779,11 +2791,11 @@ h3.userlist-header {
     }
 
     .user.idle .details.admin .name-container .name {
-        width: 72px;
+        width: 105px;
     }
 
     .user .details .name-container .name {
-        width: 110px;
+        width: 122px;
     }
 
     .user .details.admin .name-container .name {
@@ -2837,11 +2849,11 @@ h3.userlist-header {
     }
 
     .user .details .name-container .name {
-        width: 65px;
+        width: 74px;
     }
 
     .user .details.admin .name-container .name {
-        width: 55px;
+        width: 68px;
     }
 }
 
@@ -2881,16 +2893,12 @@ h3.userlist-header {
             font-size: 80%;
         }
 
-        .users .details .name-container {
-            width: 45px;
-        }
-
     .user .details .name-container .name {
-        width: 45px;
+        width: 70px;
     }
 
     .user .details.admin .name-container .name {
-        width: 45px;
+        width: 70px;
     }
 
     .user .details .name-container .idle-since {
