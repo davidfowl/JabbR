@@ -11,39 +11,46 @@ using Xunit;
 
 namespace Jabbr.Test.UserStories
 {
-    public class JabbrLoginTest
+    public class JabbrLoginTest : IDisposable
     {
+        private OpenQA.Selenium.Firefox.FirefoxDriver driver;
+        private JabbrUserStoryHelper helper = new JabbrUserStoryHelper();
 
-        public void Init()
+        private const string jabbrBaseUrl = "http://localhost:8081/";
+
+        private const string testuser1 = "testuser1";
+        private const string testuser1pwd = "testuser1";
+        private const string testuser1email = "abc@xyz.com";
+
+        public JabbrLoginTest()
         {
-
-            OpenQA.Selenium.Firefox.FirefoxDriver driver = new FirefoxDriver();
-
-            driver.Navigate().GoToUrl("http://192.168.1.2/");
-
-            var element =driver.FindElement(By.Name("username"));
-            element.SendKeys("sachin_mob");
-
-            var pwd =driver.FindElement(By.Name("password"));
-            pwd.SendKeys("Test@123");
-
-            IWebElement submitBtn = driver.FindElement( By.ClassName( "btn" ) );
-                submitBtn.Click( );
-
-
-            //WebDriverBackedSelenium backed = new WebDriverBackedSelenium(driver, "http://192.168.1.2/");
-
-            //backed.
-
-
+            driver = new FirefoxDriver();
+            driver.Navigate().GoToUrl(jabbrBaseUrl);
         }
-        
+
         [Fact]
-        public void ShouldLoginWithTestUser()
+        public void LoginFailedWithoutUserRegistration()
         {
+            var element = driver.FindElement(By.Name("username"));
+            element.SendKeys(testuser1);
 
-            Init();
+            var pwd = driver.FindElement(By.Name("password"));
+            pwd.SendKeys(testuser1pwd);
+
+            IWebElement submitBtn = driver.FindElement(By.ClassName("btn"));
+            submitBtn.Click();
+
+            var result = driver.ExecuteScript("return $('li',$('.validation-summary-errors')).text();");
+
+
+            Assert.Equal("Login failed. Check your username/password.", result);
+
         }
 
+
+        public void Dispose()
+        {
+            driver.Dispose();
+        }
     }
 }
