@@ -11,12 +11,13 @@
     
     <ItemGroup>
         <TestProjects Include="$(ProjectRoot)\JabbR.Tests\bin\$(Configuration)\JabbR.Tests.dll" />
+		<UserStoriesProjects Include="$(ProjectRoot)\Jabbr.Test.UserStories\bin\$(Configuration)\Jabbr.Test.UserStories.dll" />
     </ItemGroup>
     
     <UsingTask AssemblyFile="$(XunitPath)xunit.runner.msbuild.dll"
                TaskName="Xunit.Runner.MSBuild.xunit" />
     
-    <Target Name="RunAll" DependsOnTargets="Build; RunTests; Package" />
+    <Target Name="RunAll" DependsOnTargets="Build; RunTests; Package; RunUserStories" />
     
     <Target Name="MakeArtifactsPath">
         <MakeDir Directories="$(SiteArtifactsPath)" Condition="!Exists('$(SiteArtifactsPath)')" />
@@ -24,6 +25,10 @@
     
     <Target Name="RunTests">
         <xunit Assembly="%(TestProjects.FullPath)" />
+    </Target>
+	
+	<Target Name="RunUserStories">
+        <xunit Assembly="%(UserStoriesProjects.FullPath)" />
     </Target>
     
     <Target Name="Build">

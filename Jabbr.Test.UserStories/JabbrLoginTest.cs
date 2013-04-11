@@ -16,7 +16,7 @@ namespace Jabbr.Test.UserStories
         private OpenQA.Selenium.Firefox.FirefoxDriver driver;
         private JabbrUserStoryHelper helper = new JabbrUserStoryHelper();
 
-        private const string jabbrBaseUrl = "http://localhost:8081/";
+        private const string jabbrBaseUrl = "http://localhost:16207/";
 
         private const string testuser1 = "testuser1";
         private const string testuser1pwd = "testuser1";
