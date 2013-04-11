@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8138D1
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jabbr.Test.UserStories", "Jabbr.Test.UserStories\Jabbr.Test.UserStories.csproj", "{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabbR.Tests.UserStories", "JabbR.Tests.UserStories\JabbR.Tests.UserStories.csproj", "{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

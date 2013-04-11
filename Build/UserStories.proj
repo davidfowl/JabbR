@@ -10,7 +10,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-		<UserStoriesProjects Include="$(ProjectRoot)\Jabbr.Test.UserStories\bin\$(Configuration)\Jabbr.Test.UserStories.dll" />
+		<UserStoriesProjects Include="$(ProjectRoot)\JabbR.Tests.UserStories\bin\$(Configuration)\JabbR.Tests.UserStories.dll" />
     </ItemGroup>
     
     <UsingTask AssemblyFile="$(XunitPath)xunit.runner.msbuild.dll"

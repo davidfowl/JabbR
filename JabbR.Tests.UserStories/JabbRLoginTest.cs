@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
-using Selenium;
 using Xunit;
 
-namespace Jabbr.Test.UserStories
+namespace JabbR.Tests.UserStories
 {
-    public class JabbrLoginTest : IDisposable
+    public class JabbRLoginTest : IDisposable
     {
         private OpenQA.Selenium.Firefox.FirefoxDriver driver;
-        private JabbrUserStoryHelper helper = new JabbrUserStoryHelper();
+        private JabbRUserStoryHelper helper = new JabbRUserStoryHelper();
 
         private const string jabbrBaseUrl = "http://localhost:16207/";
 
@@ -22,7 +16,7 @@ namespace Jabbr.Test.UserStories
         private const string testuser1pwd = "testuser1";
         private const string testuser1email = "abc@xyz.com";
 
-        public JabbrLoginTest()
+        public JabbRLoginTest()
         {
             driver = new FirefoxDriver();
             driver.Navigate().GoToUrl(jabbrBaseUrl);

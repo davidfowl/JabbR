@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JabbR.Models;
+﻿using JabbR.Models;
 using JabbR.Services;
 
-namespace Jabbr.Test.UserStories {
+namespace JabbR.Tests.UserStories {
     
-    public class JabbrUserStoryHelper
+    public class JabbRUserStoryHelper
     {
         private   IMembershipService membershipService;
         private IJabbrRepository repository;
         public ICryptoService criptoService;
 
-        public JabbrUserStoryHelper()
+        public JabbRUserStoryHelper()
         {
                 Setup();
         }

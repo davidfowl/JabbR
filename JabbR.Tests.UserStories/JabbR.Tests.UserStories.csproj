@@ -7,8 +7,8 @@
     <ProjectGuid>{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jabbr.Test.UserStories</RootNamespace>
-    <AssemblyName>Jabbr.Test.UserStories</AssemblyName>
+    <RootNamespace>JabbR.Tests.UserStories</RootNamespace>
+    <AssemblyName>JabbR.Tests.UserStories</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -60,8 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JabbrLoginTest.cs" />
-    <Compile Include="JabbrUserStoryBase.cs" />
+    <Compile Include="JabbRLoginTest.cs" />
+    <Compile Include="JabbRUserStoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
