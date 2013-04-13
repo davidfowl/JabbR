@@ -13,9 +13,6 @@ namespace JabbR.Tests.UserStories
         private const string _testuser1 = "testuser1";
         private const string _testuser1pwd = "testuser1";
         
-        //private const string testuser1email = "abc@xyz.com";
-        //private JabbRUserStoryHelper _helper = new JabbRUserStoryHelper( );
-
         public JabbRLoginTest()
         {
             _driver = new FirefoxDriver();
@@ -40,7 +37,6 @@ namespace JabbR.Tests.UserStories
             Assert.Equal("Login failed. Check your username/password.", result);
 
         }
-
 
         public void Dispose()
         {

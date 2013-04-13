@@ -22,7 +22,6 @@ namespace JabbR.Tests.UserStories
             _membershipService = new MembershipService(_repository, _criptoService);
         }
 
-        
         public void SetupNewUser(string userName, string password, string email)
         {
             _membershipService.AddUser(userName, email, password);
