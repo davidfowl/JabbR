@@ -5,13 +5,13 @@ namespace JabbR.Tests.UserStories
 {   
     public class JabbRUserStoryHelper
     {
-        private   IMembershipService _membershipService;
+        private IMembershipService _membershipService;
         private IJabbrRepository _repository;
-        public ICryptoService _criptoService;
+        private ICryptoService _criptoService;
 
-        public JabbRUserStoryHelper()
+        public JabbRUserStoryHelper ( )
         {
-                Setup();
+            Setup();
         }
 
         public void Setup()
