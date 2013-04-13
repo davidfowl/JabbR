@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="RunAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="$(Targets)" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
         <ProjectRoot>$(MSBuildProjectDirectory)\..</ProjectRoot>
@@ -11,6 +11,7 @@
     
     <ItemGroup>
         <TestProjects Include="$(ProjectRoot)\JabbR.Tests\bin\$(Configuration)\JabbR.Tests.dll" />
+		<UserStoriesProjects Include="$(ProjectRoot)\JabbR.Tests.UserStories\bin\$(Configuration)\JabbR.Tests.UserStories.dll" />
     </ItemGroup>
     
     <UsingTask AssemblyFile="$(XunitPath)xunit.runner.msbuild.dll"
@@ -24,6 +25,10 @@
     
     <Target Name="RunTests">
         <xunit Assembly="%(TestProjects.FullPath)" />
+    </Target>
+	
+	<Target Name="RunUserStoriesTests">
+        <xunit Assembly="%(UserStoriesProjects.FullPath)" />
     </Target>
 	
     <Target Name="Build">
