@@ -761,10 +761,6 @@ li.error {
     padding: 5px;
 }
 
-    .action .content, .pm .content, .error .content, .broadcast .content {
-        margin-right: 95px;
-    }
-
     .action a.info {
         color: #9c009c;
         font-style: italic;
@@ -796,8 +792,9 @@ li.error {
     padding: 5px;
 }
 
-    .notification .content, .pm .content, .error .content, .broadcast .content {
-        margin-right: 95px;
+    .notification .content, .pm .content, .error .content, .broadcast .content, .welcome .content {
+        margin-right: 0;
+        padding: 12px 5px 5px 5px;
     }
 
     .notification a.info {
@@ -921,8 +918,7 @@ li.error {
     }
 
     .message .middle {
-        margin-right: 95px;
-        padding: 5px;
+        padding: 12px 5px 5px 5px;
         word-wrap: break-word;
     }
 
@@ -967,14 +963,21 @@ li.error {
     padding: 5px;
     top: 0px;
     right: 0px;
-    width: 85px;
+    width: 50px;
 }
 
     .messages li .right .time {
+        position: absolute;
         color: #bbb;
+        font-size: 0.75em;
+        top: -2px;
+        right: 2px;
     }
 
-.messages li.welcome .right .time {
+.messages li.welcome .right .time,
+.messages li.error .right .time,
+.messages li.notification .right .time,
+.messages li.broadcast .right .time {
     color: #666;
     font-weight: normal;
 }
@@ -984,7 +987,8 @@ li.error {
 }
 
 .list-header {
-    padding: 5px;
+    padding: 3px 5px;
+    color: #c5c5c5;
     border-bottom: 1px solid #eee;
 }
 
@@ -996,7 +1000,8 @@ li.error {
 
 
 .list-header .content {
-    font-weight: bold;
+    /*font-weight: bold;*/
+    font-size: 0.9em;
 }
 
 .list-item .right {
