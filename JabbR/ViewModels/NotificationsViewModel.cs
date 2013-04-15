@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using PagedList;
 
 namespace JabbR.ViewModels
@@ -21,5 +22,14 @@ namespace JabbR.ViewModels
         public bool Read { get; set; }
         public bool HtmlEncoded { get; set; }
         public DateTimeOffset When { get; set; }
+
+        /// <summary>
+        /// Returns a JSON-approved, ISO-8601 string representation of the time when the notification was received.
+        /// This specific format string comes from Json.Net source
+        /// </summary>
+        public string WhenString
+        {
+            get { return When.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK", CultureInfo.InvariantCulture); }
+        }
     }
 }
