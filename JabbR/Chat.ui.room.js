@@ -230,12 +230,12 @@
 
     Room.prototype.setListState = function (list) {
         var emptyStatus = list.children('li.empty'),
-            visibleItems = list.children('li:not(.empty):visible');
+            visibleItems = list.children('li:not(.empty)').filter(function() { return $(this).css('display') !== 'none'; });
         
         if (visibleItems.length > 0) {
             emptyStatus.remove();
         } else if (emptyStatus.length === 0) {
-            list.append($('<li class="empty" />').text(list.data('empty-message')));
+            list.append($('<li class="empty" />').text(list.data('emptyMessage')));
         }
     };
 
