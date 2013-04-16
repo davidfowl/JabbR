@@ -36,8 +36,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Selenium.WebDriverBackedSelenium">
-      <HintPath>..\packages\Selenium.WebDriverBackedSelenium.2.31.2\lib\net40\Selenium.WebDriverBackedSelenium.dll</HintPath>
+    <Reference Include="RazorHosting">
+      <HintPath>..\packages\SimpleBrowser.0.5.11\lib\net40\RazorHosting.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleBrowser">
+      <HintPath>..\packages\SimpleBrowser.0.5.11\lib\net40\SimpleBrowser.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleBrowser.WebDriver">
+      <HintPath>..\packages\SimpleBrowser.WebDriver.0.5.12\lib\net40\SimpleBrowser.WebDriver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
