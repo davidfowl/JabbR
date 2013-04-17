@@ -11,7 +11,7 @@ namespace JabbR.Tests.UserStories
     {
         private SimpleBrowserDriver _driver;
 
-        private const string _jabbrLoginUrl = "http://localhost:16207/#/rooms/master";
+        private const string _jabbrLoginUrl = "http://localhost:16207/account/login";
         private const string _testuser1 = "testuser1";
         private const string _testuser1pwd = "testuser1";
         
