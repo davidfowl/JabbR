@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8138D1
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabbR.Tests.UserStories", "JabbR.Tests.UserStories\JabbR.Tests.UserStories.csproj", "{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{45AB4285-8B37-47FD-9D38-40E6BC5D2E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45AB4285-8B37-47FD-9D38-40E6BC5D2E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45AB4285-8B37-47FD-9D38-40E6BC5D2E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
