@@ -95,6 +95,36 @@ namespace JabbR.Services
             _notifications.Remove(notification);
         }
 
+        public int GetMessageCountSince(int? lastMessageKey, out int newestMessageKey)
+        {
+            var messages = _rooms.SelectMany(r => r.Messages);
+            newestMessageKey = messages.Max(m => m.Key);
+
+            if (lastMessageKey.HasValue)
+            {
+                newestMessageKey = messages.Max(m => m.Key);
+                return messages.Count(m => m.Key > lastMessageKey);
+            }
+
+            return messages.Count();
+        }
+
+        public IQueryable<ChatMessage> GetMessagesToIndex(int? lowerBoundKey, int upperBoundKey, int skip, int take)
+        {
+            IEnumerable<ChatMessage> query = _rooms.SelectMany(r => r.Messages);
+
+            if (lowerBoundKey.HasValue)
+            {
+                query = query.Where(m => m.Key > lowerBoundKey.Value);
+            }
+
+            return query.Where(m => m.Key <= upperBoundKey)
+                      .OrderByDescending(m => m.When)
+                      .Skip(skip)
+                      .Take(take)
+                      .AsQueryable();
+        }
+
         public void CommitChanges()
         {
             // no-op since this is an in-memory impl' of the repo

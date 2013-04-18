@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Ninject;
+using WebBackgrounder;
 
 namespace JabbR
 {
@@ -18,6 +20,7 @@ namespace JabbR
         private static Timer _backgroundTimer;
         private static readonly TimeSpan _sweepInterval = TimeSpan.FromMinutes(1);
         private static readonly TimeSpan _sweepStart = TimeSpan.FromMinutes(10);
+        private static JobManager _jobManager;
 
         private static void StartBackgroundWork(IKernel kernel, IDependencyResolver resolver)
         {
@@ -34,8 +37,27 @@ namespace JabbR
             _sweepStart,
             _sweepInterval);
 
+            _jobManager = GetJobManager(kernel);
+            _jobManager.Start();
+
             // Clear all connections on app start
             ClearConnectedClients(kernel);
+        }
+
+        private static JobManager GetJobManager(IKernel kernel)
+        {
+            var indexer = kernel.Get<ISearchIndexingService>();
+            var jobs = new IJob[]
+            {
+                new LuceneIndexingJob(TimeSpan.FromMinutes(1), indexer)
+            };
+
+            var coordinator = new SingleServerJobCoordinator();
+            var manager = new JobManager(jobs, coordinator);
+
+            manager.Fail(ReportError);
+
+            return manager;
         }
 
         private static void ClearConnectedClients(IKernel kernel)

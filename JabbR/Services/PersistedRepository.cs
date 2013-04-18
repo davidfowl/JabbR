@@ -92,6 +92,34 @@ namespace JabbR.Services
             _db.SaveChanges();
         }
 
+        public int GetMessageCountSince(int? lastMessageKey, out int newestMessageKey)
+        {
+            newestMessageKey = _db.Messages.Max(m => m.Key);
+
+            if (lastMessageKey.HasValue)
+            {
+                newestMessageKey = _db.Messages.Max(m => m.Key);
+                return _db.Messages.Count(m => m.Key > lastMessageKey);
+            }
+
+            return _db.Messages.Count();
+        }
+
+        public IQueryable<ChatMessage> GetMessagesToIndex(int? lowerBoundKey, int upperBoundKey, int skip, int take)
+        {
+            IQueryable<ChatMessage> query = _db.Messages;
+
+            if (lowerBoundKey.HasValue)
+            {
+                query = query.Where(m => m.Key > lowerBoundKey.Value);
+            }
+
+            return query.Where(m => m.Key <= upperBoundKey)
+                      .OrderByDescending(m => m.When)
+                      .Skip(skip)
+                      .Take(take);
+        }
+
         public void CommitChanges()
         {
             _db.SaveChanges();
@@ -289,6 +317,6 @@ namespace JabbR.Services
         public void Reload(object entity)
         {
             _db.Entry(entity).Reload();
-        }        
+        }
     }
 }
