@@ -235,7 +235,7 @@
 
     Room.prototype.setListState = function (list) {
         var emptyStatus = list.children('li.empty'),
-            visibleItems = list.children('li:not(.empty)').filter(function() { return $(this).css('display') !== 'none'; });
+            visibleItems = list.children('li:not(.empty):visible');
         
         if (visibleItems.length > 0) {
             emptyStatus.remove();
@@ -299,8 +299,30 @@
         }
     };
 
+    function insertionSort(items, comparisonPredicate) {
+
+        var listLength = items.length,
+            value,
+            i, 
+            j;
+
+        for (i = 0; i < listLength; i++) {
+
+            value = items[i];
+            
+            for (j = i - 1; j > -1 && comparisonPredicate(items[j], value) === 1; j--) {
+                items[j + 1] = items[j];
+            }
+
+            items[j + 1] = value;
+        }
+
+        return items;
+    }
+
     Room.prototype.sortUsersByName = function (userListToSort) {
-        return userListToSort.sort(function (a, b) {
+
+        return insertionSort(userListToSort, function (a, b) {
             var compA = $(a).data('name').toString().toUpperCase();
             var compB = $(b).data('name').toString().toUpperCase();
             return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
