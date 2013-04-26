@@ -315,26 +315,33 @@
     Room.prototype.sortList = function (listToSort) {
         var listItems = listToSort.children('li:not(.empty)').get();
 
-        var activeUsers = [],
-            idleUsers = [],
-            sortedUsers = [];
+        if (listItems.length > 0) {
+            var originalDisplayMode = listToSort.css("display"),
+                activeUsers = [],
+                idleUsers = [],
+                sortedUsers = [];
 
-        $.each(listItems, function (index, item) {
-            if ($(item).data('active')) {
-                activeUsers.push(item);
-            } else {
-                idleUsers.push(item);
-            }
-        });
+            listToSort.css("display", "none");
 
-        activeUsers = this.sortUsersByName(activeUsers);
-        idleUsers = this.sortUsersByName(idleUsers);
+            $.each(listItems, function (index, item) {
+                if ($(item).data('active')) {
+                    activeUsers.push(item);
+                } else {
+                    idleUsers.push(item);
+                }
+            });
 
-        sortedUsers = activeUsers.concat(idleUsers);
+            activeUsers = this.sortUsersByName(activeUsers);
+            idleUsers = this.sortUsersByName(idleUsers);
 
-        $.each(sortedUsers, function (index, item) {
-            listToSort.append(item);
-        });
+            sortedUsers = activeUsers.concat(idleUsers);
+
+            $.each(sortedUsers, function (index, item) {
+                listToSort.append(item);
+            });
+
+            listToSort.css("display", originalDisplayMode);
+        }
     };
 
     Room.prototype.canTrimHistory = function () {
