@@ -11,7 +11,6 @@
     
     <ItemGroup>
         <TestProjects Include="$(ProjectRoot)\JabbR.Tests\bin\$(Configuration)\JabbR.Tests.dll" />
-        <UserStoriesProjects Include="$(ProjectRoot)\JabbR.Tests.UserStories\bin\$(Configuration)\JabbR.Tests.UserStories.dll" />
     </ItemGroup>
     
     <UsingTask AssemblyFile="$(XunitPath)xunit.runner.msbuild.dll"
@@ -26,11 +25,7 @@
     <Target Name="RunTests">
         <xunit Assembly="%(TestProjects.FullPath)" />
     </Target>
-    
-    <Target Name="RunUserStoriesTests">
-        <xunit Assembly="%(UserStoriesProjects.FullPath)" />
-    </Target>
-    
+        
     <Target Name="Build">
         <MSBuild Projects="$(ProjectRoot)\JabbR.sln" 
                  Targets="Build" 

@@ -23,6 +23,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8138D1
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabbR.Tests.UserStories", "JabbR.Tests.UserStories\JabbR.Tests.UserStories.csproj", "{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabbR.Client", "JabbR.Client\JabbR.Client.csproj", "{A4A1D183-FD80-4DBD-806F-883DDADD4967}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabbR.Client.Sample", "JabbR.Client.Sample\JabbR.Client.Sample.csproj", "{E8AA84F5-7283-4CA3-A679-901EF0EFB0D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jabbr.Test.UserStories", "Jabbr.Test.UserStories\Jabbr.Test.UserStories.csproj", "{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabbR.Tests.UserStories", "JabbR.Tests.UserStories\JabbR.Tests.UserStories.csproj", "{C59F3440-E569-4DFD-8480-703EF8150F43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,8 +47,22 @@ Global
 		{45AB4285-8B37-47FD-9D38-40E6BC5D2E13}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{80E1EBB6-1D0B-44DF-BC41-192CCA8242FC}.Release|x86.ActiveCfg = Release|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C59F3440-E569-4DFD-8480-703EF8150F43}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
