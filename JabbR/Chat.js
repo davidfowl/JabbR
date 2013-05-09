@@ -169,12 +169,12 @@
         };
     }
 
-    function getMessageViewModel(message) {
+    function getMessageViewModel(message, isNewMessage) {
         var re = new RegExp("\\b@?" + chat.state.name.replace(/\./, '\\.') + "\\b", "i");
         return {
             name: message.User.Name,
             hash: message.User.Hash,
-            message: message.HtmlEncoded ? message.Content : ui.processContent(message.Content),
+            message: message.HtmlEncoded ? message.Content : ui.processContent(message.Content, isNewMessage),
             htmlContent: message.HtmlContent,
             id: message.Id,
             date: message.When.fromJsonDate(),
@@ -389,7 +389,7 @@
     };
 
     chat.client.addMessage = function (message, room) {
-        var viewModel = getMessageViewModel(message);
+        var viewModel = getMessageViewModel(message, true);
 
         scrollIfNecessary(function () {
             // Update your message when it comes from the server

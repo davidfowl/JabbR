@@ -2,9 +2,10 @@
 /// <reference path="Scripts/jQuery.tmpl.js" />
 /// <reference path="Scripts/jquery.cookie.js" />
 /// <reference path="Scripts/moment.min.js" />
+/// <reference path="Chat.stings.js" />
 
 /*jshint evil:true, bitwise:false*/
-(function ($, window, emoji, markdown, linkify, moment) {
+(function ($, window, emoji, markdown, linkify, moment, stings) {
     "use strict";
 
     // getting the browser's name for use in isMobile
@@ -113,7 +114,7 @@
         return new Date(this.getTime() + 1000 * 3600 * 24 * days);
     };
 
-    function processContent(content, templates, roomCache) {
+    function processContent(content, templates, roomCache, isNewMessage) {
         content = content || '';
 
         var hasNewline = content.indexOf('\n') !== -1;
@@ -149,6 +150,8 @@
                     return href ? '<a rel="nofollow external" target="_blank" href="' + href + '" title="' + href + '">' + text + '</a>' : text;
                 }
             });
+            // Transform sting to html
+            content = utility.transformSting(content, utility.transformEmojis, isNewMessage);
 
             return content;
         }
@@ -180,6 +183,14 @@
             var transformToHtml = new emoji.Parser().transformToHtml;
             return (transformToHtml(content));
         },
+        parseSting: function (content) {
+            var parser = new stings.Parser().parse;
+            return (parser(content));
+        },
+        transformSting: function (content, emojiParser, isNewMessage) {
+            var transformToHtml = new stings.Parser().transformToHtml;
+            return (transformToHtml(content, emojiParser, isNewMessage));
+        },
         decodeHtml: decodeHtml,
         encodeHtml: encodeHtml,
         newId: guidGenerator,
@@ -192,4 +203,4 @@
 
     window.chat.utility = utility;
 
-})(jQuery, window, window.Emoji, window.Markdown, window.linkify, window.moment);
+})(jQuery, window, window.Emoji, window.Markdown, window.linkify, window.moment, window.Stings);
