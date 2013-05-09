@@ -4,9 +4,10 @@
 /// <reference path="Chat.toast.js" />
 /// <reference path="Scripts/livestamp.min.js" />
 /// <reference path="Scripts/moment.min.js" />
+/// <reference path="Chat.stings.js" />
 
 /*jshint bitwise:false */
-(function ($, window, document, chat, utility, emoji, linkify) {
+(function ($, window, document, chat, utility, emoji, linkify, stings) {
     "use strict";
 
     var $chatArea = null,
@@ -1175,7 +1176,7 @@
 
             // Auto-complete for user names
             $newMessage.autoTabComplete({
-                prefixMatch: '[@#/:]',
+                prefixMatch: '[@#/:^]',
                 get: function (prefix) {
                     switch (prefix) {
                         case '@':
@@ -1193,6 +1194,10 @@
 
                         case ':':
                             return emoji.getIcons();
+                            
+                        case '^':
+                            return stings.getStings();
+
                         default:
                             return [];
                     }
@@ -2217,8 +2222,8 @@
             var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
             room.setListState(room.owners);
         },
-        processContent: function (content) {
-            return utility.processContent(content, templates, roomCache);
+        processContent: function (content, isNewMessage) {
+            return utility.processContent(content, templates, roomCache, isNewMessage);
         },
         trimRoomMessageHistory: function (roomName) {
             var rooms = roomName ? [getRoomElements(roomName)] : getAllRoomElements();
@@ -2233,4 +2238,4 @@
         window.chat = {};
     }
     window.chat.ui = ui;
-})(jQuery, window, window.document, window.chat, window.chat.utility, window.Emoji, window.linkify);
+})(jQuery, window, window.document, window.chat, window.chat.utility, window.Emoji, window.linkify, window.Stings);
