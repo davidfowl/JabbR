@@ -13,4 +13,4 @@ _AzurePackage/
 JabbR*.css
 JabbR*.js
 TestResults/
-/userStories.log
+/tools/casperjs/log.xml
