@@ -1,3 +1,8 @@
+var fs = require('fs');
+
+phantom.casperPath = fs.absolute('.');
+phantom.injectJs(phantom.casperPath + '\\casperbin\\bootstrap.js');
+
 var hostName = "http://localhost:16207",
 invalidUserLoginErrorMessage = "Login failed. Check your username/password.",
 registrationPath = '/account/register',
