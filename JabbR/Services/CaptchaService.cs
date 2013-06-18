@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Net;
 
 namespace JabbR.Services
 {
@@ -32,7 +33,7 @@ namespace JabbR.Services
 
             byte[] postdata = Encoding.UTF8.GetBytes(poststring);
 
-            System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create("http://www.google.com/recaptcha/api/verify");
+            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create("http://www.google.com/recaptcha/api/verify");
             webRequest.Method = "POST";
             webRequest.ContentType = "application/x-www-form-urlencoded";
             webRequest.ContentLength = postdata.Length;
@@ -41,7 +42,7 @@ namespace JabbR.Services
             {
                 writer.Write(postdata, 0, postdata.Length);
             }
-            using (System.Net.HttpWebResponse webResponse = (System.Net.HttpWebResponse)webRequest.GetResponse())
+            using (HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse())
             {
                 using (var stream = new StreamReader(webResponse.GetResponseStream()))
                 {
