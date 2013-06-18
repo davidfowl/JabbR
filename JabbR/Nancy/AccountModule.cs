@@ -163,7 +163,7 @@ namespace JabbR.Nancy
                         ValidatePassword(password, confirmPassword);
                     }
                     //only check if we have a captcha public key in the web.config file
-                    if (!string.IsNullOrEmpty(captchaService.PublicKey))
+                    if (!String.IsNullOrEmpty(captchaService.PublicKey))
                     {
                         if (!captchaService.IsValid(Request.UserHostAddress,
                                 Request.Form.recaptcha_challenge_field,
