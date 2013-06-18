@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
@@ -113,6 +116,8 @@ namespace JabbR.Nancy
                     return HttpStatusCode.NotFound;
                 }
 
+                ViewBag.reCaptchaPublicKey = ConfigurationManager.AppSettings["jabbr:reCaptchaPublicKey"];
+
                 ViewBag.requirePassword = requirePassword;
 
                 return View["register"];
@@ -157,7 +162,39 @@ namespace JabbR.Nancy
                         ValidatePassword(password, confirmPassword);
                     }
 
-                    if (ModelValidationResult.IsValid)
+                    if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["jabbr:reCaptchaPrivateKey"]))
+                    {
+                        string poststring = string.Format("privatekey={0}&remoteip={1}&challenge={2}&response={3}",
+                            ConfigurationManager.AppSettings["jabbr:reCaptchaPrivateKey"],
+                            Request.UserHostAddress,
+                            Request.Form.recaptcha_challenge_field,
+                            Request.Form.recaptcha_response_field);
+
+                        byte[] postdata = Encoding.UTF8.GetBytes(poststring);
+
+                        System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create("http://www.google.com/recaptcha/api/verify");
+                        webRequest.Method = "POST";
+                        webRequest.ContentType = "application/x-www-form-urlencoded";
+                        webRequest.ContentLength = postdata.Length;
+
+                        using (Stream writer = webRequest.GetRequestStream())
+                        {
+                            writer.Write(postdata, 0, postdata.Length);
+                        }
+                        using (System.Net.HttpWebResponse webResponse = (System.Net.HttpWebResponse)webRequest.GetResponse())
+                        {
+                            using (var stream = new StreamReader(webResponse.GetResponseStream()))
+                            {
+                                string firstLine = stream.ReadLine();
+                                //System.Diagnostics.Debug.WriteLine(stream.ReadToEnd());
+                                if (firstLine != "true")
+                                {
+                                    this.AddValidationError("_FORM", "Bad Captcha response, please try again");
+                                }
+                            }
+                        }
+                    }
+                    else if (ModelValidationResult.IsValid)
                     {
                         if (requirePassword)
                         {
@@ -188,6 +225,8 @@ namespace JabbR.Nancy
                 {
                     this.AddValidationError("_FORM", ex.Message);
                 }
+                
+                ViewBag.reCaptchaPublicKey = ConfigurationManager.AppSettings["jabbr:reCaptchaPublicKey"];
 
                 return View["register"];
             };
