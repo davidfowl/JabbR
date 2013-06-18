@@ -12,21 +12,22 @@ namespace JabbR.Services
     //checks with Googles ReCaptcha service
     public class CaptchaService : ICaptchaService
     {
-        private readonly string reCaptchaPrivateKey;
-        private readonly string reCaptchaPublicKey;
+        private readonly string _reCaptchaPrivateKey;
+        private readonly string _reCaptchaPublicKey;
 
-        public CaptchaService()
+        public CaptchaService(ApplicationSettings applicationSettings)
         {
             //get the keys
-            reCaptchaPrivateKey = ConfigurationManager.AppSettings["jabbr:reCaptchaPrivateKey"];
-            reCaptchaPublicKey = ConfigurationManager.AppSettings["jabbr:reCaptchaPublicKey"];
+
+            _reCaptchaPrivateKey = applicationSettings.ReCaptchaPrivateKey;
+            _reCaptchaPublicKey = applicationSettings.ReCaptchaPublicKey;
 
         }
 
         public bool IsValid(string UserHostAddress, string captchaChallenge, string captchaResponse)
         {
             string poststring = string.Format("privatekey={0}&remoteip={1}&challenge={2}&response={3}",
-                            this.reCaptchaPrivateKey,
+                            this._reCaptchaPrivateKey,
                             UserHostAddress,
                             captchaChallenge,
                             captchaResponse);
@@ -64,7 +65,7 @@ namespace JabbR.Services
         {
             get
             {
-                return reCaptchaPublicKey;
+                return _reCaptchaPublicKey;
             }
         }
     }
