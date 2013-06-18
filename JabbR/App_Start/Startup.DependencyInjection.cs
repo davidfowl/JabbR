@@ -91,6 +91,9 @@ namespace JabbR
             kernel.Bind<IUserAuthenticator>()
                   .To<DefaultUserAuthenticator>();
 
+            kernel.Bind<ICaptchaService>()
+                .To<CaptchaService>();
+
             kernel.Bind<IAuthenticationService>()
                   .ToConstant(new AuthenticationService());
 
