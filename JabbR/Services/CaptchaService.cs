@@ -24,11 +24,11 @@ namespace JabbR.Services
 
         }
 
-        public bool IsValid(string UserHostAddress, string captchaChallenge, string captchaResponse)
+        public bool IsValid(string UserIpAddress, string captchaChallenge, string captchaResponse)
         {
             string poststring = string.Format("privatekey={0}&remoteip={1}&challenge={2}&response={3}",
                             this._reCaptchaPrivateKey,
-                            UserHostAddress,
+                            UserIpAddress,
                             captchaChallenge,
                             captchaResponse);
 

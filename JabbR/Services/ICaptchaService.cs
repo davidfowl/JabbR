@@ -2,7 +2,7 @@
 {
     public interface ICaptchaService
     {
-        bool IsValid(string UserHostAddress, string captchaChallenge, string captchaResponse);
+        bool IsValid(string UserIpAddress, string captchaChallenge, string captchaResponse);
         string PublicKey  { get; }
     }
 }
