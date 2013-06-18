@@ -985,6 +985,7 @@
     <Content Include="Views\Notifications\index.cshtml" />
     <Content Include="Views\Home\monitor.cshtml" />
     <Content Include="Views\Administration\index.cshtml" />
+    <Content Include="Views\Account\_recaptcha.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Middleware\FixCookieHandler.cs" />
@@ -1064,6 +1065,8 @@
     <Compile Include="Migrations\201301262237296_FixProviderName.Designer.cs">
       <DependentUpon>201301262237296_FixProviderName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\CaptchaService.cs" />
+    <Compile Include="Services\ICaptchaService.cs" />
     <Compile Include="Nancy\InputExtensions.cs" />
     <Compile Include="Nancy\JabbRModule.cs" />
     <Compile Include="Nancy\NancyExtensions.cs" />
