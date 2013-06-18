@@ -26,6 +26,10 @@ namespace JabbR.Services
 
         public bool AllowRoomCreation { get; set; }
 
+        public string ReCaptchaPrivateKey { get; set; }
+
+        public string ReCaptchaPublicKey { get; set; }
+
         public IDictionary<string, string> AuthenticationProviders { get; set; }
 
         public static ApplicationSettings GetDefaultSettings()

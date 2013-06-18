@@ -98,6 +98,21 @@
                     <div class="control-group">
                     </div>
                 </fieldset>
+                <fieldset id="reCaptchaKeys">
+                    <legend>ReCaptcha Keys</legend>
+                    <div class="control-group">
+                        <label class="control-label" for="reCaptchaPrivateKey">ReCaptcha Private Key</label>
+                        <div class="controls">
+                            <input type="text" name="reCaptchaPrivateKey" class="input-xlarge" value="@Model.ReCaptchaPrivateKey" placeholder="ReCaptcha Private Key"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="reCaptchaPublicKey">ReCaptcha Public Key</label>
+                        <div class="controls">
+                            <input type="text" name="reCaptchaPublicKey" class="input-xlarge" value="@Model.ReCaptchaPublicKey" placeholder="Re Captcha Public Key"/>
+                        </div>
+                    </div>
+                </fieldset>
                 <div class="control-group">
                     <div class="controls">
                         <input type="submit" class="btn pull-right" value="Save Settings" />

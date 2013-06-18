@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
@@ -18,7 +21,8 @@ namespace JabbR.Nancy
                              IJabbrRepository repository,
                              IAuthenticationService authService,
                              IChatNotificationService notificationService,
-                             IUserAuthenticator authenticator)
+                             IUserAuthenticator authenticator,
+                             ICaptchaService captchaService)
             : base("/account")
         {
             Get["/"] = _ =>
@@ -107,11 +111,13 @@ namespace JabbR.Nancy
 
                 bool requirePassword = !Principal.Identity.IsAuthenticated;
 
-                if (requirePassword && 
+                if (requirePassword &&
                     !applicationSettings.AllowUserRegistration)
                 {
                     return HttpStatusCode.NotFound;
                 }
+
+                ViewBag.reCaptchaPublicKey = captchaService.PublicKey;
 
                 ViewBag.requirePassword = requirePassword;
 
@@ -156,6 +162,17 @@ namespace JabbR.Nancy
                     {
                         ValidatePassword(password, confirmPassword);
                     }
+                    //only check if we have a captcha public key in the web.config file
+                    if (!String.IsNullOrEmpty(captchaService.PublicKey))
+                    {
+                        if (!captchaService.IsValid(Request.UserHostAddress,
+                                Request.Form.recaptcha_challenge_field,
+                                Request.Form.recaptcha_response_field))
+                        {
+                            this.AddValidationError("_FORM", "Bad Captcha response, please try again");
+                        }
+                    }
+                    
 
                     if (ModelValidationResult.IsValid)
                     {
@@ -188,6 +205,8 @@ namespace JabbR.Nancy
                 {
                     this.AddValidationError("_FORM", ex.Message);
                 }
+
+                ViewBag.reCaptchaPublicKey = captchaService.PublicKey;
 
                 return View["register"];
             };
