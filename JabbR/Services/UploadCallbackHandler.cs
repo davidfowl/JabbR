@@ -67,7 +67,7 @@ namespace JabbR.Services
             // Notify all clients for the uploaded url
             _hubContext.Clients.Group(roomName).addMessage(messageViewModel, roomName);
 
-            _resourceProcessor.ProcessUrls(new[] { result.Url }, _hubContext.Clients, roomName, message.Id, true);
+            _resourceProcessor.ProcessUrls(new[] { result.Url }, _hubContext.Clients, roomName, message.Id, updateDatabase: true);
         }
 
         private static string FormatBytes(long bytes)
