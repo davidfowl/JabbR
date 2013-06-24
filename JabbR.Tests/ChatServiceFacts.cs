@@ -593,7 +593,7 @@ namespace JabbR.Test
                 repository.Add(user);
                 var service = new ChatService(new Mock<ICache>().Object, repository);
 
-                service.UpdateActivity(user, "client1", userAgent: null);
+                service.UpdateActivity(user, "client1", null, null);
                 var clients = user.ConnectedClients.ToList();
 
                 Assert.Equal((int)UserStatus.Active, user.Status);

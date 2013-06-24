@@ -73,6 +73,11 @@ namespace JabbR.Services
             _db.Notifications.Add(notification);
         }
 
+        public void Add(BannedIP bannedIP)
+        {
+            _db.BannedIPs.Add(bannedIP);
+        }
+
         public void Remove(ChatRoom room)
         {
             _db.Rooms.Remove(room);
@@ -286,6 +291,11 @@ namespace JabbR.Services
         public void Reload(object entity)
         {
             _db.Entry(entity).Reload();
-        }        
+        }  
+      
+        public bool IsIPBanned(string remoteIP)
+        {
+            return _db.BannedIPs.Any(e => e.RemoteIP == remoteIP);
+        }
     }
 }

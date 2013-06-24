@@ -6,8 +6,8 @@ namespace JabbR.Services
     public interface IChatService
     {
         // Users 
-        ChatClient AddClient(ChatUser user, string clientId, string userAgent);
-        void UpdateActivity(ChatUser user, string clientId, string userAgent);
+        ChatClient AddClient(ChatUser user, string clientId, string userAgent, string remoteIP);
+        void UpdateActivity(ChatUser user, string clientId, string userAgent, string remoteIP);
         string DisconnectClient(string clientId);
 
         // Rooms
@@ -37,6 +37,7 @@ namespace JabbR.Services
         void AddAdmin(ChatUser admin, ChatUser targetUser);
         void RemoveAdmin(ChatUser admin, ChatUser targetUser);
         void BanUser(ChatUser callingUser, ChatUser targetUser);
+        void BanUserIPs(ChatUser callingUser, ChatUser targetUser);
 
         void AddAttachment(ChatMessage message, string fileName, string contentType, long size, UploadResult result);
 
