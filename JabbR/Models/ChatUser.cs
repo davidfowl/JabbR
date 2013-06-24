@@ -38,7 +38,7 @@ namespace JabbR.Models
         public string Email { get; set; }
 
         public bool IsAdmin { get; set; }
-        public bool IsBanned { get; set; }
+        public UserBanStatus BanStatus { get; set; }
 
         // Request password reset token
         public string RequestPasswordResetId { get; set; }
