@@ -43,7 +43,7 @@ namespace JabbR.Commands
             {
                 room = context.Service.AddRoom(callingUser, roomName);
 
-                context.Service.JoinRoom(callingUser, room, null);
+                context.Service.JoinRoom(callingUser, room, inviteCode: null);
 
                 context.Repository.CommitChanges();
             }
