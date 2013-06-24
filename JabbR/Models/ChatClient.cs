@@ -13,6 +13,7 @@ namespace JabbR.Models
 
         public string UserAgent { get; set; }
         public string Name { get; set; }
+        public string RemoteIP { get; set; }
 
         public DateTimeOffset LastActivity { get; set; }
         public DateTimeOffset LastClientActivity { get; set; }

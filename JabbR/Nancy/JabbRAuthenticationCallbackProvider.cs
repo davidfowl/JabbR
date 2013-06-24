@@ -47,7 +47,6 @@ namespace JabbR.Nancy
                     claims.Add(new Claim(ClaimTypes.Email, information.Email));
                 }
 
-
                 nancyModule.SignIn(claims);
             }
 

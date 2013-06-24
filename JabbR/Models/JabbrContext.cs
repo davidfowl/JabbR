@@ -36,6 +36,8 @@ namespace JabbR.Models
 
             modelBuilder.Configurations.Add(new NotificationMap());
 
+            modelBuilder.Configurations.Add(new BannedIPMap());
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -47,5 +49,6 @@ namespace JabbR.Models
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Settings> Settings { get; set; }
+        public DbSet<BannedIP> BannedIPs { get; set; }
     }
 }

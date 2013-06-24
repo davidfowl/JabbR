@@ -13,6 +13,7 @@ namespace JabbR.Services
         private readonly ICollection<ChatRoom> _rooms;
         private readonly ICollection<Attachment> _attachments;
         private readonly ICollection<Notification> _notifications;
+        private readonly ICollection<BannedIP> _bannedIPs; 
 
         public InMemoryRepository()
         {
@@ -21,6 +22,7 @@ namespace JabbR.Services
             _identities = new SafeCollection<ChatUserIdentity>();
             _attachments = new SafeCollection<Attachment>();
             _notifications = new SafeCollection<Notification>();
+            _bannedIPs = new SafeCollection<BannedIP>();
         }
 
         public IQueryable<ChatRoom> Rooms { get { return _rooms.AsQueryable(); } }
@@ -69,6 +71,11 @@ namespace JabbR.Services
         public void Add(Notification notification)
         {
             _notifications.Add(notification);
+        }
+
+        public void Add(BannedIP bannedIP)
+        {
+            _bannedIPs.Add(bannedIP);
         }
 
         public void Remove(ChatClient client)
@@ -239,6 +246,11 @@ namespace JabbR.Services
 
         public void Reload(object entity)
         {
+        }
+
+        public bool IsIPBanned(string remoteIP)
+        {
+            return _bannedIPs.Any(ip => ip.RemoteIP == remoteIP);
         }
     }
 }

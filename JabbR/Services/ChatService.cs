@@ -370,12 +370,13 @@ namespace JabbR.Services
             _repository.CommitChanges();
         }
 
-        public void UpdateActivity(ChatUser user, string clientId, string userAgent)
+        public void UpdateActivity(ChatUser user, string clientId, string userAgent, string remoteIP)
         {
             user.Status = (int)UserStatus.Active;
             user.LastActivity = DateTime.UtcNow;
 
-            ChatClient client = AddClient(user, clientId, userAgent);
+            ChatClient client = AddClient(user, clientId, userAgent, remoteIP);
+            client.RemoteIP = remoteIP;
             client.UserAgent = userAgent;
             client.LastActivity = DateTimeOffset.UtcNow;
             client.LastClientActivity = DateTimeOffset.UtcNow;
@@ -548,7 +549,7 @@ namespace JabbR.Services
             LeaveRoom(targetUser, targetRoom);
         }
 
-        public ChatClient AddClient(ChatUser user, string clientId, string userAgent)
+        public ChatClient AddClient(ChatUser user, string clientId, string userAgent, string remoteIP)
         {
             ChatClient client = _repository.GetClientById(clientId);
             if (client != null)
@@ -561,6 +562,7 @@ namespace JabbR.Services
                 Id = clientId,
                 User = user,
                 UserAgent = userAgent,
+                RemoteIP = remoteIP,
                 LastActivity = DateTimeOffset.UtcNow,
                 LastClientActivity = user.LastActivity
             };
@@ -822,6 +824,28 @@ namespace JabbR.Services
             if (targetUser.IsAdmin)
             {
                 throw new InvalidOperationException("You cannot ban another admin.");
+            }
+
+            targetUser.IsBanned = true;
+
+            _repository.CommitChanges();
+        }
+
+        public void BanUserIPs(ChatUser admin, ChatUser targetUser)
+        {
+            EnsureAdmin(admin);
+
+            if (targetUser.IsAdmin)
+            {
+                throw new InvalidOperationException("You cannot ban another admin.");
+            }
+
+            foreach (var connectedClient in targetUser.ConnectedClients)
+            {
+                if (!string.IsNullOrEmpty(connectedClient.RemoteIP))
+                {
+                    _repository.Add(new BannedIP { RemoteIP = connectedClient.RemoteIP, When = DateTimeOffset.Now });
+                }
             }
 
             targetUser.IsBanned = true;

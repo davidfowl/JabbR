@@ -10,6 +10,8 @@ using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+
 using Newtonsoft.Json;
 
 namespace JabbR
@@ -99,14 +101,14 @@ namespace JabbR
                 }
 
                 // Ensure the client is re-added
-                _service.AddClient(user, Context.ConnectionId, UserAgent);
+                _service.AddClient(user, Context.ConnectionId, UserAgent, Context.GetRemoteIP());
             }
             else
             {
                 _logger.Log("{0}:{1} connected.", user.Name, Context.ConnectionId);
 
                 // Update some user values
-                _service.UpdateActivity(user, Context.ConnectionId, UserAgent);
+                _service.UpdateActivity(user, Context.ConnectionId, UserAgent, Context.GetRemoteIP());
                 _repository.CommitChanges();
             }
 
@@ -290,7 +292,7 @@ namespace JabbR
             }
 
             // Make sure this client is being tracked
-            _service.AddClient(user, Context.ConnectionId, UserAgent);
+            _service.AddClient(user, Context.ConnectionId, UserAgent, Context.GetRemoteIP());
 
             var currentStatus = (UserStatus)user.Status;
 
@@ -564,7 +566,9 @@ namespace JabbR
 
         private void UpdateActivity(ChatUser user)
         {
-            _service.UpdateActivity(user, Context.ConnectionId, UserAgent);
+            string remoteIP = Context.GetRemoteIP();
+
+            _service.UpdateActivity(user, Context.ConnectionId, UserAgent, remoteIP);
 
             _repository.CommitChanges();
         }

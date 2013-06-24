@@ -67,10 +67,13 @@ namespace JabbR.Nancy
                 {
                     if (ModelValidationResult.IsValid)
                     {
-                        IList<Claim> claims;
-                        if (authenticator.TryAuthenticateUser(username, password, out claims))
+                        if (!repository.IsIPBanned(Request.UserHostAddress))
                         {
-                            return this.SignIn(claims);
+                            IList<Claim> claims;
+                            if (authenticator.TryAuthenticateUser(username, password, out claims))
+                            {
+                                return this.SignIn(claims);
+                            }
                         }
                     }
                 }
@@ -159,6 +162,11 @@ namespace JabbR.Nancy
 
                     if (ModelValidationResult.IsValid)
                     {
+                        if (repository.IsIPBanned(Request.UserHostAddress))
+                        {
+                            return HttpStatusCode.EnhanceYourCalm;
+                        }
+
                         if (requirePassword)
                         {
                             ChatUser user = membershipService.AddUser(username, email, password);

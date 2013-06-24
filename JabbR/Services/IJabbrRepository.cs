@@ -40,6 +40,7 @@ namespace JabbR.Services
         void Add(ChatUser user);
         void Add(ChatUserIdentity identity);
         void Add(Attachment attachment);
+        void Add(BannedIP bannedIP);
 
         void Remove(ChatClient client);
         void Remove(ChatRoom room);
@@ -48,6 +49,8 @@ namespace JabbR.Services
         void CommitChanges();
 
         bool IsUserInRoom(ChatUser user, ChatRoom room);
+
+        bool IsIPBanned(string remoteIP);
 
         // Reload entities from the store
         void Reload(object entity);
