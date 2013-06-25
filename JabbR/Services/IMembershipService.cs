@@ -1,6 +1,5 @@
-﻿using System.Security.Claims;
-using System.Security.Principal;
-using JabbR.Models;
+﻿using JabbR.Models;
+using System.Security.Claims;
 
 namespace JabbR.Services
 {
@@ -16,6 +15,8 @@ namespace JabbR.Services
         // Password management
         void ChangeUserPassword(ChatUser user, string oldPassword, string newPassword);
         void SetUserPassword(ChatUser user, string password);
+        void RequestResetPassword(ChatUser user, int requestResetPasswordValidThroughInHours);
+        void ResetUserPassword(ChatUser user, string newPassword);
 
         bool TryAuthenticateUser(string userName, string password, out ChatUser user);
     }

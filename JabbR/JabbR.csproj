@@ -922,6 +922,9 @@
     <EmbeddedResource Include="Migrations\201304280435045_MoreClientProperties.resx">
       <DependentUpon>201304280435045_MoreClientProperties.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306231959322_AllowUserResetPassword.resx">
+      <DependentUpon>201306231959322_AllowUserResetPassword.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\ba-linkify.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -961,6 +964,15 @@
     <Content Include="Scripts\quicksilver.js" />
     <Content Include="Scripts\qunit.js" />
     <Content Include="Chat.dictionary.css" />
+    <Content Include="Views\Account\resetpassword.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Account\resetpasswordsuccess.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\EmailTemplates\RequestResetPassword.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -985,8 +997,11 @@
     <Content Include="Views\Notifications\index.cshtml" />
     <Content Include="Views\Home\monitor.cshtml" />
     <Content Include="Views\Administration\index.cshtml" />
+    <Content Include="Views\Account\requestresetpassword.cshtml" />
+    <Content Include="Views\Account\requestresetpasswordsuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Views\EmailTemplates\RequestResetPassword.text.cshtml" />
     <Compile Include="Middleware\FixCookieHandler.cs" />
     <Compile Include="App_Start\Startup.DependencyInjection.cs" />
     <Compile Include="Commands\AllowedCommand.cs" />
@@ -1044,6 +1059,10 @@
     <Compile Include="Migrations\201304280435045_MoreClientProperties.cs" />
     <Compile Include="Migrations\201304280435045_MoreClientProperties.Designer.cs">
       <DependentUpon>201304280435045_MoreClientProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306231959322_AllowUserResetPassword.cs" />
+    <Compile Include="Migrations\201306231959322_AllowUserResetPassword.Designer.cs">
+      <DependentUpon>201306231959322_AllowUserResetPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\ClientNotification.cs" />
@@ -1105,10 +1124,24 @@
     <Compile Include="Nancy\NotificationsModule.cs" />
     <Compile Include="Nancy\SessionExtensions.cs" />
     <Compile Include="Services\DefaultUserAuthenticator.cs" />
+    <Compile Include="Services\Email\EmailService.cs" />
+    <Compile Include="Services\Email\IEmailService.cs" />
     <Compile Include="Services\IJabbrConfiguration.cs" />
     <Compile Include="Services\ISettingsManager.cs" />
     <Compile Include="Services\IUserAuthenticator.cs" />
     <Compile Include="Services\JabbrConfiguration.cs" />
+    <Compile Include="Services\Email\ContentTypes.cs" />
+    <Compile Include="Services\Email\Email.cs" />
+    <Compile Include="Services\Email\SmtpClientEmailSender.cs" />
+    <Compile Include="Services\Email\EmailTemplate.cs" />
+    <Compile Include="Services\Email\RazorEmailTemplateEngine.cs" />
+    <Compile Include="Services\Email\EmailTemplateModelWrapper.cs" />
+    <Compile Include="Infrastructure\EnumerableExtensions.cs" />
+    <Compile Include="Services\Email\FileEmailTemplateContentReader.cs" />
+    <Compile Include="Services\Email\IEmailSender.cs" />
+    <Compile Include="Services\Email\IEmailTemplate.cs" />
+    <Compile Include="Services\Email\IEmailTemplateContentReader.cs" />
+    <Compile Include="Services\Email\IEmailTemplateEngine.cs" />
     <Compile Include="Services\PresenceMonitor.cs" />
     <Compile Include="Services\SettingsKeyProvider.cs" />
     <Compile Include="Services\ApplicationSettings.cs" />

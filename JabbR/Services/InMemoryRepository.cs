@@ -1,8 +1,8 @@
-﻿using System;
+﻿using JabbR.Infrastructure;
+using JabbR.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using JabbR.Infrastructure;
-using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -31,7 +31,7 @@ namespace JabbR.Services
 
         public void Add(Attachment attachment)
         {
-            _attachments.Add(attachment);   
+            _attachments.Add(attachment);
         }
 
         public void Add(ChatRoom room)
@@ -185,6 +185,13 @@ namespace JabbR.Services
                 return identity.User;
             }
             return null;
+        }
+
+        public ChatUser GetUserByRequestResetPasswordId(string requestResetPasswordId)
+        {
+            return _users.FirstOrDefault(u => u.RequestPasswordResetId != null &&
+                                              u.RequestPasswordResetId.Equals(requestResetPasswordId, StringComparison.OrdinalIgnoreCase) &&
+                                              u.RequestPasswordResetValidThrough > DateTime.Now);
         }
 
         public Notification GetNotificationById(int notificationId)
