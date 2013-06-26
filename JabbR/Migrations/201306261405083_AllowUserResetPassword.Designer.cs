@@ -11,7 +11,7 @@ namespace JabbR.Models.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201306231959322_AllowUserResetPassword"; }
+            get { return "201306261405083_AllowUserResetPassword"; }
         }
         
         string IMigrationMetadata.Source

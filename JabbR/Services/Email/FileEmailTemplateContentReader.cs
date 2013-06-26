@@ -6,16 +6,14 @@ namespace JabbR.Services
 {
     public class FileEmailTemplateContentReader : IEmailTemplateContentReader
     {
-        public FileEmailTemplateContentReader()
-            : this("views/emailtemplates", ".cshtml")
-        {
-        }
+        private readonly string _templateDirectory;
+        private readonly string _fileExtension;
 
         public FileEmailTemplateContentReader(string templateDirectory, string fileExtension)
         {
-            if (string.IsNullOrEmpty(templateDirectory))
+            if (String.IsNullOrWhiteSpace(templateDirectory))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, "\"{0}\" cannot be blank.", "templateDirectory"));
+                throw new ArgumentException(String.Format(CultureInfo.CurrentUICulture, "\"{0}\" cannot be blank.", "templateDirectory"));
             }
 
             if (!Path.IsPathRooted(templateDirectory))
@@ -25,25 +23,21 @@ namespace JabbR.Services
 
             if (!Directory.Exists(templateDirectory))
             {
-                throw new DirectoryNotFoundException(string.Format(CultureInfo.CurrentCulture, "\"{0}\" does not exist.", templateDirectory));
+                throw new DirectoryNotFoundException(String.Format(CultureInfo.CurrentCulture, "\"{0}\" does not exist.", templateDirectory));
             }
 
-            TemplateDirectory = templateDirectory;
-            FileExtension = fileExtension;
+            _templateDirectory = templateDirectory;
+            _fileExtension = fileExtension;
         }
 
-        protected string TemplateDirectory { get; private set; }
-
-        protected string FileExtension { get; private set; }
-
-        public string Read(string templateName, string suffix)
+        public string Read(string templateName, string suffix = null)
         {
-            if (string.IsNullOrEmpty(templateName))
+            if (String.IsNullOrWhiteSpace(templateName))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, "\"{0}\" cannot be blank.", "templateName"));
+                throw new ArgumentException(String.Format(CultureInfo.CurrentUICulture, "\"{0}\" cannot be blank.", "templateName"));
             }
 
-            var content = string.Empty;
+            var content = String.Empty;
             var path = BuildPath(templateName, suffix);
 
             if (File.Exists(path))
@@ -58,19 +52,17 @@ namespace JabbR.Services
         {
             var fileName = templateName;
 
-            if (!string.IsNullOrWhiteSpace(suffix))
+            if (!String.IsNullOrWhiteSpace(suffix))
             {
                 fileName += "." + suffix;
             }
 
-            if (!string.IsNullOrWhiteSpace(FileExtension))
+            if (!String.IsNullOrWhiteSpace(_fileExtension))
             {
-                fileName += FileExtension;
+                fileName += _fileExtension;
             }
 
-            var path = Path.Combine(TemplateDirectory, fileName);
-
-            return path;
+            return Path.Combine(_templateDirectory, fileName);
         }
     }
 }

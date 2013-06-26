@@ -7,7 +7,7 @@ namespace JabbR.Services
 {
     public abstract class EmailTemplate : IEmailTemplate
     {
-        private readonly StringBuilder buffer;
+        private readonly StringBuilder _buffer;
 
         [DebuggerStepThrough]
         protected EmailTemplate()
@@ -18,7 +18,7 @@ namespace JabbR.Services
             Bcc = new List<string>();
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            buffer = new StringBuilder();
+            _buffer = new StringBuilder();
         }
 
         public string From { get; set; }
@@ -39,7 +39,7 @@ namespace JabbR.Services
 
         public string Body
         {
-            get { return buffer.ToString(); }
+            get { return _buffer.ToString(); }
         }
 
         protected dynamic Model { get; private set; }
@@ -58,7 +58,7 @@ namespace JabbR.Services
 
         public virtual void WriteLiteral(object value)
         {
-            buffer.Append(value);
+            _buffer.Append(value);
         }
     }
 }

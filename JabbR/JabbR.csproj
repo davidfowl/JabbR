@@ -922,8 +922,8 @@
     <EmbeddedResource Include="Migrations\201304280435045_MoreClientProperties.resx">
       <DependentUpon>201304280435045_MoreClientProperties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306231959322_AllowUserResetPassword.resx">
-      <DependentUpon>201306231959322_AllowUserResetPassword.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201306261405083_AllowUserResetPassword.resx">
+      <DependentUpon>201306261405083_AllowUserResetPassword.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\ba-linkify.min.js" />
@@ -1060,9 +1060,9 @@
     <Compile Include="Migrations\201304280435045_MoreClientProperties.Designer.cs">
       <DependentUpon>201304280435045_MoreClientProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201306231959322_AllowUserResetPassword.cs" />
-    <Compile Include="Migrations\201306231959322_AllowUserResetPassword.Designer.cs">
-      <DependentUpon>201306231959322_AllowUserResetPassword.cs</DependentUpon>
+    <Compile Include="Migrations\201306261405083_AllowUserResetPassword.cs" />
+    <Compile Include="Migrations\201306261405083_AllowUserResetPassword.Designer.cs">
+      <DependentUpon>201306261405083_AllowUserResetPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\ClientNotification.cs" />
@@ -1126,11 +1126,11 @@
     <Compile Include="Services\DefaultUserAuthenticator.cs" />
     <Compile Include="Services\Email\EmailService.cs" />
     <Compile Include="Services\Email\IEmailService.cs" />
+    <Compile Include="Services\Email\RazorEmailTemplateContentReader.cs" />
     <Compile Include="Services\IJabbrConfiguration.cs" />
     <Compile Include="Services\ISettingsManager.cs" />
     <Compile Include="Services\IUserAuthenticator.cs" />
     <Compile Include="Services\JabbrConfiguration.cs" />
-    <Compile Include="Services\Email\ContentTypes.cs" />
     <Compile Include="Services\Email\Email.cs" />
     <Compile Include="Services\Email\SmtpClientEmailSender.cs" />
     <Compile Include="Services\Email\EmailTemplate.cs" />

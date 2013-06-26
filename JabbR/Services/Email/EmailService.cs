@@ -1,5 +1,4 @@
-﻿using JabbR.Infrastructure;
-using JabbR.Models;
+﻿using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -10,17 +9,14 @@ namespace JabbR.Services
         private readonly ApplicationSettings _applicationSettings;
         private readonly IEmailTemplateEngine _templateEngine;
         private readonly IEmailSender _sender;
-        private readonly ILogger _logger;
 
         public EmailService(ApplicationSettings applicationSettings,
                             IEmailTemplateEngine templateEngine,
-                            IEmailSender sender,
-                            ILogger logger)
+                            IEmailSender sender)
         {
             _applicationSettings = applicationSettings;
             _templateEngine = templateEngine;
             _sender = sender;
-            _logger = logger;
         }
 
         public void SendRequestResetPassword(ChatUser user, string siteBaseUrl)
@@ -30,7 +26,7 @@ namespace JabbR.Services
                 From = _applicationSettings.EmailSender,
                 To = user.Email,
                 Name = user.Name,
-                PasswordResetUrl = string.Concat(siteBaseUrl, user.RequestPasswordResetId)
+                PasswordResetUrl = siteBaseUrl + user.RequestPasswordResetId
             };
 
             var mail = _templateEngine.RenderTemplate(RequestResetPasswordTemplateName, model);

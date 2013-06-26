@@ -1,9 +1,9 @@
-﻿using JabbR.Infrastructure;
-using JabbR.Models;
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using JabbR.Infrastructure;
+using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -181,7 +181,7 @@ namespace JabbR.Services
         public void RequestResetPassword(ChatUser user, int requestValidThroughInHours)
         {
             user.RequestPasswordResetId = Guid.NewGuid().ToString().ToSha256(user.Salt);
-            user.RequestPasswordResetValidThrough = DateTime.Now.AddHours(requestValidThroughInHours);
+            user.RequestPasswordResetValidThrough = DateTimeOffset.UtcNow.AddHours(requestValidThroughInHours);
         }
 
         public void ResetUserPassword(ChatUser user, string newPassword)

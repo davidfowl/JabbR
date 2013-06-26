@@ -122,14 +122,14 @@ namespace JabbR
                   .ToConstant(new ContentProviderProcessor(kernel));
 
             kernel.Bind<IEmailTemplateContentReader>()
-                  .To<FileEmailTemplateContentReader>();
+                  .To<RazorEmailTemplateContentReader>();
 
             kernel.Bind<IEmailTemplateEngine>()
                   .To<RazorEmailTemplateEngine>();
 
             kernel.Bind<IEmailSender>()
                   .To<SmtpClientEmailSender>();
-            
+
             kernel.Bind<IEmailService>()
                   .To<EmailService>();
 

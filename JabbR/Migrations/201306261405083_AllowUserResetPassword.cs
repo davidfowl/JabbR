@@ -8,7 +8,7 @@ namespace JabbR.Models.Migrations
         public override void Up()
         {
             AddColumn("dbo.ChatUsers", "RequestPasswordResetId", c => c.String());
-            AddColumn("dbo.ChatUsers", "RequestPasswordResetValidThrough", c => c.DateTime());
+            AddColumn("dbo.ChatUsers", "RequestPasswordResetValidThrough", c => c.DateTimeOffset());
         }
         
         public override void Down()

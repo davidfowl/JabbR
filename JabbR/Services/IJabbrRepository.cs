@@ -1,6 +1,6 @@
-﻿using JabbR.Models;
-using System;
+﻿using System;
 using System.Linq;
+using JabbR.Models;
 
 namespace JabbR.Services
 {

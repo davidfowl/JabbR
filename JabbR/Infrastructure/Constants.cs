@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace JabbR.Infrastructure
 {
     public static class Constants
@@ -18,5 +19,11 @@ namespace JabbR.Infrastructure
     public static class AcsClaimTypes
     {
         public static readonly string IdentityProvider = "http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/IdentityProvider";
+    }
+
+    public static class ContentTypes
+    {
+        public const string Html = "text/html";
+        public const string Text = "text/plain";
     }
 }

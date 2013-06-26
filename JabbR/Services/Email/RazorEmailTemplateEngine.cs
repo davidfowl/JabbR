@@ -1,5 +1,3 @@
-using JabbR.Infrastructure;
-using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -9,6 +7,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web.Razor;
+using JabbR.Infrastructure;
+using Microsoft.CSharp;
 
 namespace JabbR.Services
 {
@@ -22,7 +22,6 @@ namespace JabbR.Services
 
         private static readonly string[] _referencedAssemblies = BuildReferenceList().ToArray();
         private static readonly RazorTemplateEngine _razorEngine = CreateRazorEngine();
-
         private static readonly Dictionary<string, IDictionary<string, Type>> _typeMapping = new Dictionary<string, IDictionary<string, Type>>(StringComparer.OrdinalIgnoreCase);
         private static readonly ReaderWriterLockSlim _syncLock = new ReaderWriterLockSlim();
 
@@ -51,7 +50,7 @@ namespace JabbR.Services
             _textTemplateSuffix = textTemplateSuffix;
             _templateSuffixes = new Dictionary<string, string>
                                 {
-                                    { _sharedTemplateSuffix, string.Empty },
+                                    { _sharedTemplateSuffix, String.Empty },
                                     { _htmlTemplateSuffix, ContentTypes.Html },
                                     { _textTemplateSuffix, ContentTypes.Text }
                                 };
@@ -59,9 +58,9 @@ namespace JabbR.Services
 
         public Email RenderTemplate(string templateName, object model = null)
         {
-            if (string.IsNullOrEmpty(templateName))
+            if (String.IsNullOrWhiteSpace(templateName))
             {
-                throw new System.ArgumentException(string.Format(System.Globalization.CultureInfo.CurrentUICulture, "\"{0}\" cannot be blank.", "templateName"));
+                throw new System.ArgumentException(String.Format(System.Globalization.CultureInfo.CurrentUICulture, "\"{0}\" cannot be blank.", "templateName"));
             }
 
             var templates = CreateTemplateInstances(templateName);
@@ -103,7 +102,7 @@ namespace JabbR.Services
                 SetProperties(template, mail, body => { mail.HtmlBody = body; });
             }
             // shared template (.cshtml file)
-            if (templates.TryGetValue(string.Empty, out template))
+            if (templates.TryGetValue(String.Empty, out template))
             {
                 SetProperties(template, mail, null);
             }
@@ -157,7 +156,7 @@ namespace JabbR.Services
                                                         Content = _contentReader.Read(templateName, pair.Key),
                                                         ContentType = pair.Value
                                                     })
-                                             .Where(x => !string.IsNullOrWhiteSpace(x.Content))
+                                             .Where(x => !String.IsNullOrWhiteSpace(x.Content))
                                              .ToList();
 
             var compilableTemplates = templates.Select(x => new KeyValuePair<string, string>(x.TemplateName, x.Content)).ToArray();
@@ -171,17 +170,17 @@ namespace JabbR.Services
         {
             if (template != null)
             {
-                if (!string.IsNullOrWhiteSpace(template.From))
+                if (!String.IsNullOrWhiteSpace(template.From))
                 {
                     mail.From = template.From;
                 }
 
-                if (!string.IsNullOrWhiteSpace(template.Sender))
+                if (!String.IsNullOrWhiteSpace(template.Sender))
                 {
                     mail.Sender = template.Sender;
                 }
 
-                if (!string.IsNullOrWhiteSpace(template.Subject))
+                if (!String.IsNullOrWhiteSpace(template.Subject))
                 {
                     mail.Subject = template.Subject;
                 }
@@ -201,7 +200,7 @@ namespace JabbR.Services
 
             if (templateResults.Any(result => result.ParserErrors.Any()))
             {
-                var parseExceptionMessage = string.Join(Environment.NewLine + Environment.NewLine, templateResults.SelectMany(r => r.ParserErrors).Select(e => e.Location + ":" + Environment.NewLine + e.Message).ToArray());
+                var parseExceptionMessage = String.Join(Environment.NewLine + Environment.NewLine, templateResults.SelectMany(r => r.ParserErrors).Select(e => e.Location + ":" + Environment.NewLine + e.Message).ToArray());
 
                 throw new InvalidOperationException(parseExceptionMessage);
             }
@@ -219,7 +218,7 @@ namespace JabbR.Services
 
                 if (compilerResults.Errors.HasErrors)
                 {
-                    var compileExceptionMessage = string.Join(Environment.NewLine + Environment.NewLine, compilerResults.Errors.OfType<CompilerError>().Where(ce => !ce.IsWarning).Select(e => e.FileName + ":" + Environment.NewLine + e.ErrorText).ToArray());
+                    var compileExceptionMessage = String.Join(Environment.NewLine + Environment.NewLine, compilerResults.Errors.OfType<CompilerError>().Where(ce => !ce.IsWarning).Select(e => e.FileName + ":" + Environment.NewLine + e.ErrorText).ToArray());
 
                     throw new InvalidOperationException(compileExceptionMessage);
                 }
@@ -267,7 +266,7 @@ namespace JabbR.Services
 
         private static IEnumerable<string> BuildReferenceList()
         {
-            string currentAssemblyLocation = typeof(RazorEmailTemplateEngine).Assembly.CodeBase.Replace("file:///", string.Empty).Replace("/", "\\");
+            string currentAssemblyLocation = typeof(RazorEmailTemplateEngine).Assembly.CodeBase.Replace("file:///", String.Empty).Replace("/", "\\");
 
             return new List<string>
                        {

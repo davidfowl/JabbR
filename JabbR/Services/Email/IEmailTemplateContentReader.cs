@@ -2,6 +2,6 @@ namespace JabbR.Services
 {
     public interface IEmailTemplateContentReader
     {
-        string Read(string templateName, string suffix);
+        string Read(string templateName, string suffix = null);
     }
 }
