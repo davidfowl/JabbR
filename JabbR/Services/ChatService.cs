@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.UploadHandlers;
 
@@ -750,7 +749,7 @@ namespace JabbR.Services
 
             if (!targetRoom.Closed)
             {
-                throw new InvalidOperationException(string.Format("{0} is already open.", targetRoom.Name));
+                throw new InvalidOperationException(String.Format("{0} is already open.", targetRoom.Name));
             }
 
             // Open the room
