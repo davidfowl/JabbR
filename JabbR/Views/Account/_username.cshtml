@@ -32,7 +32,7 @@
                             <a href="@Url.Content("~/account/register")">Register</a> if you don't have an account.
                         </p>
                     }
-                    @if (Model.AllowUserResetPassword)
+                    @if (Model.AllowUserResetPassword && Model.HasEmailSender)
                     { 
                         <p>
                             <a href="@Url.Content("~/account/requestresetpassword")">Reset password</a> if you've forgotten or lost your login information.       
