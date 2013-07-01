@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using JabbR.Infrastructure;
@@ -353,8 +352,7 @@ namespace JabbR.Nancy
                 }
 
                 if (!Principal.Identity.IsAuthenticated &&
-                    !applicationSettings.AllowUserResetPassword ||
-                    string.IsNullOrWhiteSpace(applicationSettings.EmailSender))
+                    !applicationSettings.AllowUserResetPassword)
                 {
                     return HttpStatusCode.NotFound;
                 }
@@ -370,8 +368,7 @@ namespace JabbR.Nancy
                 }
 
                 if (!Principal.Identity.IsAuthenticated &&
-                    !applicationSettings.AllowUserResetPassword ||
-                    string.IsNullOrWhiteSpace(applicationSettings.EmailSender))
+                    !applicationSettings.AllowUserResetPassword)
                 {
                     return HttpStatusCode.NotFound;
                 }
@@ -380,7 +377,7 @@ namespace JabbR.Nancy
 
                 if (String.IsNullOrEmpty(username))
                 {
-                    this.AddValidationError("username", "User name is required.");
+                    this.AddValidationError("username", "User name is required");
                 }
 
                 try
@@ -389,23 +386,15 @@ namespace JabbR.Nancy
                     {
                         ChatUser user = repository.GetUserByName(username);
 
-                        if (user == null)
-                        {
-                            this.AddValidationError("username", String.Format(CultureInfo.CurrentUICulture, "User name '{0}' not found.", username));
-                        }
-                        else if (String.IsNullOrWhiteSpace(user.Email))
-                        {
-                            this.AddValidationError("username", String.Format(CultureInfo.CurrentUICulture, "No email found for user name '{0}'.", username));
-                        }
-                        else
+                        if (user != null)
                         {
                             membershipService.RequestResetPassword(user, applicationSettings.RequestResetPasswordValidThroughInHours);
                             repository.CommitChanges();
 
                             emailService.SendRequestResetPassword(user, this.Request.Url.SiteBase + "/account/resetpassword/");
-
-                            return View["requestresetpasswordsuccess", username];
                         }
+
+                        return View["requestresetpasswordsuccess", username];
                     }
                 }
                 catch (Exception ex)
@@ -418,42 +407,30 @@ namespace JabbR.Nancy
 
             Get["/resetpassword/{id}"] = parameters =>
             {
-                if (!applicationSettings.AllowUserResetPassword ||
-                    string.IsNullOrWhiteSpace(applicationSettings.EmailSender))
+                if (!applicationSettings.AllowUserResetPassword)
                 {
                     return HttpStatusCode.NotFound;
                 }
 
-                string resetPasswordToken = parameters.id;
-                string userName = membershipService.GetUserNameFromToken(resetPasswordToken);
+                string requestResetPasswordId = parameters.id;
+                ChatUser user = repository.GetUserByRequestResetPasswordId(requestResetPasswordId);
 
-                if (userName == null)
+                if (user != null)
                 {
-                    return View["resetpassworderror", "seems to be not valid"];
+                    return View["resetpassword", user.RequestPasswordResetId];
                 }
-                else
-                {
-                    ChatUser user = repository.GetUserByRequestResetPasswordId(userName, resetPasswordToken);
-                    if (user == null)
-                    {
-                        return View["resetpassworderror", "has been expired"];
-                    }
-                    else
-                    {
-                        return View["resetpassword", user.RequestPasswordResetId];
-                    }
-                }
+
+                return HttpStatusCode.NotFound;
             };
 
             Post["/resetpassword/{id}"] = parameters =>
             {
-                if (!applicationSettings.AllowUserResetPassword ||
-                    string.IsNullOrWhiteSpace(applicationSettings.EmailSender))
+                if (!applicationSettings.AllowUserResetPassword)
                 {
                     return HttpStatusCode.NotFound;
                 }
 
-                string resetPasswordToken = parameters.id;
+                string requestResetPasswordId = parameters.id;
                 string newPassword = Request.Form.password;
                 string confirmNewPassword = Request.Form.confirmPassword;
 
@@ -463,13 +440,11 @@ namespace JabbR.Nancy
                 {
                     if (ModelValidationResult.IsValid)
                     {
-                        string userName = membershipService.GetUserNameFromToken(resetPasswordToken);
-                        ChatUser user = repository.GetUserByRequestResetPasswordId(userName, resetPasswordToken);
+                        ChatUser user = repository.GetUserByRequestResetPasswordId(requestResetPasswordId);
 
-                        // There is any user for the request?
                         if (user == null)
                         {
-                            return View["resetpasswordexpired"];
+                            return HttpStatusCode.NotFound;
                         }
                         else
                         {
@@ -485,7 +460,7 @@ namespace JabbR.Nancy
                     this.AddValidationError("_FORM", ex.Message);
                 }
 
-                return View["resetpassword", resetPasswordToken];
+                return View["resetpassword", requestResetPasswordId];
             };
         }
 

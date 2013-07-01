@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using JabbR.Models;
+﻿using JabbR.Models;
 using JabbR.Services;
+using System.Collections.Generic;
 using WorldDomination.Web.Authentication;
 
 namespace JabbR.ViewModels
@@ -12,12 +12,10 @@ namespace JabbR.ViewModels
             SocialDetails = new SocialLoginViewModel(configuredProviders, userIdentities);
             AllowUserRegistration = settings.AllowUserRegistration;
             AllowUserResetPassword = settings.AllowUserResetPassword;
-            HasEmailSender = !string.IsNullOrWhiteSpace(settings.EmailSender);
         }
 
         public bool AllowUserRegistration { get; set; }
         public bool AllowUserResetPassword { get; set; }
-        public bool HasEmailSender { get; set; }
         public SocialLoginViewModel SocialDetails { get; private set; }
     }
 }

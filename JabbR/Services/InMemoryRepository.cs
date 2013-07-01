@@ -187,7 +187,7 @@ namespace JabbR.Services
             return null;
         }
 
-        public ChatUser GetUserByRequestResetPasswordId(string userName, string requestResetPasswordId)
+        public ChatUser GetUserByRequestResetPasswordId(string requestResetPasswordId)
         {
             return _users.FirstOrDefault(u => u.RequestPasswordResetId != null &&
                                               u.RequestPasswordResetId.Equals(requestResetPasswordId, StringComparison.OrdinalIgnoreCase) &&

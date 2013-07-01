@@ -18,7 +18,7 @@ namespace JabbR.Services
         private static readonly Func<JabbrContext, string, ChatRoom> getRoomByName = (db, roomName) => db.Rooms.FirstOrDefault(r => r.Name == roomName);
         private static readonly Func<JabbrContext, string, ChatClient> getClientById = (db, clientId) => db.Clients.FirstOrDefault(c => c.Id == clientId);
         private static readonly Func<JabbrContext, string, ChatClient> getClientByIdWithUser = (db, clientId) => db.Clients.Include(c => c.User).FirstOrDefault(u => u.Id == clientId);
-        private static readonly Func<JabbrContext, string, string, DateTimeOffset, ChatUser> getUserByRequestResetPasswordId = (db, userName, requestId, now) => db.Users.FirstOrDefault(u => u.Name == userName && u.RequestPasswordResetId != null && u.RequestPasswordResetId.Equals(requestId, StringComparison.OrdinalIgnoreCase) && u.RequestPasswordResetValidThrough > now);
+        private static readonly Func<JabbrContext, string, DateTimeOffset, ChatUser> getUserByRequestResetPasswordId = (db, requestId, now) => db.Users.FirstOrDefault(u => u.RequestPasswordResetId != null && u.RequestPasswordResetId.Equals(requestId, StringComparison.OrdinalIgnoreCase) && u.RequestPasswordResetValidThrough > now);
 
         public PersistedRepository(JabbrContext db)
         {
@@ -253,9 +253,9 @@ namespace JabbR.Services
             return null;
         }
 
-        public ChatUser GetUserByRequestResetPasswordId(string userName, string requestResetPasswordId)
+        public ChatUser GetUserByRequestResetPasswordId(string requestResetPasswordId)
         {
-            return getUserByRequestResetPasswordId(_db, userName, requestResetPasswordId, DateTimeOffset.UtcNow);
+            return getUserByRequestResetPasswordId(_db, requestResetPasswordId, DateTimeOffset.UtcNow);
         }
 
         public Notification GetNotificationById(int notificationId)
