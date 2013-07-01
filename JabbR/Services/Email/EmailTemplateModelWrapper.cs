@@ -14,7 +14,7 @@ namespace JabbR.Services
                 throw new System.ArgumentNullException("propertyMap");
             }
 
-            _propertyMap = propertyMap;
+            this._propertyMap = propertyMap;
         }
 
         public override IEnumerable<string> GetDynamicMemberNames()
