@@ -405,14 +405,14 @@ namespace JabbR.Nancy
                 return View["requestresetpassword"];
             };
 
-            Get["/resetpassword/{id}"] = parameters =>
+            Get["/resetpassword/{id}"] = _ =>
             {
                 if (!applicationSettings.AllowUserResetPassword)
                 {
                     return HttpStatusCode.NotFound;
                 }
 
-                string requestResetPasswordId = parameters.id;
+                string requestResetPasswordId = _.id;
                 ChatUser user = repository.GetUserByRequestResetPasswordId(requestResetPasswordId);
 
                 if (user != null)
