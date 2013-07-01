@@ -180,7 +180,7 @@ namespace JabbR.Services
 
         public void RequestResetPassword(ChatUser user, int requestValidThroughInHours)
         {
-            user.RequestPasswordResetId = Guid.NewGuid().ToString("N");
+            user.RequestPasswordResetId = Guid.NewGuid().ToString().ToSha256(user.Salt);
             user.RequestPasswordResetValidThrough = DateTimeOffset.UtcNow.AddHours(requestValidThroughInHours);
         }
 
