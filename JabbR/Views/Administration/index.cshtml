@@ -54,7 +54,7 @@
                     <div class="control-group">
                         <label class="control-label" for="requestResetPasswordValidThroughInHours">Reset Password Valid Through (Hours)</label>
                         <div class="controls">
-                            <input type="text" name="requestResetPasswordValidThroughInHours" class="input-mini" value="@Model.RequestResetPasswordValidThroughInHours" />
+                            @Html.TextBox("requestResetPasswordValidThroughInHours", "input-mini")
                         </div>
                     </div>
                     <div class="control-group">
