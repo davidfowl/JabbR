@@ -2302,18 +2302,11 @@ li.clearfix {
 
 .windows-auth,
 .usernamepassword-auth,
-.user-registration,
-.user-request-reset-password {
+.user-registration {
     margin: 20px -40px;
 }
 
-.user-reset-password {
-    margin: 20px;
-}
-
-    .user-registration .validation-summary-errors,
-    .user-request-reset-password .validation-summary-errors,
-    .user-reset-password .validation-summary-errors {
+    .user-registration .validation-summary-errors {
         margin: 20px 200px;
     }
 

@@ -1,6 +1,6 @@
-﻿using JabbR.Models;
+﻿using System.Linq;
 using System;
-using System.Linq;
+using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -27,7 +27,6 @@ namespace JabbR.Services
         ChatUser GetUserByClientId(string clientId);
         ChatUser GetUserByLegacyIdentity(string userIdentity);
         ChatUser GetUserByIdentity(string providerName, string userIdentity);
-        ChatUser GetUserByRequestResetPasswordId(string requestResetPasswordId);
         Notification GetNotificationById(int notificationId);
 
         ChatClient GetClientById(string clientId, bool includeUser = false);

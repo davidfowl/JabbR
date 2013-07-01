@@ -1,6 +1,7 @@
-﻿using JabbR.Models;
-using JabbR.Services;
+﻿using System;
 using System.Collections.Generic;
+using JabbR.Models;
+using JabbR.Services;
 using WorldDomination.Web.Authentication;
 
 namespace JabbR.ViewModels
@@ -11,11 +12,9 @@ namespace JabbR.ViewModels
         {
             SocialDetails = new SocialLoginViewModel(configuredProviders, userIdentities);
             AllowUserRegistration = settings.AllowUserRegistration;
-            AllowUserResetPassword = settings.AllowUserResetPassword;
         }
 
         public bool AllowUserRegistration { get; set; }
-        public bool AllowUserResetPassword { get; set; }
         public SocialLoginViewModel SocialDetails { get; private set; }
     }
 }

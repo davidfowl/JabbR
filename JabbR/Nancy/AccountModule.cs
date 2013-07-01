@@ -1,12 +1,12 @@
-﻿using JabbR.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Nancy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using WorldDomination.Web.Authentication;
 
 namespace JabbR.Nancy
@@ -18,8 +18,7 @@ namespace JabbR.Nancy
                              IJabbrRepository repository,
                              IAuthenticationService authService,
                              IChatNotificationService notificationService,
-                             IUserAuthenticator authenticator,
-                             IEmailService emailService)
+                             IUserAuthenticator authenticator)
             : base("/account")
         {
             Get["/"] = _ =>
@@ -108,7 +107,7 @@ namespace JabbR.Nancy
 
                 bool requirePassword = !Principal.Identity.IsAuthenticated;
 
-                if (requirePassword &&
+                if (requirePassword && 
                     !applicationSettings.AllowUserRegistration)
                 {
                     return HttpStatusCode.NotFound;
@@ -342,125 +341,6 @@ namespace JabbR.Nancy
                 }
 
                 return GetProfileView(authService, user);
-            };
-
-            Get["/requestresetpassword"] = _ =>
-            {
-                if (IsAuthenticated)
-                {
-                    return Response.AsRedirect("~/account/#changePassword");
-                }
-
-                if (!Principal.Identity.IsAuthenticated &&
-                    !applicationSettings.AllowUserResetPassword)
-                {
-                    return HttpStatusCode.NotFound;
-                }
-
-                return View["requestresetpassword"];
-            };
-
-            Post["/requestresetpassword"] = _ =>
-            {
-                if (IsAuthenticated)
-                {
-                    return Response.AsRedirect("~/account/#changePassword");
-                }
-
-                if (!Principal.Identity.IsAuthenticated &&
-                    !applicationSettings.AllowUserResetPassword)
-                {
-                    return HttpStatusCode.NotFound;
-                }
-
-                string username = Request.Form.username;
-
-                if (String.IsNullOrEmpty(username))
-                {
-                    this.AddValidationError("username", "User name is required");
-                }
-
-                try
-                {
-                    if (ModelValidationResult.IsValid)
-                    {
-                        ChatUser user = repository.GetUserByName(username);
-
-                        if (user != null)
-                        {
-                            membershipService.RequestResetPassword(user, applicationSettings.RequestResetPasswordValidThroughInHours);
-                            repository.CommitChanges();
-
-                            emailService.SendRequestResetPassword(user, string.Concat(this.Request.Url.SiteBase, "/account/resetpassword/"));
-                        }
-
-                        return View["requestresetpasswordsuccess", username];
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.AddValidationError("_FORM", ex.Message);
-                }
-
-                return View["requestresetpassword"];
-            };
-
-            Get["/resetpassword/{id}"] = _ =>
-            {
-                if (!applicationSettings.AllowUserResetPassword)
-                {
-                    return HttpStatusCode.NotFound;
-                }
-
-                string requestResetPasswordId = _.id;
-                ChatUser user = repository.GetUserByRequestResetPasswordId(requestResetPasswordId);
-
-                if (user != null)
-                {
-                    return View["resetpassword", user.RequestPasswordResetId];
-                }
-
-                return HttpStatusCode.NotFound;
-            };
-
-            Post["/resetpassword/{id}"] = _ =>
-            {
-                if (!applicationSettings.AllowUserResetPassword)
-                {
-                    return HttpStatusCode.NotFound;
-                }
-
-                string requestResetPasswordId = _.id;
-                string newPassword = Request.Form.password;
-                string confirmNewPassword = Request.Form.confirmPassword;
-
-                ValidatePassword(newPassword, confirmNewPassword);
-
-                try
-                {
-                    if (ModelValidationResult.IsValid)
-                    {
-                        ChatUser user = repository.GetUserByRequestResetPasswordId(requestResetPasswordId);
-
-                        if (user == null)
-                        {
-                            return HttpStatusCode.NotFound;
-                        }
-                        else
-                        {
-                            membershipService.ResetUserPassword(user, newPassword);
-                            repository.CommitChanges();
-
-                            return View["resetpasswordsuccess"];
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.AddValidationError("_FORM", ex.Message);
-                }
-
-                return View["resetpassword", requestResetPasswordId];
             };
         }
 

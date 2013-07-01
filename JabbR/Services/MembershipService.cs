@@ -1,9 +1,9 @@
-﻿using JabbR.Infrastructure;
-using JabbR.Models;
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using JabbR.Infrastructure;
+using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -172,22 +172,6 @@ namespace JabbR.Services
             {
                 throw new InvalidOperationException("Passwords don't match.");
             }
-
-            ValidatePassword(newPassword);
-
-            EnsureSaltedPassword(user, newPassword);
-        }
-
-        public void RequestResetPassword(ChatUser user, int requestValidThroughInHours)
-        {
-            user.RequestPasswordResetId = Guid.NewGuid().ToString().ToSha256(user.Salt);
-            user.RequestPasswordResetValidThrough = DateTime.Now.AddHours(requestValidThroughInHours);
-        }
-
-        public void ResetUserPassword(ChatUser user, string newPassword)
-        {
-            user.RequestPasswordResetId = null;
-            user.RequestPasswordResetValidThrough = null;
 
             ValidatePassword(newPassword);
 

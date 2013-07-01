@@ -1,10 +1,10 @@
-﻿using JabbR.Models;
-using System;
+﻿using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
+using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -18,7 +18,6 @@ namespace JabbR.Services
         private static readonly Func<JabbrContext, string, ChatRoom> getRoomByName = (db, roomName) => db.Rooms.FirstOrDefault(r => r.Name == roomName);
         private static readonly Func<JabbrContext, string, ChatClient> getClientById = (db, clientId) => db.Clients.FirstOrDefault(c => c.Id == clientId);
         private static readonly Func<JabbrContext, string, ChatClient> getClientByIdWithUser = (db, clientId) => db.Clients.Include(c => c.User).FirstOrDefault(u => u.Id == clientId);
-        private static readonly Func<JabbrContext, string, DateTime, ChatUser> getUserByRequestResetPasswordId = (db, requestId, now) => db.Users.FirstOrDefault(u => u.RequestPasswordResetId != null && u.RequestPasswordResetId.Equals(requestId, StringComparison.OrdinalIgnoreCase) && u.RequestPasswordResetValidThrough > now);
 
         public PersistedRepository(JabbrContext db)
         {
@@ -253,11 +252,6 @@ namespace JabbR.Services
             return null;
         }
 
-        public ChatUser GetUserByRequestResetPasswordId(string requestResetPasswordId)
-        {
-            return getUserByRequestResetPasswordId(_db, requestResetPasswordId, DateTime.Now);
-        }
-
         public Notification GetNotificationById(int notificationId)
         {
             return _db.Notifications.SingleOrDefault(n => n.Key == notificationId);
@@ -288,9 +282,10 @@ namespace JabbR.Services
                       .FirstOrDefault() != null;
         }
 
+
         public void Reload(object entity)
         {
             _db.Entry(entity).Reload();
-        }
+        }        
     }
 }
