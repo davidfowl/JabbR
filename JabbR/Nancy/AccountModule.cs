@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using JabbR.Infrastructure;
+﻿using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Nancy;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using WorldDomination.Web.Authentication;
 
 namespace JabbR.Nancy
@@ -391,7 +391,7 @@ namespace JabbR.Nancy
                             membershipService.RequestResetPassword(user, applicationSettings.RequestResetPasswordValidThroughInHours);
                             repository.CommitChanges();
 
-                            emailService.SendRequestResetPassword(user, this.Request.Url.SiteBase + "/account/resetpassword/");
+                            emailService.SendRequestResetPassword(user, string.Concat(this.Request.Url.SiteBase, "/account/resetpassword/"));
                         }
 
                         return View["requestresetpasswordsuccess", username];
@@ -423,14 +423,14 @@ namespace JabbR.Nancy
                 return HttpStatusCode.NotFound;
             };
 
-            Post["/resetpassword/{id}"] = parameters =>
+            Post["/resetpassword/{id}"] = _ =>
             {
                 if (!applicationSettings.AllowUserResetPassword)
                 {
                     return HttpStatusCode.NotFound;
                 }
 
-                string requestResetPasswordId = parameters.id;
+                string requestResetPasswordId = _.id;
                 string newPassword = Request.Form.password;
                 string confirmNewPassword = Request.Form.confirmPassword;
 

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using JabbR.Infrastructure;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using JabbR.Infrastructure;
 
 namespace JabbR.Services
 {
@@ -46,7 +45,7 @@ namespace JabbR.Services
                 AllowRoomCreation = true,
                 AllowUserResetPassword = false,
                 RequestResetPasswordValidThroughInHours = 6,
-                EmailSender = String.Empty
+                EmailSender = "noreply@jabbr.net"
             };
         }
 

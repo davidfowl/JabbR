@@ -1,8 +1,8 @@
-﻿using System;
+﻿using JabbR.Infrastructure;
+using JabbR.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using JabbR.Infrastructure;
-using JabbR.Models;
 
 namespace JabbR.Services
 {
@@ -191,7 +191,7 @@ namespace JabbR.Services
         {
             return _users.FirstOrDefault(u => u.RequestPasswordResetId != null &&
                                               u.RequestPasswordResetId.Equals(requestResetPasswordId, StringComparison.OrdinalIgnoreCase) &&
-                                              u.RequestPasswordResetValidThrough > DateTimeOffset.UtcNow);
+                                              u.RequestPasswordResetValidThrough > DateTime.Now);
         }
 
         public Notification GetNotificationById(int notificationId)

@@ -1,7 +1,6 @@
-using System;
+using JabbR.Infrastructure;
 using System.Net.Mail;
 using System.Net.Mime;
-using JabbR.Infrastructure;
 
 namespace JabbR.Services
 {
@@ -27,7 +26,7 @@ namespace JabbR.Services
         {
             var message = new MailMessage { From = new MailAddress(email.From), Subject = email.Subject };
 
-            if (!String.IsNullOrWhiteSpace(email.Sender))
+            if (!string.IsNullOrEmpty(email.Sender))
             {
                 message.Sender = new MailAddress(email.Sender);
             }
@@ -38,17 +37,17 @@ namespace JabbR.Services
             email.Bcc.Each(bcc => message.Bcc.Add(bcc));
             email.Headers.Each(pair => message.Headers[pair.Key] = pair.Value);
 
-            if (!String.IsNullOrWhiteSpace(email.HtmlBody) && !String.IsNullOrWhiteSpace(email.TextBody))
+            if (!string.IsNullOrEmpty(email.HtmlBody) && !string.IsNullOrEmpty(email.TextBody))
             {
                 message.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(email.HtmlBody, new ContentType(ContentTypes.Html)));
                 message.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(email.TextBody, new ContentType(ContentTypes.Text)));
             }
-            else if (!String.IsNullOrWhiteSpace(email.TextBody))
+            else if (!string.IsNullOrEmpty(email.TextBody))
             {
                 message.Body = email.TextBody;
                 message.IsBodyHtml = false;
             }
-            else if (!String.IsNullOrWhiteSpace(email.HtmlBody))
+            else if (!string.IsNullOrEmpty(email.HtmlBody))
             {
                 message.Body = email.HtmlBody;
                 message.IsBodyHtml = true;

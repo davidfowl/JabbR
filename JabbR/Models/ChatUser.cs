@@ -1,7 +1,7 @@
-﻿using System;
+﻿using JabbR.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using JabbR.Infrastructure;
 
 namespace JabbR.Models
 {
@@ -42,7 +42,7 @@ namespace JabbR.Models
 
         // Password reset id
         public string RequestPasswordResetId { get; set; }
-        public DateTimeOffset? RequestPasswordResetValidThrough { get; set; }
+        public DateTime? RequestPasswordResetValidThrough { get; set; }
 
         // List of clients that are currently connected for this user
         public virtual ICollection<ChatUserIdentity> Identities { get; set; }

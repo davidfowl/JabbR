@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using JabbR.Models;
+﻿using JabbR.Models;
+using System.Security.Claims;
 
 namespace JabbR.Services
 {

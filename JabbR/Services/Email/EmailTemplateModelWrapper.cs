@@ -5,7 +5,7 @@ namespace JabbR.Services
 {
     public class EmailTemplateModelWrapper : DynamicObject
     {
-        private readonly IDictionary<string, object> _propertyMap;
+        private readonly IDictionary<string, object> propertyMap;
 
         public EmailTemplateModelWrapper(IDictionary<string, object> propertyMap)
         {
@@ -14,26 +14,26 @@ namespace JabbR.Services
                 throw new System.ArgumentNullException("propertyMap");
             }
 
-            this._propertyMap = propertyMap;
+            this.propertyMap = propertyMap;
         }
 
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            return _propertyMap.Keys;
+            return propertyMap.Keys;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             result = null;
 
-            return binder != null && _propertyMap.TryGetValue(binder.Name, out result);
+            return binder != null && propertyMap.TryGetValue(binder.Name, out result);
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
             if (binder != null)
             {
-                _propertyMap[binder.Name] = value;
+                propertyMap[binder.Name] = value;
 
                 return true;
             }
