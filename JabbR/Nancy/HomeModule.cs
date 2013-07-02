@@ -219,7 +219,10 @@ namespace JabbR.Nancy
                 "Client_OccupantsMany",
                 "LoadingMessage",
                 "Client_LoadMore",
-                "Client_UploadingFromClipboard"
+                "Client_UploadingFromClipboard",
+                "Chat_UserBannedSilently",
+                "Chat_UserBanned",
+                "Chat_UserUnbanned"
             };
 
             var resourceManager = new ResourceManager(typeof(LanguageResources));

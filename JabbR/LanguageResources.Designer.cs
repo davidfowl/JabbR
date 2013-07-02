@@ -757,6 +757,51 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ban a user from JabbR without them knowing.  They can still log in and read messages..
+        /// </summary>
+        public static string Ban_SilentCommandInfo {
+            get {
+                return ResourceManager.GetString("Ban_SilentCommandInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unban a user from JabbR!.
+        /// </summary>
+        public static string Ban_UnbanCommandInfo {
+            get {
+                return ResourceManager.GetString("Ban_UnbanCommandInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is already banned..
+        /// </summary>
+        public static string Ban_UserAlreadyBanned {
+            get {
+                return ResourceManager.GetString("Ban_UserAlreadyBanned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is already silently banned..
+        /// </summary>
+        public static string Ban_UserAlreadyBannedSilently {
+            get {
+                return ResourceManager.GetString("Ban_UserAlreadyBannedSilently", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is not banned..
+        /// </summary>
+        public static string Ban_UserNotBanned {
+            get {
+                return ResourceManager.GetString("Ban_UserNotBanned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Who do you want to ban?.
         /// </summary>
         public static string Ban_UserRequired {
@@ -961,6 +1006,24 @@ namespace JabbR {
         public static string Chat_UserAdminRevoked {
             get {
                 return ResourceManager.GetString("Chat_UserAdminRevoked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been banned..
+        /// </summary>
+        public static string Chat_UserBanned {
+            get {
+                return ResourceManager.GetString("Chat_UserBanned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been silently banned..
+        /// </summary>
+        public static string Chat_UserBannedSilently {
+            get {
+                return ResourceManager.GetString("Chat_UserBannedSilently", resourceCulture);
             }
         }
         
@@ -1195,6 +1258,15 @@ namespace JabbR {
         public static string Chat_UserSetRoomTopic {
             get {
                 return ResourceManager.GetString("Chat_UserSetRoomTopic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been unbanned..
+        /// </summary>
+        public static string Chat_UserUnbanned {
+            get {
+                return ResourceManager.GetString("Chat_UserUnbanned", resourceCulture);
             }
         }
         

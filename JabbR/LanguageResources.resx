@@ -1125,4 +1125,28 @@ Use ? or type /? to display the FAQ and list of commands.</value>
   <data name="Client_UploadNoPreview" xml:space="preserve">
     <value>No preview available for this file type.</value>
   </data>
+  <data name="Ban_SilentCommandInfo" xml:space="preserve">
+    <value>Ban a user from JabbR without them knowing.  They can still log in and read messages.</value>
+  </data>
+  <data name="Ban_UnbanCommandInfo" xml:space="preserve">
+    <value>Unban a user from JabbR!</value>
+  </data>
+  <data name="Ban_UserAlreadyBanned" xml:space="preserve">
+    <value>{0} is already banned.</value>
+  </data>
+  <data name="Ban_UserAlreadyBannedSilently" xml:space="preserve">
+    <value>{0} is already silently banned.</value>
+  </data>
+  <data name="Ban_UserNotBanned" xml:space="preserve">
+    <value>{0} is not banned.</value>
+  </data>
+  <data name="Chat_UserBanned" xml:space="preserve">
+    <value>{0} has been banned.</value>
+  </data>
+  <data name="Chat_UserBannedSilently" xml:space="preserve">
+    <value>{0} has been silently banned.</value>
+  </data>
+  <data name="Chat_UserUnbanned" xml:space="preserve">
+    <value>{0} has been unbanned.</value>
+  </data>
 </root>

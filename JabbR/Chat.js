@@ -865,14 +865,17 @@
     };
 
     chat.client.userUnbanned = function (user) {
-        ui.addMessage(user + ' has been unbanned', 'notification', this.state.activeRoom);
+        var message = utility.getLanguageResource('Chat_UserUnbanned', user);
+        ui.addMessage(message, 'notification', this.state.activeRoom);
     };
     
     chat.client.userBanned = function (user, silent) {
         if (silent) {
-            ui.addMessage(user + ' has been silently banned', 'notification', this.state.activeRoom);
+            var silentBanMessage = utility.getLanguageResource('Chat_UserBannedSilently', user);
+            ui.addMessage(silentBanMessage, 'notification', this.state.activeRoom);
         } else {
-            ui.addMessage(user + ' has been banned', 'notification', this.state.activeRoom);
+            var banMessage = utility.getLanguageResource('Chat_UserBanned', user);
+            ui.addMessage(banMessage, 'notification', this.state.activeRoom);
         }
     };
 

@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Linq;
 using JabbR.Models;
 
 namespace JabbR.Commands
 {
-    [Command("silentban", "Ban a user from JabbR without them knowing.  They can still log in and read messages.", "user", "admin")]
+    [Command("silentban", "Ban_SilentCommandInfo", "user", "admin")]
     public class SilentBanCommand : AdminCommand
     {
         public override void ExecuteAdminOperation(CommandContext context, CallerContext callerContext, ChatUser callingUser, string[] args)
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Who do you want to ban?");
+                throw new InvalidOperationException(LanguageResources.Ban_UserRequired);
             }
 
             string targetUserName = args[0];
@@ -20,7 +19,7 @@ namespace JabbR.Commands
 
             if (targetUser.BanStatus == UserBanStatus.SilentlyBanned)
             {
-                throw new InvalidOperationException(String.Format("{0} is already silently banned.", targetUser.Name));
+                throw new InvalidOperationException(String.Format(LanguageResources.Ban_UserAlreadyBannedSilently, targetUser.Name));
             }
 
             context.Service.BanUser(callingUser, targetUser, silent: true);
