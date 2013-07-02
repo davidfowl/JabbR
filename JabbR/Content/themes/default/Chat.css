@@ -2168,19 +2168,16 @@ li.clearfix {
 
 #releaseArea {
     padding: 10px 0;
-}
-
-#releaseTag {
     font-size: smaller;
     margin: 0;
 }
 
-    #releaseTag a {
+    #releaseArea a {
         color: #1C94C4;
         text-decoration: none;
     }
 
-        #releaseTag a:hover {
+        #releaseArea a:hover {
             color: #1C94C4;
             text-decoration: underline;
         }
@@ -2345,13 +2342,21 @@ li.clearfix {
 
 .windows-auth,
 .usernamepassword-auth,
-.user-registration {
+.user-registration,
+.user-request-reset-password {
     margin: 20px -40px;
 }
 
-    .user-registration .validation-summary-errors {
+.user-reset-password {
+    margin: 20px;
+}
+
+    .user-registration .validation-summary-errors,
+    .user-request-reset-password .validation-summary-errors,
+    .user-reset-password .validation-summary-errors {
         margin: 20px 200px;
     }
+
 
     .usernamepassword-auth .control-group {
         margin-left: 40px;

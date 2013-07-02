@@ -44,8 +44,6 @@ namespace JabbR.ContentProviders.Core
                     }
 
                     // Update the message with the content
-
-                    // REVIEW: Does it even make sense to get multiple results?
                     using (var repository = _kernel.Get<IJabbrRepository>())
                     {
                         var message = repository.GetMessageById(messageId);

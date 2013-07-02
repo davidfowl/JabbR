@@ -76,10 +76,10 @@ namespace JabbR.WebApi
             if (chatRoom.Private)
             {
                 // TODO: Allow viewing messages using auth token
-                return Request.CreateJabbrErrorMessage(HttpStatusCode.NotFound, String.Format("Unable to locate room {0}.", chatRoom.Name), filenamePrefix);
+                return Request.CreateJabbrErrorMessage(HttpStatusCode.NotFound, String.Format(LanguageResources.RoomNotFound, chatRoom.Name), filenamePrefix);
             }
 
-            var messages = _repository.GetMessagesByRoom(chatRoom)
+            var messages = _repository.GetMessagesByRoom(chatRoom, includeBannedUsers: true)
                 .Where(msg => msg.When <= end && msg.When >= start)
                 .OrderBy(msg => msg.When)
                 .Select(msg => new MessageApiModel

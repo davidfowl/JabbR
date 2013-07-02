@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System;
+﻿using System;
+using System.Linq;
 using JabbR.Models;
 
 namespace JabbR.Services
@@ -14,8 +14,8 @@ namespace JabbR.Services
         IQueryable<ChatUser> GetOnlineUsers();
 
         IQueryable<ChatUser> SearchUsers(string name);
-        IQueryable<ChatMessage> GetMessagesByRoom(ChatRoom room);
-        IQueryable<ChatMessage> GetPreviousMessages(string messageId);
+        IQueryable<ChatMessage> GetMessagesByRoom(ChatRoom room, bool includeBannedUsers);
+        IQueryable<ChatMessage> GetPreviousMessages(string messageId, bool includeBannedUsers);
         IQueryable<ChatRoom> GetAllowedRooms(ChatUser user);
         IQueryable<Notification> GetNotificationsByUser(ChatUser user);
         ChatMessage GetMessageById(string id);
@@ -27,6 +27,7 @@ namespace JabbR.Services
         ChatUser GetUserByClientId(string clientId);
         ChatUser GetUserByLegacyIdentity(string userIdentity);
         ChatUser GetUserByIdentity(string providerName, string userIdentity);
+        ChatUser GetUserByRequestResetPasswordId(string userName, string requestResetPasswordId);
         Notification GetNotificationById(int notificationId);
 
         ChatClient GetClientById(string clientId, bool includeUser = false);

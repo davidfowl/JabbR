@@ -31,7 +31,7 @@ namespace JabbR.Services
 
         public void Add(Attachment attachment)
         {
-            _attachments.Add(attachment);   
+            _attachments.Add(attachment);
         }
 
         public void Add(ChatRoom room)
@@ -145,9 +145,9 @@ namespace JabbR.Services
             return _notifications.Where(n => n.UserKey == user.Key).AsQueryable();
         }
 
-        public IQueryable<ChatMessage> GetMessagesByRoom(ChatRoom room)
+        public IQueryable<ChatMessage> GetMessagesByRoom(ChatRoom room, bool includeBannedUsers)
         {
-            return room.Messages.AsQueryable();
+            return room.Messages.Where(e => (e.User.BanStatus == UserBanStatus.NotBanned || includeBannedUsers)).AsQueryable();
         }
 
         public IQueryable<ChatUser> GetOnlineUsers(ChatRoom room)
@@ -187,6 +187,13 @@ namespace JabbR.Services
             return null;
         }
 
+        public ChatUser GetUserByRequestResetPasswordId(string userName, string requestResetPasswordId)
+        {
+            return _users.FirstOrDefault(u => u.RequestPasswordResetId != null &&
+                                              u.RequestPasswordResetId.Equals(requestResetPasswordId, StringComparison.OrdinalIgnoreCase) &&
+                                              u.RequestPasswordResetValidThrough > DateTimeOffset.UtcNow);
+        }
+
         public Notification GetNotificationById(int notificationId)
         {
             return _notifications.SingleOrDefault(n => n.Key == notificationId);
@@ -197,7 +204,7 @@ namespace JabbR.Services
             return _users.SelectMany(u => u.ConnectedClients).FirstOrDefault(c => c.Id == clientId);
         }
 
-        public IQueryable<ChatMessage> GetPreviousMessages(string messageId)
+        public IQueryable<ChatMessage> GetPreviousMessages(string messageId, bool includeBannedUsers)
         {
             // Ineffcient since we don't have a messages collection
 
@@ -205,7 +212,7 @@ namespace JabbR.Services
                     let message = r.Messages.FirstOrDefault(m => m.Id == messageId)
                     where message != null
                     from m in r.Messages
-                    where m.When < message.When
+                    where m.When < message.When && (message.User.BanStatus == UserBanStatus.NotBanned || includeBannedUsers)
                     select m).AsQueryable();
         }
 

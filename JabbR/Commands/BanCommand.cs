@@ -4,22 +4,27 @@ using JabbR.Models;
 
 namespace JabbR.Commands
 {
-    [Command("ban", "Ban a user from JabbR!", "user", "admin")]
+    [Command("ban", "Ban_CommandInfo", "user", "admin")]
     public class BanCommand : AdminCommand
     {
         public override void ExecuteAdminOperation(CommandContext context, CallerContext callerContext, ChatUser callingUser, string[] args)
         {
             if (args.Length == 0)
             {
-                throw new InvalidOperationException("Who do you want to ban?");
+                throw new InvalidOperationException(LanguageResources.Ban_UserRequired);
             }
 
             string targetUserName = args[0];
 
             ChatUser targetUser = context.Repository.VerifyUser(targetUserName);
 
-            context.Service.BanUser(callingUser, targetUser);
-            context.NotificationService.BanUser(targetUser);
+            if (targetUser.BanStatus == UserBanStatus.Banned)
+            {
+                throw new InvalidOperationException(String.Format(LanguageResources.Ban_UserAlreadyBanned, targetUser.Name));
+            }
+
+            context.Service.BanUser(callingUser, targetUser, silent: false);
+            context.NotificationService.BanUser(targetUser, silent: false);
             context.Repository.CommitChanges();
         }
     }

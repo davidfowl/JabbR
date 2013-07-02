@@ -169,7 +169,7 @@ namespace JabbR
             // REVIEW: Is it better to use the extension method room.EnsureOpen here?
             if (room.Closed)
             {
-                throw new InvalidOperationException(String.Format("You cannot post messages to '{0}'. The room is closed.", clientMessage.Room));
+                throw new InvalidOperationException(String.Format(LanguageResources.SendMessageRoomClosed, clientMessage.Room));
             }
 
             // Update activity *after* ensuring the user, this forces them to be active
@@ -177,9 +177,9 @@ namespace JabbR
 
             // Create a true unique id and save the message to the db
             string id = Guid.NewGuid().ToString("d");
+
             ChatMessage chatMessage = _service.AddMessage(user, room, id, clientMessage.Content);
             _repository.CommitChanges();
-
 
             var messageViewModel = new MessageViewModel(chatMessage);
 
@@ -189,19 +189,48 @@ namespace JabbR
                 // send it to everyone. The assumption is that the client has some ui
                 // that it wanted to update immediately showing the message and
                 // then when the actual message is roundtripped it would "solidify it".
-                Clients.Group(room.Name).addMessage(messageViewModel, room.Name);
+                if (user.BanStatus == UserBanStatus.NotBanned)
+                {
+                    Clients.Group(room.Name).addMessage(messageViewModel, room.Name);
+                }
+                else
+                {
+                    foreach (var client in user.ConnectedClients)
+                    {
+                        Clients.Client(client.Id).addMessage(messageViewModel, room.Name);
+                    }
+                }
             }
             else
             {
-                // If the client did set an id then we need to give everyone the real id first
-                Clients.OthersInGroup(room.Name).addMessage(messageViewModel, room.Name);
+                if (user.BanStatus == UserBanStatus.NotBanned)
+                {
+                    // If the client did set an id then we need to give everyone the real id first
+                    Clients.OthersInGroup(room.Name).addMessage(messageViewModel, room.Name);
+                }
+                else
+                {
+                    // If they're banned, just add the message to their clients
+                    foreach (var client in user.ConnectedClients)
+                    {
+                        if (Context.ConnectionId == client.Id)
+                        {
+                            continue;
+                        }
+
+                        Clients.Client(client.Id).addMessage(messageViewModel, room.Name);
+                    }
+                }
 
                 // Now tell the caller to replace the message
                 Clients.Caller.replaceMessage(clientMessage.Id, messageViewModel, room.Name);
             }
 
-            // Add mentions
-            AddMentions(chatMessage);
+            if (user.BanStatus == UserBanStatus.NotBanned)
+            {
+                // Add mentions
+                AddMentions(chatMessage);
+            }
 
             var urls = UrlExtractor.ExtractUrls(chatMessage.Content);
             if (urls.Count > 0)
@@ -341,9 +370,9 @@ namespace JabbR
         public object GetShortcuts()
         {
             return new[] {
-                new { Name = "Tab or Shift + Tab", Category = "shortcut", Description = "Go to the next open room tab or Go to the previous open room tab." },
-                new { Name = "Alt + L", Category = "shortcut", Description = "Go to the Lobby."},
-                new { Name = "Alt + Number", Category = "shortcut", Description = "Go to specific Tab."}
+                new { Name = "Tab or Shift + Tab", Category = "shortcut", Description = LanguageResources.Client_ShortcutTabs },
+                new { Name = "Alt + L", Category = "shortcut", Description = LanguageResources.Client_ShortcutLobby },
+                new { Name = "Alt + Number", Category = "shortcut", Description = LanguageResources.Client_ShortcutSpecificTab }
             };
         }
 
@@ -366,7 +395,11 @@ namespace JabbR
 
         public IEnumerable<MessageViewModel> GetPreviousMessages(string messageId)
         {
-            var previousMessages = (from m in _repository.GetPreviousMessages(messageId)
+            string userId = Context.User.GetUserId();
+            ChatUser user = _repository.VerifyUserId(userId);
+            bool includeBannedUsers = user.BanStatus != UserBanStatus.NotBanned;
+
+            var previousMessages = (from m in _repository.GetPreviousMessages(messageId, includeBannedUsers)
                                     orderby m.When descending
                                     select m).Take(100);
 
@@ -385,6 +418,7 @@ namespace JabbR
 
             string userId = Context.User.GetUserId();
             ChatUser user = _repository.VerifyUserId(userId);
+            bool includeBannedUsers = user.BanStatus != UserBanStatus.NotBanned;
 
             ChatRoom room = _repository.GetRoomByName(roomName);
 
@@ -393,7 +427,7 @@ namespace JabbR
                 return null;
             }
 
-            var recentMessages = (from m in _repository.GetMessagesByRoom(room)
+            var recentMessages = (from m in _repository.GetMessagesByRoom(room, includeBannedUsers)
                                   orderby m.When descending
                                   select m).Take(50).ToList();
 
@@ -411,8 +445,8 @@ namespace JabbR
                 Owners = from u in room.Owners.Online()
                          select u.Name,
                 RecentMessages = recentMessages.Select(m => new MessageViewModel(m)),
-                Topic = room.Topic ?? "",
-                Welcome = room.Welcome ?? "",
+                Topic = room.Topic ?? String.Empty,
+                Welcome = room.Welcome ?? String.Empty,
                 Closed = room.Closed
             };
         }
@@ -434,7 +468,7 @@ namespace JabbR
                 !room.Owners.Contains(user) ||
                 (room.Private && !user.AllowedRooms.Contains(room)))
             {
-                throw new InvalidOperationException("You're not allowed to post a notification.");
+                throw new InvalidOperationException(LanguageResources.PostNotification_NotAllowed);
             }
 
             var chatMessage = new ChatMessage
@@ -688,7 +722,7 @@ namespace JabbR
             {
                 Name = room.Name,
                 Private = room.Private,
-                Welcome = room.Welcome ?? "",
+                Welcome = room.Welcome ?? String.Empty,
                 Closed = room.Closed
             };
 
@@ -794,29 +828,57 @@ namespace JabbR
             // Create the view model
             var userViewModel = new UserViewModel(user);
 
-            // Tell all users in rooms to change the gravatar
-            foreach (var room in user.Rooms)
+            if (user.BanStatus == UserBanStatus.NotBanned)
             {
-                Clients.Group(room.Name).changeGravatar(userViewModel, room.Name);
+                // Tell all users in rooms to change the gravatar
+                foreach (var room in user.Rooms)
+                {
+                    Clients.Group(room.Name).changeGravatar(userViewModel, room.Name);
+                }
+            }
+            else
+            {
+                // just tell the user that they changed their own gravatar
+                foreach (var room in user.Rooms)
+                {
+                    foreach (var client in user.ConnectedClients)
+                    {
+                        Clients.Client(client.Id).changeGravatar(userViewModel, room.Name);
+                    }
+                }
             }
         }
 
         void INotificationService.OnSelfMessage(ChatRoom room, ChatUser user, string content)
         {
-            Clients.Group(room.Name).sendMeMessage(user.Name, content, room.Name);
+            if (user.BanStatus == UserBanStatus.NotBanned)
+            {
+                Clients.Group(room.Name).sendMeMessage(user.Name, content, room.Name);
+            }
+            else
+            {
+                // send it to just the client
+                foreach (var client in user.ConnectedClients)
+                {
+                    Clients.Client(client.Id).sendMeMessage(user.Name, content, room.Name);
+                }
+            }
         }
 
         void INotificationService.SendPrivateMessage(ChatUser fromUser, ChatUser toUser, string messageText)
         {
-            // Send a message to the sender and the sendee
+            // Send a message to the sender and the sendee (but only if the sender isn't banned)
             foreach (var client in fromUser.ConnectedClients)
             {
                 Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
             }
 
-            foreach (var client in toUser.ConnectedClients)
+            if (fromUser.BanStatus == UserBanStatus.NotBanned)
             {
-                Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
+                foreach (var client in toUser.ConnectedClients)
+                {
+                    Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
+                }
             }
         }
 
@@ -933,10 +995,13 @@ namespace JabbR
 
         void INotificationService.Invite(ChatUser user, ChatUser targetUser, ChatRoom targetRoom)
         {
-            // Send the invite message to the sendee
-            foreach (var client in targetUser.ConnectedClients)
+            if (user.BanStatus == UserBanStatus.NotBanned)
             {
-                Clients.Client(client.Id).sendInvite(user.Name, targetUser.Name, targetRoom.Name);
+                // Send the invite message to the sendee
+                foreach (var client in targetUser.ConnectedClients)
+                {
+                    Clients.Client(client.Id).sendInvite(user.Name, targetUser.Name, targetRoom.Name);
+                }
             }
 
             // Send the invite notification to the sender
@@ -949,20 +1014,33 @@ namespace JabbR
         void INotificationService.NugeUser(ChatUser user, ChatUser targetUser)
         {
             // Send a nudge message to the sender and the sendee
-            foreach (var client in targetUser.ConnectedClients)
+            if (user.BanStatus == UserBanStatus.NotBanned)
             {
-                Clients.Client(client.Id).nudge(user.Name, targetUser.Name);
+                foreach (var client in targetUser.ConnectedClients)
+                {
+                    Clients.Client(client.Id).nudge(user.Name, targetUser.Name);
+                }
             }
 
             foreach (var client in user.ConnectedClients)
             {
-                Clients.Client(client.Id).sendPrivateMessage(user.Name, targetUser.Name, "nudged " + targetUser.Name);
+                Clients.Client(client.Id).nudge(user.Name, targetUser.Name);
             }
         }
 
         void INotificationService.NudgeRoom(ChatRoom room, ChatUser user)
         {
-            Clients.Group(room.Name).nudge(user.Name);
+            if (user.BanStatus == UserBanStatus.NotBanned)
+            {
+                Clients.Group(room.Name).nudge(user.Name);
+            }
+            else
+            {
+                foreach (var client in user.ConnectedClients)
+                {
+                    Clients.Client(client.Id).nudge(user.Name);
+                }
+            }
         }
 
         void INotificationService.LeaveRoom(ChatUser user, ChatRoom room)
@@ -1002,9 +1080,22 @@ namespace JabbR
             var userViewModel = new UserViewModel(user);
 
             // Tell all users in rooms to change the note
-            foreach (var room in user.Rooms)
+            if (user.BanStatus == UserBanStatus.NotBanned)
             {
-                Clients.Group(room.Name).changeNote(userViewModel, room.Name);
+                foreach (var room in user.Rooms)
+                {
+                    Clients.Group(room.Name).changeNote(userViewModel, room.Name);
+                }
+            }
+            else
+            {
+                foreach (var room in user.Rooms)
+                {
+                    foreach (var client in user.ConnectedClients)
+                    {
+                        Clients.Client(client.Id).changeNote(userViewModel, room.Name);
+                    }
+                }
             }
         }
 
@@ -1022,16 +1113,29 @@ namespace JabbR
             }
 
             // Tell all users in rooms to change the flag
-            foreach (var room in user.Rooms)
+            if (user.BanStatus == UserBanStatus.NotBanned)
             {
-                Clients.Group(room.Name).changeFlag(userViewModel, room.Name);
+                foreach (var room in user.Rooms)
+                {
+                    Clients.Group(room.Name).changeFlag(userViewModel, room.Name);
+                }
+            }
+            else
+            {
+                foreach (var room in user.Rooms)
+                {
+                    foreach (var client in user.ConnectedClients)
+                    {
+                        Clients.Client(client.Id).changeFlag(userViewModel, room.Name);
+                    }
+                }
             }
         }
 
         void INotificationService.ChangeTopic(ChatUser user, ChatRoom room)
         {
             bool isTopicCleared = String.IsNullOrWhiteSpace(room.Topic);
-            var parsedTopic = room.Topic ?? "";
+            var parsedTopic = room.Topic ?? String.Empty;
             Clients.Group(room.Name).topicChanged(room.Name, isTopicCleared, parsedTopic, user.Name);
             // Create the view model
             var roomViewModel = new RoomViewModel
@@ -1046,7 +1150,7 @@ namespace JabbR
         void INotificationService.ChangeWelcome(ChatUser user, ChatRoom room)
         {
             bool isWelcomeCleared = String.IsNullOrWhiteSpace(room.Welcome);
-            var parsedWelcome = room.Welcome ?? "";
+            var parsedWelcome = room.Welcome ?? String.Empty;
             foreach (var client in user.ConnectedClients)
             {
                 Clients.Client(client.Id).welcomeChanged(isWelcomeCleared, parsedWelcome);
@@ -1147,23 +1251,39 @@ namespace JabbR
             return value != null ? Uri.UnescapeDataString(value) : null;
         }
 
-        void INotificationService.BanUser(ChatUser targetUser)
+        void INotificationService.BanUser(ChatUser targetUser, bool silent)
         {
-            var rooms = targetUser.Rooms.Select(x => x.Name);
-
-            foreach (var room in rooms)
+            // if it's a nonsilent ban, kick them from their rooms then log out their clients
+            if (!silent)
             {
+                var rooms = targetUser.Rooms.Select(x => x.Name);
+
+                foreach (var room in rooms)
+                {
+                    foreach (var client in targetUser.ConnectedClients)
+                    {
+                        // Kick the user from this room
+                        Clients.Client(client.Id).kick(room);
+
+                        // Remove the user from this the room group so he doesn't get the leave message
+                        Groups.Remove(client.Id, room);
+                    }
+                }
+
                 foreach (var client in targetUser.ConnectedClients)
                 {
-                    // Kick the user from this room
-                    Clients.Client(client.Id).kick(room);
-
-                    // Remove the user from this the room group so he doesn't get the leave message
-                    Groups.Remove(client.Id, room);
+                    Clients.Client(client.Id).logOut(rooms);
                 }
             }
 
-            Clients.Client(targetUser.ConnectedClients.First().Id).logOut(rooms);
+            // notify the caller via a notification
+            Clients.Caller.userBanned(targetUser.Name, silent);
+        }
+        
+        void INotificationService.UnbanUser(ChatUser targetUser)
+        {
+            // notify the user via a notification that they've been unbanned
+            Clients.Caller.userUnbanned(targetUser.Name);
         }
 
         protected override void Dispose(bool disposing)

@@ -38,7 +38,11 @@ namespace JabbR.Models
         public string Email { get; set; }
 
         public bool IsAdmin { get; set; }
-        public bool IsBanned { get; set; }
+        public UserBanStatus BanStatus { get; set; }
+
+        // Request password reset token
+        public string RequestPasswordResetId { get; set; }
+        public DateTimeOffset? RequestPasswordResetValidThrough { get; set; }
 
         // List of clients that are currently connected for this user
         public virtual ICollection<ChatUserIdentity> Identities { get; set; }

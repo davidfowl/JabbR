@@ -18,6 +18,7 @@ namespace JabbR.Services
         private static readonly Func<JabbrContext, string, ChatRoom> getRoomByName = (db, roomName) => db.Rooms.FirstOrDefault(r => r.Name == roomName);
         private static readonly Func<JabbrContext, string, ChatClient> getClientById = (db, clientId) => db.Clients.FirstOrDefault(c => c.Id == clientId);
         private static readonly Func<JabbrContext, string, ChatClient> getClientByIdWithUser = (db, clientId) => db.Clients.Include(c => c.User).FirstOrDefault(u => u.Id == clientId);
+        private static readonly Func<JabbrContext, string, string, DateTimeOffset, ChatUser> getUserByRequestResetPasswordId = (db, userName, requestId, now) => db.Users.FirstOrDefault(u => u.Name == userName && u.RequestPasswordResetId != null && u.RequestPasswordResetId.Equals(requestId, StringComparison.OrdinalIgnoreCase) && u.RequestPasswordResetValidThrough > now);
 
         public PersistedRepository(JabbrContext db)
         {
@@ -144,17 +145,17 @@ namespace JabbR.Services
                                     .Where(n => n.UserKey == user.Key);
         }
 
-        private IQueryable<ChatMessage> GetMessagesByRoom(string roomName)
+        private IQueryable<ChatMessage> GetMessagesByRoom(string roomName, bool includeBannedUsers)
         {
-            return _db.Messages.Include(r => r.Room).Where(r => r.Room.Name == roomName);
+            return _db.Messages.Include(r => r.Room).Where(r => r.Room.Name == roomName && (r.User.BanStatus == UserBanStatus.NotBanned || includeBannedUsers));
         }
 
-        public IQueryable<ChatMessage> GetMessagesByRoom(ChatRoom room)
+        public IQueryable<ChatMessage> GetMessagesByRoom(ChatRoom room, bool includeBannedUsers)
         {
-            return _db.Messages.Include(r => r.User).Where(r => r.RoomKey == room.Key);
+            return _db.Messages.Include(r => r.User).Where(r => r.RoomKey == room.Key && (r.User.BanStatus == UserBanStatus.NotBanned || includeBannedUsers));
         }
 
-        public IQueryable<ChatMessage> GetPreviousMessages(string messageId)
+        public IQueryable<ChatMessage> GetPreviousMessages(string messageId, bool includeBannedUsers)
         {
             var info = (from m in _db.Messages.Include(m => m.Room)
                         where m.Id == messageId
@@ -164,8 +165,8 @@ namespace JabbR.Services
                             RoomName = m.Room.Name
                         }).FirstOrDefault();
 
-            return from m in GetMessagesByRoom(info.RoomName)
-                   where m.When < info.When
+            return from m in GetMessagesByRoom(info.RoomName, includeBannedUsers)
+                   where m.When < info.When 
                    select m;
         }
 
@@ -252,6 +253,11 @@ namespace JabbR.Services
             return null;
         }
 
+        public ChatUser GetUserByRequestResetPasswordId(string userName, string requestResetPasswordId)
+        {
+            return getUserByRequestResetPasswordId(_db, userName, requestResetPasswordId, DateTimeOffset.UtcNow);
+        }
+
         public Notification GetNotificationById(int notificationId)
         {
             return _db.Notifications.SingleOrDefault(n => n.Key == notificationId);
@@ -282,10 +288,9 @@ namespace JabbR.Services
                       .FirstOrDefault() != null;
         }
 
-
         public void Reload(object entity)
         {
             _db.Entry(entity).Reload();
-        }        
+        }
     }
 }

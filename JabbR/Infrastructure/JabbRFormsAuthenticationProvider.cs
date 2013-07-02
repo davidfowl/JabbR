@@ -54,7 +54,7 @@ namespace JabbR.Infrastructure
                 if (loggedInUser != null && user != loggedInUser)
                 {
                     // Set an error message
-                    authResult.Message = String.Format("This {0} account has already been linked to another user.", authResult.ProviderName);
+                    authResult.Message = String.Format(LanguageResources.Account_AccountAlreadyLinked, authResult.ProviderName);
                     authResult.Success = false;
 
                     // Keep the old user logged in
@@ -86,7 +86,7 @@ namespace JabbR.Infrastructure
 
                     _repository.CommitChanges();
 
-                    authResult.Message = String.Format("Successfully linked {0} account.", authResult.ProviderName);
+                    authResult.Message = String.Format(LanguageResources.Account_AccountLinkedSuccess, authResult.ProviderName);
 
                     targetUser = loggedInUser;
                 }
@@ -111,12 +111,6 @@ namespace JabbR.Infrastructure
 
         private static void AddClaim(FormsResponseSignInContext context, ChatUser user)
         {
-            // Do nothing if the user is banned
-            if (user.IsBanned)
-            {
-                return;
-            }
-
             // Add the jabbr id claim
             context.Identity.AddClaim(new Claim(JabbRClaimTypes.Identifier, user.Id));
 
