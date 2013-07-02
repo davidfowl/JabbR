@@ -218,7 +218,8 @@ namespace JabbR.Nancy
                 "Client_OccupantsOne",
                 "Client_OccupantsMany",
                 "LoadingMessage",
-                "Client_LoadMore"
+                "Client_LoadMore",
+                "Client_UploadingFromClipboard"
             };
 
             var resourceManager = new ResourceManager(typeof(LanguageResources));

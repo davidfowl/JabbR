@@ -716,10 +716,10 @@
         $unknownUploadPreview.hide();
         //set image url
         if (file.dataURL) {
-            $previewUpload.find('h3').text('Uploading from clipboard');
+            $previewUpload.find('h3').text(utility.getLanguageResource('Client_UploadingFromClipboard'));
             $imageUploadPreview.attr('src', file.dataURL);
         } else {
-            $previewUpload.find('h3').text('Uploading: ' + file.name);
+            $previewUpload.find('h3').text(utility.getLanguageResource('Client_Uploading', file.name));
             if (type == 'image') {
                 //uploading an actual file
                 $imageUploadPreview.attr('src', file.data.result);
@@ -750,7 +750,7 @@
                     }
                 };
 
-            ui.addMessage('Uploading \'' + name + '\'.', 'broadcast');
+            ui.addMessage(utility.getLanguageResource('Client_Uploading', name), 'broadcast');
 
             $ui.trigger(ui.events.fileUploaded, [uploader]);
         });
