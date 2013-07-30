@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using JabbR.Infrastructure;
@@ -8,7 +7,6 @@ using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Nancy;
-using WorldDomination.Web.Authentication;
 
 namespace JabbR.Nancy
 {
@@ -39,7 +37,7 @@ namespace JabbR.Nancy
             {
                 if (IsAuthenticated)
                 {
-                    return Response.AsRedirect("~/");
+                    return this.AsRedirectQueryStringOrDefault("~/");
                 }
 
                 return View["login", GetLoginViewModel(applicationSettings, repository, authService)];
@@ -49,7 +47,7 @@ namespace JabbR.Nancy
             {
                 if (IsAuthenticated)
                 {
-                    return Response.AsRedirect("~/");
+                    return this.AsRedirectQueryStringOrDefault("~/");
                 }
 
                 string username = Request.Form.username;
@@ -104,7 +102,7 @@ namespace JabbR.Nancy
             {
                 if (IsAuthenticated)
                 {
-                    return Response.AsRedirect("~/");
+                    return this.AsRedirectQueryStringOrDefault("~/");
                 }
 
                 bool requirePassword = !Principal.Identity.IsAuthenticated;
@@ -132,7 +130,7 @@ namespace JabbR.Nancy
 
                 if (IsAuthenticated)
                 {
-                    return Response.AsRedirect("~/");
+                    return this.AsRedirectQueryStringOrDefault("~/");
                 }
 
                 ViewBag.requirePassword = requirePassword;

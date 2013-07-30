@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
+
 using JabbR.Services;
 using Nancy;
-using Nancy.Authentication.WorldDomination;
-using WorldDomination.Web.Authentication;
+using Nancy.SimpleAuthentication;
+using SimpleAuthentication.Core;
 
 namespace JabbR.Nancy
 {
@@ -19,11 +21,24 @@ namespace JabbR.Nancy
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
         {
-            Response response = nancyModule.Response.AsRedirect("~/");
+            Response response;
 
-            if (nancyModule.IsAuthenticated())
+            if (model.ReturnUrl != null)
             {
-                response = nancyModule.Response.AsRedirect("~/account/#identityProviders");
+                // correct encoding on absoluteUri returned.  SA assumes that what we enter is a path
+                string returnUri = model.ReturnUrl.PathAndQuery;
+                returnUri = Regex.Replace(returnUri, "%3f", @"?", RegexOptions.IgnoreCase);
+                returnUri = returnUri.Replace("%23", "#");
+                response = nancyModule.Response.AsRedirect("~" + returnUri);
+            }
+            else
+            {
+                response = nancyModule.AsRedirectQueryStringOrDefault("~/");
+
+                if (nancyModule.IsAuthenticated())
+                {
+                    response = nancyModule.AsRedirectQueryStringOrDefault("~/account/#identityProviders");
+                }
             }
 
             if (model.Exception != null)
@@ -46,7 +61,6 @@ namespace JabbR.Nancy
                 {
                     claims.Add(new Claim(ClaimTypes.Email, information.Email));
                 }
-
 
                 nancyModule.SignIn(claims);
             }
