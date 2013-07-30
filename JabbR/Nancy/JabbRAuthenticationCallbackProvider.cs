@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using JabbR.Services;
 using Nancy;
-using Nancy.Authentication.WorldDomination;
-using WorldDomination.Web.Authentication;
+using Nancy.SimpleAuthentication;
+using SimpleAuthentication.Core;
 
 namespace JabbR.Nancy
 {
@@ -19,11 +19,20 @@ namespace JabbR.Nancy
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
         {
-            Response response = nancyModule.AsRedirectQueryStringOrDefault("~/");
+            Response response;
 
-            if (nancyModule.IsAuthenticated())
+            if (model.ReturnUrl != null)
             {
-                response = nancyModule.AsRedirectQueryStringOrDefault("~/account/#identityProviders");
+                response = nancyModule.Response.AsRedirect(model.ReturnUrl.AbsoluteUri);
+            }
+            else
+            {
+                response = nancyModule.AsRedirectQueryStringOrDefault("~/");
+
+                if (nancyModule.IsAuthenticated())
+                {
+                    response = nancyModule.AsRedirectQueryStringOrDefault("~/account/#identityProviders");
+                }
             }
 
             if (model.Exception != null)

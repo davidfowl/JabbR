@@ -2414,31 +2414,8 @@ li.clearfix {
     padding: 0 20px;
 }
 
-.icon-twitter-logo {
-    background-image: url('../../images/twitter_white.png');
-    background-repeat: no-repeat;
-    background-position: center left;
-    height: 16px;
-    width: 16px;
-    margin: 3px 10px 0 -10px;
-}
-
-.icon-facebook-logo {
-    background-image: url('../../images/facebook_white.png');
-    background-repeat: no-repeat;
-    background-position: center left;
-    height: 16px;
-    width: 16px;
-    margin: 0 10px;
-}
-
-.icon-google-logo {
-    background-image: url('../../images/google_white.png');
-    background-repeat: no-repeat;
-    background-position: center left;
-    height: 16px;
-    width: 16px;
-    margin: 5px 10px 0 -10px;
+.icon-google:before {
+    content: "\f0d5";
 }
 
 .icon-link {
