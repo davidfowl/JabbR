@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
+
 using JabbR.Services;
 using Nancy;
 using Nancy.SimpleAuthentication;
@@ -23,7 +25,11 @@ namespace JabbR.Nancy
 
             if (model.ReturnUrl != null)
             {
-                response = nancyModule.Response.AsRedirect(model.ReturnUrl.AbsoluteUri);
+                // correct encoding on absoluteUri returned.  SA assumes that what we enter is a path
+                string returnUri = model.ReturnUrl.PathAndQuery;
+                returnUri = Regex.Replace(returnUri, "%3f", @"?", RegexOptions.IgnoreCase);
+                returnUri = returnUri.Replace("%23", "#");
+                response = nancyModule.Response.AsRedirect("~" + returnUri);
             }
             else
             {

@@ -941,6 +941,7 @@
   <ItemGroup>
     <Compile Include="Infrastructure\EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\HttpServerUtility.cs" />
+    <Compile Include="Infrastructure\IAuthenticationService.cs" />
     <Compile Include="LanguageResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
