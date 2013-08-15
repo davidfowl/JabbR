@@ -820,7 +820,9 @@ li.error {
     background-color: #c0e8ff;
     font-weight: bold;
 }
-
+.welcome .content {
+    margin-right: 75px;
+}
 .action {
     color: #9c009c;
     border-bottom: 1px solid #eee;
