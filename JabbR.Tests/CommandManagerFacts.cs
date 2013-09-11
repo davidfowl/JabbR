@@ -10,7 +10,7 @@ using Microsoft.AspNet.SignalR;
 using Moq;
 using Xunit;
 
-namespace JabbR.Test
+namespace JabbR.Tests
 {
     public class CommandManagerFacts
     {
@@ -5175,6 +5175,136 @@ namespace JabbR.Test
                 // Act and Assert
                 HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/flag " + isoCode));
                 Assert.Equal("Sorry, but the country ISO code you requested doesn't exist. Please refer to http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a proper list of country ISO codes.", ex.Message);
+            }
+        }
+
+        public class MemeCommand
+        {
+            [Fact]
+            public void CanGenerateMeme()
+            {
+                // Arrange.
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "asshat",
+                    Id = "1"
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room"
+                };
+                repository.Add(room);
+                var service = new ChatService(cache, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        "room",
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+                // Act.
+                bool result = commandManager.TryHandleCommand("/meme aa top-line bottom-line");
+
+                // Assert.
+                Assert.True(result);
+                notificationService.Verify(x => x.GenerateMeme(user, room, "http://upboat.me/aa/top-line/bottom-line.jpg"), Times.Once());
+            }
+
+            [Fact]
+            public void InLobbyThrows()
+            {
+                // Arrange.
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "asshat",
+                    Id = "1"
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room"
+                };
+                repository.Add(room);
+                var service = new ChatService(cache, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        "", // In the lobby.
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+                // Act.
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/meme aa top-line bottom-line"));
+                Assert.Equal("This command cannot be invoked from the Lobby.", ex.Message);
+            }
+
+            [Fact]
+            public void MissingAllArgumentsThrows()
+            {
+                // Arrange.
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "asshat",
+                    Id = "1"
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room"
+                };
+                repository.Add(room);
+                var service = new ChatService(cache, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        "room",
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+                // Act.
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/meme"));
+                Assert.Equal("What type of meme do you want to generate and with what message? You need to provide 3 seperate arguments delimeted by spaces. Help: here's the list of memes: http://upboat.me/List .", ex.Message);
+            }
+
+            [Fact]
+            public void MissingSomeArgumentsThrows()
+            {
+                // Arrange.
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "asshat",
+                    Id = "1"
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room"
+                };
+                repository.Add(room);
+                var service = new ChatService(cache, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        "room",
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+                // Act.
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/meme cd top-line"));
+                Assert.Equal("Incorrect number of meme arguments. You need to provide 3 seperate arguments delimeted by spaces. (TIP: use a dash (eg: -) to display a space in your message.", ex.Message);
             }
         }
 
