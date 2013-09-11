@@ -1014,7 +1014,6 @@ namespace JabbR
         void INotificationService.GenerateMeme(ChatUser user, ChatRoom room, string message)
         {
             Send(message, room.Name);
-            //Clients.User(user.Id).postNotification(message, room.Name);
         }
 
         void INotificationService.AddAdmin(ChatUser targetUser)
