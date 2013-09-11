@@ -9,7 +9,7 @@ using Microsoft.AspNet.SignalR;
 using Moq;
 using Xunit;
 
-namespace JabbR.Test
+namespace JabbR.Tests
 {
     public class ChatServiceFacts
     {

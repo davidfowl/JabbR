@@ -8,7 +8,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Moq;
 
-namespace JabbR.Test
+namespace JabbR.Tests
 {
     public class ChatFacts
     {
