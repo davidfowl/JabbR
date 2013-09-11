@@ -228,7 +228,14 @@ form#send-message {
 .roomTopic {
     position: absolute;
     margin-left: 5px;
+      width: calc(100% - 123px);
+     height: 20px;
+      overflow: hidden;
 }
+/*.wrapTopicContent {
+       height: 20px;
+      overflow: hidden;
+}*/
 
 .users {
     font-size: small;
