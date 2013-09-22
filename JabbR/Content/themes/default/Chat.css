@@ -228,9 +228,6 @@ form#send-message {
 .roomTopic {
     position: absolute;
     margin-left: 5px;
-    width: calc(100% - 123px);
-    height: 20px;
-    overflow: hidden;
 }
 
 .users {
@@ -809,7 +806,12 @@ li.user.typing .gravatar {
     position: absolute;
     right: 0;
     width: 70px;
+	height: 30px;
 }
+
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+     height: 18px;
+ }
 
 #enable-disable-toast {
     cursor: pointer;
