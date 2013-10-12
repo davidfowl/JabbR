@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace JabbR.ContentProviders.Core
@@ -20,10 +19,10 @@ namespace JabbR.ContentProviders.Core
                 return TaskAsyncHelper.FromResult<ContentProviderResult>(null);
             }
 
-            return TaskAsyncHelper.FromResult(new ContentProviderResult()
+            return TaskAsyncHelper.FromResult(new ContentProviderResult
              {
                  Content = String.Format(MediaFormatString, args.ToArray()),
-                 Title = request.RequestUri.AbsoluteUri.ToString()
+                 Title = request.RequestUri.AbsoluteUri
              });
         }
 
