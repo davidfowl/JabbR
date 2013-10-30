@@ -993,6 +993,13 @@
         ui.updateTabOrder(tabOrder);
     };
 
+    chat.client.serverTime = function (time) {
+        // Check of server/client time difference is > 5 Seconds
+        var difference = (Date.now() - time.fromJsonDate().getTime());
+        if (difference > 5000 || difference < -5000)
+            ui.showTimeOffsetUI(difference);
+    }
+
     $ui.bind(ui.events.typing, function () {
         // If not in a room, don't try to send typing notifications
         if (!chat.state.activeRoom) {
