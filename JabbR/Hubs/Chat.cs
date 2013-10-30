@@ -77,6 +77,9 @@ namespace JabbR
 
             CheckStatus();
 
+            // Allow for Client/Server time differences
+            Clients.Caller.serverTime(DateTime.Now);
+
             return base.OnConnected();
         }
 
