@@ -129,6 +129,11 @@
         return new Date(this.getTime() + 1000 * 3600 * 24 * days);
     };
 
+    // returns date corrected with server/client time offset
+    Date.prototype.toServerTime = function () {
+        return new Date(this.getTime() + utility.serverTimeOffset);
+    }
+
     function processContent(content, templates, roomCache, htmlEncoded) {
         content = content || '';
 
@@ -204,7 +209,8 @@
         newId: guidGenerator,
         processContent: processContent,
         format: format,
-        getLanguageResource: getLanguageResource
+        getLanguageResource: getLanguageResource,
+        serverTimeOffset: 0
     };
 
     if (!window.chat) {
