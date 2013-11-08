@@ -127,7 +127,7 @@
             <img class="gravatar" src="https://secure.gravatar.com/avatar/${hash}?s=16&d=mm" />
             <div class="details {{if admin}}admin{{/if}}">
                 <div class="flag-container">
-                    <div class="flag{{if flagClass}} ${flagClass}{{/if}}" {{if flag}}title="${country}"{{/if}}></div>
+                    <div class="flag"></div>
                 </div>
                 <div class="name-container">
                     <div class="name" {{if note}}title="${note}"{{else}}title="${name}"{{/if}}>${name}</div>
@@ -328,7 +328,7 @@
         <div id="chat-area" role="tabpanel">
             <div id="room-loading">
                 <div id="loader-container">
-                    <canvas id="canvas" width="150" height="150"></canvas>
+                    <canvas id="loading-canvas" width="150" height="150"></canvas>
                     <h4>@LanguageResources.LoadingMessage</h4>
                 </div>
             </div>
@@ -506,17 +506,18 @@
             .Add("~/Scripts/jquery.history.js")
             .Add("~/Scripts/moment.min.js")
             .Add("~/Scripts/livestamp.min.js")
+            .Add("~/Scripts/loader.js")
             .Add("~/Chat.emoji.js")
             .Add("~/Chat.utility.js")
             .Add("~/Chat.toast.js")
             .Add("~/Chat.ui.room.js")
             .Add("~/Chat.ui.js")
             .Add("~/Chat.ui.fileUpload.js")
+            .Add("~/Chat.ui.connectionStatus.js")
             .Add("~/Chat.documentOnWrite.js")
             .Add("~/Chat.twitter.js")
             .Add("~/Chat.githubissues.js")
             .Add("~/Chat.js")
-            .Add("~/loader.js")
             .Render("~/Scripts/JabbR2_#.js"));
     }
     @if (Model.DebugMode)

@@ -37,16 +37,6 @@
         return chat.state.name === user.Name;
     }
 
-    function getNoteCssClass(user) {
-        if (user.IsAfk === true) {
-            return 'afk';
-        }
-        else if (user.Note) {
-            return 'message';
-        }
-        return '';
-    }
-
     function getNote(user) {
         if (user.IsAfk === true) {
             if (user.AfkNote) {
@@ -65,10 +55,6 @@
         }
 
         return false;
-    }
-
-    function getFlagCssClass(user) {
-        return (user.Flag) ? 'flag flag-' + user.Flag : '';
     }
 
     function performLogout() {
@@ -202,9 +188,7 @@
             hash: user.Hash,
             owner: isOwner,
             active: user.Active,
-            noteClass: getNoteCssClass(user),
             note: getNote(user),
-            flagClass: getFlagCssClass(user),
             flag: user.Flag,
             country: user.Country,
             lastActive: lastActive,
@@ -869,36 +853,6 @@
         ui.addNotificationToActiveRoom(message);
     };
 
-    // Helpish commands
-    //TODO: remove, not called anywhere.
-    chat.client.showRooms = function (rooms) {
-        if (!rooms.length) {
-            ui.addListToActiveRoom('Rooms', [utility.getLanguageResource('Chat_NoRoomsAvailable')]);
-        }
-        else {
-            // sort rooms by count descending then name
-            var sorted = rooms.sort(function (a, b) {
-                if (a.Closed && !b.Closed) {
-                    return 1;
-                } else if (b.Closed && !a.Closed) {
-                    return -1;
-                }
-
-                if (a.Count > b.Count) {
-                    return -1;
-                } else if (b.Count > a.Count) {
-                    return 1;
-                }
-
-                return a.Name.toString().toUpperCase().localeCompare(b.Name.toString().toUpperCase());
-            });
-
-            ui.addListToActiveRoom('Rooms', $.map(sorted, function () {
-                return this.Name + ' (' + this.Count + ')';
-            }));
-        }
-    };
-
     chat.client.showCommands = function () {
         ui.showHelp();
     };
@@ -977,8 +931,8 @@
         ui.addNotificationToActiveRoom(utility.getLanguageResource('Chat_YouAdminRevoked'));
     };
 
-    chat.client.broadcastMessage = function (message, room) {
-        ui.addBroadcast(utility.getLanguageResource('Chat_AdminBroadcast', message), room);
+    chat.client.broadcastMessage = function (message) {
+        ui.addBroadcast(utility.getLanguageResource('Chat_AdminBroadcast', message));
     };
 
     chat.client.outOfSync = function () {
@@ -1290,14 +1244,14 @@
                 if (change.newState === $.connection.connectionState.reconnecting) {
                     failPendingMessages();
 
-                    ui.showStatus(1, '');
+                    ui.connectionStatus.update(1, '');
                 }
                 else if (change.newState === $.connection.connectionState.connected) {
                     if (!initial) {
-                        ui.showStatus(0, $.connection.hub.transport.name);
+                        ui.connectionStatus.update(0, $.connection.hub.transport.name);
                         ui.setReadOnly(false);
                     } else {
-                        ui.initializeConnectionStatus($.connection.hub.transport.name);
+                        ui.connectionStatus.initialize($.connection.hub.transport.name);
                     }
 
                     initial = false;
@@ -1314,7 +1268,7 @@
                     failPendingMessages();
                 }
 
-                ui.showStatus(2, '');
+                ui.connectionStatus.update(2, '');
                 ui.setReadOnly(true);
 
                 // Restart the connection
