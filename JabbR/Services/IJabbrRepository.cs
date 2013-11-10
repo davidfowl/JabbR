@@ -8,6 +8,7 @@ namespace JabbR.Services
     {
         IQueryable<ChatRoom> Rooms { get; }
         IQueryable<ChatUser> Users { get; }
+        IQueryable<ChatClient> Clients { get; }
 
         IQueryable<ChatUser> GetOnlineUsers(ChatRoom room);
         IQueryable<ChatUser> GetOnlineUsers();
@@ -16,6 +17,7 @@ namespace JabbR.Services
         IQueryable<ChatMessage> GetMessagesByRoom(ChatRoom room);
         IQueryable<ChatMessage> GetPreviousMessages(string messageId);
         IQueryable<ChatRoom> GetAllowedRooms(ChatUser user);
+        IQueryable<Notification> GetNotificationsByUser(ChatUser user);
         ChatMessage GetMessageById(string id);
 
         ChatUser GetUserById(string userId);
@@ -25,6 +27,7 @@ namespace JabbR.Services
         ChatUser GetUserByClientId(string clientId);
         ChatUser GetUserByLegacyIdentity(string userIdentity);
         ChatUser GetUserByIdentity(string providerName, string userIdentity);
+        Notification GetNotificationById(int notificationId);
 
         ChatClient GetClientById(string clientId, bool includeUser = false);
 
@@ -42,12 +45,14 @@ namespace JabbR.Services
         void Remove(ChatRoom room);
         void Remove(ChatUser user);
         void Remove(ChatUserIdentity identity);
-        void RemoveAllClients();
         void CommitChanges();
 
         bool IsUserInRoom(ChatUser user, ChatRoom room);
 
         // Reload entities from the store
         void Reload(object entity);
+
+        void Add(Notification notification);
+        void Remove(Notification notification);
     }
 }

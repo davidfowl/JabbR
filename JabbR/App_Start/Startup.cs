@@ -1,14 +1,23 @@
-﻿using System.Net.Http.Formatting;
+﻿using System;
+using System.IdentityModel.Selectors;
+using System.IdentityModel.Services.Configuration;
+using System.IdentityModel.Tokens;
+using System.Net.Http.Formatting;
+using System.ServiceModel.Security;
 using System.Web.Http;
+using JabbR.Hubs;
 using JabbR.Infrastructure;
 using JabbR.Middleware;
 using JabbR.Nancy;
 using JabbR.Services;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.AspNet.SignalR.SystemWeb.Infrastructure;
-using Microsoft.Owin.Mapping;
-using Microsoft.Owin.StaticFiles;
+using Microsoft.AspNet.SignalR.Transports;
+using Microsoft.Owin.Security.DataProtection;
+using Microsoft.Owin.Security.Federation;
+using Microsoft.Owin.Security.Forms;
 using Newtonsoft.Json.Serialization;
 using Ninject;
 using Owin;
@@ -19,34 +28,68 @@ namespace JabbR
     {
         public void Configuration(IAppBuilder app)
         {
-            var settings = new ApplicationSettings();
+            var configuration = new JabbrConfiguration();
 
-            if (settings.MigrateDatabase)
+            if (configuration.MigrateDatabase)
             {
                 // Perform the required migrations
                 DoMigrations();
             }
 
-            var kernel = SetupNinject(settings);
+            var kernel = SetupNinject(configuration);
 
             app.Use(typeof(DetectSchemeHandler));
 
-            if (settings.RequireHttps)
+            if (configuration.RequireHttps)
             {
                 app.Use(typeof(RequireHttpsHandler));
             }
 
-            app.UseShowExceptions();
+            app.UseErrorPage();
 
-            // This needs to run before everything
-            app.Use(typeof(AuthorizationHandler), kernel.Get<IAuthenticationTokenService>());
-
+            SetupAuth(app, kernel);
             SetupSignalR(kernel, app);
             SetupWebApi(kernel, app);
-            SetupMiddleware(settings, app);
+            SetupMiddleware(kernel, app);
             SetupNancy(kernel, app);
 
             SetupErrorHandling();
+        }
+
+        private static void SetupAuth(IAppBuilder app, IKernel kernel)
+        {
+            app.UseFormsAuthentication(new FormsAuthenticationOptions
+            {
+                LoginPath = "/account/login",
+                LogoutPath = "/account/logout",
+                CookieHttpOnly = true,
+                AuthenticationType = Constants.JabbRAuthType,
+                CookieName = "jabbr.id",
+                ExpireTimeSpan = TimeSpan.FromDays(30),
+                DataProtection = kernel.Get<IDataProtection>(),
+                Provider = kernel.Get<IFormsAuthenticationProvider>()
+            });
+
+            //var config = new FederationConfiguration(loadConfig: false);
+            //config.WsFederationConfiguration.Issuer = "";
+            //config.WsFederationConfiguration.Realm = "http://localhost:16207/";
+            //config.WsFederationConfiguration.Reply = "http://localhost:16207/wsfederation";
+            //var cbi = new ConfigurationBasedIssuerNameRegistry();
+            //cbi.AddTrustedIssuer("", "");
+            //config.IdentityConfiguration.AudienceRestriction.AllowedAudienceUris.Add(new Uri("http://localhost:16207/"));
+            //config.IdentityConfiguration.IssuerNameRegistry = cbi;
+            //config.IdentityConfiguration.CertificateValidationMode = X509CertificateValidationMode.None;
+            //config.IdentityConfiguration.CertificateValidator = X509CertificateValidator.None;
+
+            //app.UseFederationAuthentication(new FederationAuthenticationOptions
+            //{
+            //    ReturnPath = "/wsfederation",
+            //    SigninAsAuthenticationType = Constants.JabbRAuthType,
+            //    FederationConfiguration = config,
+            //    Provider = new FederationAuthenticationProvider()
+            //});
+
+            app.Use(typeof(WindowsPrincipalHandler));
         }
 
         private static void SetupNancy(IKernel kernel, IAppBuilder app)
@@ -55,13 +98,8 @@ namespace JabbR
             app.UseNancy(bootstrapper);
         }
 
-        private static void SetupMiddleware(IApplicationSettings settings, IAppBuilder app)
+        private static void SetupMiddleware(IKernel kernel, IAppBuilder app)
         {
-            if (settings.ProxyImages)
-            {
-                app.MapPath("/proxy", subApp => subApp.Use(typeof(ImageProxyHandler), settings));
-            }
-
             app.UseStaticFiles();
         }
 
@@ -69,6 +107,8 @@ namespace JabbR
         {
             var resolver = new NinjectSignalRDependencyResolver(kernel);
             var connectionManager = resolver.Resolve<IConnectionManager>();
+            var heartbeat = resolver.Resolve<ITransportHeartbeat>();
+            var hubPipeline = resolver.Resolve<IHubPipeline>();
 
             // Ah well loading system web.
             kernel.Bind<IProtectedData>()
@@ -83,9 +123,12 @@ namespace JabbR
                 EnableDetailedErrors = true
             };
 
+            hubPipeline.AddModule(kernel.Get<LoggingHubPipelineModule>());
+
             app.MapHubs(config);
 
-            StartBackgroundWork(kernel, resolver);
+            var monitor = new PresenceMonitor(kernel, connectionManager, heartbeat);
+            monitor.Start();
         }
 
         private static void SetupWebApi(IKernel kernel, IAppBuilder app)
@@ -97,13 +140,6 @@ namespace JabbR
             jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             config.Formatters.Add(jsonFormatter);
             config.DependencyResolver = new NinjectWebApiDependencyResolver(kernel);
-
-
-            config.Routes.MapHttpRoute(
-                name: "LoginV1",
-                routeTemplate: "api/v1/authenticate",
-                defaults: new { controller = "Authenticate" }
-             );
 
             config.Routes.MapHttpRoute(
                 name: "MessagesV1",

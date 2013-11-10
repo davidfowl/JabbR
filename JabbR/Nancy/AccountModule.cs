@@ -1,55 +1,43 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
+using System.Security.Claims;
 using JabbR.Infrastructure;
 using JabbR.Models;
 using JabbR.Services;
 using JabbR.ViewModels;
 using Nancy;
-using Nancy.Cookies;
 using WorldDomination.Web.Authentication;
 
 namespace JabbR.Nancy
 {
     public class AccountModule : JabbRModule
     {
-        public AccountModule(IApplicationSettings applicationSettings,
-                             IAuthenticationTokenService authenticationTokenService,
+        public AccountModule(ApplicationSettings applicationSettings,
                              IMembershipService membershipService,
                              IJabbrRepository repository,
                              IAuthenticationService authService,
-                             IChatNotificationService notificationService)
+                             IChatNotificationService notificationService,
+                             IUserAuthenticator authenticator)
             : base("/account")
         {
             Get["/"] = _ =>
             {
-                if (Context.CurrentUser == null)
+                if (!IsAuthenticated)
                 {
                     return HttpStatusCode.Forbidden;
                 }
 
-                ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
+                ChatUser user = repository.GetUserById(Principal.GetUserId());
 
                 return GetProfileView(authService, user);
             };
 
             Get["/login"] = _ =>
             {
-                if (Context.CurrentUser != null)
+                if (IsAuthenticated)
                 {
                     return Response.AsRedirect("~/");
-                }
-
-                var windowsPrincipal = Context.Items["windows.User"] as WindowsPrincipal;
-
-                if (windowsPrincipal != null && 
-                    windowsPrincipal.Identity.IsAuthenticated)
-                {
-                    // Detect windows authentication and automatically create a user or lookup a user
-                    // based on the identity
-                    ChatUser user = repository.GetUserById(windowsPrincipal.Identity.Name) ?? 
-                                    membershipService.AddUser(windowsPrincipal);
-                    return this.CompleteLogin(authenticationTokenService, user);
                 }
 
                 return View["login", GetLoginViewModel(applicationSettings, repository, authService)];
@@ -57,7 +45,7 @@ namespace JabbR.Nancy
 
             Post["/login"] = param =>
             {
-                if (Context.CurrentUser != null)
+                if (IsAuthenticated)
                 {
                     return Response.AsRedirect("~/");
                 }
@@ -79,54 +67,73 @@ namespace JabbR.Nancy
                 {
                     if (ModelValidationResult.IsValid)
                     {
-                        ChatUser user = membershipService.AuthenticateUser(username, password);
-                        return this.CompleteLogin(authenticationTokenService, user);
-                    }
-                    else
-                    {
-                        return View["login", GetLoginViewModel(applicationSettings, repository, authService)];
+                        IList<Claim> claims;
+                        if (authenticator.TryAuthenticateUser(username, password, out claims))
+                        {
+                            return this.SignIn(claims);
+                        }
                     }
                 }
                 catch
                 {
-                    this.AddValidationError("_FORM", "Login failed. Check your username/password.");
-                    return View["login", GetLoginViewModel(applicationSettings, repository, authService)];
+                    // Swallow the exception    
                 }
+
+                this.AddValidationError("_FORM", "Login failed. Check your username/password.");
+
+                return View["login", GetLoginViewModel(applicationSettings, repository, authService)];
             };
 
             Post["/logout"] = _ =>
             {
-                if (Context.CurrentUser == null)
+                if (!IsAuthenticated)
                 {
                     return HttpStatusCode.Forbidden;
                 }
 
                 var response = Response.AsJson(new { success = true });
 
-                response.AddCookie(new NancyCookie(Constants.UserTokenCookie, null)
-                {
-                    Expires = DateTime.Now.AddDays(-1)
-                });
+                this.SignOut();
 
                 return response;
             };
 
             Get["/register"] = _ =>
             {
-                if (Context.CurrentUser != null)
+                if (IsAuthenticated)
                 {
                     return Response.AsRedirect("~/");
                 }
+
+                bool requirePassword = !Principal.Identity.IsAuthenticated;
+
+                if (requirePassword && 
+                    !applicationSettings.AllowUserRegistration)
+                {
+                    return HttpStatusCode.NotFound;
+                }
+
+                ViewBag.requirePassword = requirePassword;
 
                 return View["register"];
             };
 
             Post["/create"] = _ =>
             {
-                if (Context.CurrentUser != null)
+                bool requirePassword = !Principal.Identity.IsAuthenticated;
+
+                if (requirePassword &&
+                    !applicationSettings.AllowUserRegistration)
+                {
+                    return HttpStatusCode.NotFound;
+                }
+
+                if (IsAuthenticated)
                 {
                     return Response.AsRedirect("~/");
                 }
+
+                ViewBag.requirePassword = requirePassword;
 
                 string username = Request.Form.username;
                 string email = Request.Form.email;
@@ -143,14 +150,38 @@ namespace JabbR.Nancy
                     this.AddValidationError("email", "Email is required");
                 }
 
-                ValidatePassword(password, confirmPassword);
-
                 try
                 {
+                    if (requirePassword)
+                    {
+                        ValidatePassword(password, confirmPassword);
+                    }
+
                     if (ModelValidationResult.IsValid)
                     {
-                        ChatUser user = membershipService.AddUser(username, email, password);
-                        return this.CompleteLogin(authenticationTokenService, user);
+                        if (requirePassword)
+                        {
+                            ChatUser user = membershipService.AddUser(username, email, password);
+
+                            return this.SignIn(user);
+                        }
+                        else
+                        {
+                            // Add the required claims to this identity
+                            var identity = Principal.Identity as ClaimsIdentity;
+
+                            if (!Principal.HasClaim(ClaimTypes.Name))
+                            {
+                                identity.AddClaim(new Claim(ClaimTypes.Name, username));
+                            }
+
+                            if (!Principal.HasClaim(ClaimTypes.Email))
+                            {
+                                identity.AddClaim(new Claim(ClaimTypes.Email, email));
+                            }
+
+                            return this.SignIn(Principal.Claims);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -163,17 +194,17 @@ namespace JabbR.Nancy
 
             Post["/unlink"] = param =>
             {
-                if (Context.CurrentUser == null)
+                if (!IsAuthenticated)
                 {
                     return HttpStatusCode.Forbidden;
                 }
 
                 string provider = Request.Form.provider;
-                ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
+                ChatUser user = repository.GetUserById(Principal.GetUserId());
 
                 if (user.Identities.Count == 1 && !user.HasUserNameAndPasswordCredentials())
                 {
-                    this.AddAlertMessage("error", "You cannot unlink this account because you would lose your ability to login.");
+                    Request.AddAlertMessage("error", "You cannot unlink this account because you would lose your ability to login.");
                     return Response.AsRedirect("~/account/#identityProviders");
                 }
 
@@ -183,7 +214,7 @@ namespace JabbR.Nancy
                 {
                     repository.Remove(identity);
 
-                    this.AddAlertMessage("success", String.Format("Successfully unlinked {0} account.", provider));
+                    Request.AddAlertMessage("success", String.Format("Successfully unlinked {0} account.", provider));
                     return Response.AsRedirect("~/account/#identityProviders");
                 }
 
@@ -192,7 +223,7 @@ namespace JabbR.Nancy
 
             Post["/newpassword"] = _ =>
             {
-                if (Context.CurrentUser == null)
+                if (!IsAuthenticated)
                 {
                     return HttpStatusCode.Forbidden;
                 }
@@ -202,7 +233,7 @@ namespace JabbR.Nancy
 
                 ValidatePassword(password, confirmPassword);
 
-                ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
+                ChatUser user = repository.GetUserById(Principal.GetUserId());
 
                 try
                 {
@@ -219,7 +250,7 @@ namespace JabbR.Nancy
 
                 if (ModelValidationResult.IsValid)
                 {
-                    this.AddAlertMessage("success", "Successfully added a password.");
+                    Request.AddAlertMessage("success", "Successfully added a password.");
                     return Response.AsRedirect("~/account/#changePassword");
                 }
 
@@ -228,7 +259,12 @@ namespace JabbR.Nancy
 
             Post["/changepassword"] = _ =>
             {
-                if (Context.CurrentUser == null)
+                if (!applicationSettings.AllowUserRegistration)
+                {
+                    return HttpStatusCode.NotFound;
+                }
+
+                if (!IsAuthenticated)
                 {
                     return HttpStatusCode.Forbidden;
                 }
@@ -244,7 +280,7 @@ namespace JabbR.Nancy
 
                 ValidatePassword(password, confirmPassword);
 
-                ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
+                ChatUser user = repository.GetUserById(Principal.GetUserId());
 
                 try
                 {
@@ -261,7 +297,7 @@ namespace JabbR.Nancy
 
                 if (ModelValidationResult.IsValid)
                 {
-                    this.AddAlertMessage("success", "Successfully changed your password.");
+                    Request.AddAlertMessage("success", "Successfully changed your password.");
                     return Response.AsRedirect("~/account/#changePassword");
                 }
 
@@ -270,7 +306,7 @@ namespace JabbR.Nancy
 
             Post["/changeusername"] = _ =>
             {
-                if (Context.CurrentUser == null)
+                if (!IsAuthenticated)
                 {
                     return HttpStatusCode.Forbidden;
                 }
@@ -280,7 +316,7 @@ namespace JabbR.Nancy
 
                 ValidateUsername(username, confirmUsername);
 
-                ChatUser user = repository.GetUserById(Context.CurrentUser.UserName);
+                ChatUser user = repository.GetUserById(Principal.GetUserId());
                 string oldUsername = user.Name;
 
                 try
@@ -300,7 +336,7 @@ namespace JabbR.Nancy
                 {
                     notificationService.OnUserNameChanged(user, oldUsername, username);
 
-                    this.AddAlertMessage("success", "Successfully changed your username.");
+                    Request.AddAlertMessage("success", "Successfully changed your username.");
                     return Response.AsRedirect("~/account/#changeUsername");
                 }
 
@@ -339,18 +375,18 @@ namespace JabbR.Nancy
             return View["index", new ProfilePageViewModel(user, authService.GetProviders())];
         }
 
-        private LoginViewModel GetLoginViewModel(IApplicationSettings applicationSettings,
+        private LoginViewModel GetLoginViewModel(ApplicationSettings applicationSettings,
                                                  IJabbrRepository repository,
                                                  IAuthenticationService authService)
         {
             ChatUser user = null;
 
-            if (Context.CurrentUser != null)
+            if (IsAuthenticated)
             {
-                user = repository.GetUserById(Context.CurrentUser.UserName);
+                user = repository.GetUserById(Principal.GetUserId());
             }
 
-            var viewModel = new LoginViewModel(authService.GetProviders(), user != null ? user.Identities : null);
+            var viewModel = new LoginViewModel(applicationSettings, authService.GetProviders(), user != null ? user.Identities : null);
             return viewModel;
         }
     }

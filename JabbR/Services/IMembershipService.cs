@@ -1,21 +1,22 @@
-﻿using System.Security.Principal;
+﻿using System.Security.Claims;
+using System.Security.Principal;
 using JabbR.Models;
 
 namespace JabbR.Services
 {
     public interface IMembershipService
     {
-        // Add a user without a password (identity)
-        ChatUser AddUser(string userName, string provider, string identity, string email);
-
-        // Windows auth
-        ChatUser AddUser(WindowsPrincipal windowsPrincipal);
-
-        // User name password functions
+        // Account creation
+        ChatUser AddUser(ClaimsPrincipal claimsPrincipal);
+        void LinkIdentity(ChatUser user, ClaimsPrincipal principal);
         ChatUser AddUser(string userName, string email, string password);
-        ChatUser AuthenticateUser(string userName, string password);
+
         void ChangeUserName(ChatUser user, string newUserName);
+
+        // Password management
         void ChangeUserPassword(ChatUser user, string oldPassword, string newPassword);
         void SetUserPassword(ChatUser user, string password);
+
+        bool TryAuthenticateUser(string userName, string password, out ChatUser user);
     }
 }

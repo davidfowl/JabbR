@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using JabbR.Infrastructure;
 
 namespace JabbR.Models
 {
@@ -14,11 +16,23 @@ namespace JabbR.Models
         public virtual ChatUser User { get; set; }
         public DateTimeOffset When { get; set; }
         public bool HtmlEncoded { get; set; }
+        public int MessageType { get; set; }
 
         // After content providers run this is updated with the content
         public string HtmlContent { get; set; }
 
         public int? RoomKey { get; set; }
         public int? UserKey { get; set; }
+
+        // Notificaitons
+        public string ImageUrl { get; set; }
+        public string Source { get; set; }
+
+        public virtual ICollection<Notification> Notifications { get; set; }
+
+        public ChatMessage()
+        {
+            Notifications = new SafeCollection<Notification>();
+        }
     }
 }

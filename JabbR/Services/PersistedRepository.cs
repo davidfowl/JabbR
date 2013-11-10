@@ -34,6 +34,11 @@ namespace JabbR.Services
             get { return _db.Users; }
         }
 
+        public IQueryable<ChatClient> Clients
+        {
+            get { return _db.Clients; }
+        }
+
         public void Add(ChatRoom room)
         {
             _db.Rooms.Add(room);
@@ -63,6 +68,11 @@ namespace JabbR.Services
             _db.Messages.Add(message);
         }
 
+        public void Add(Notification notification)
+        {
+            _db.Notifications.Add(notification);
+        }
+
         public void Remove(ChatRoom room)
         {
             _db.Rooms.Remove(room);
@@ -78,6 +88,12 @@ namespace JabbR.Services
         public void Remove(ChatUserIdentity identity)
         {
             _db.Identities.Remove(identity);
+            _db.SaveChanges();
+        }
+
+        public void Remove(Notification notification)
+        {
+            _db.Notifications.Remove(notification);
             _db.SaveChanges();
         }
 
@@ -118,6 +134,14 @@ namespace JabbR.Services
                 .Where(r =>
                        (!r.Private) ||
                        (r.Private && r.AllowedUsers.Any(u => u.Key == user.Key)));
+        }
+
+        public IQueryable<Notification> GetNotificationsByUser(ChatUser user)
+        {
+            return _db.Notifications.Include(n => n.Room)
+                                    .Include(n => n.Message)
+                                    .Include(n => n.Message.User)
+                                    .Where(n => n.UserKey == user.Key);
         }
 
         private IQueryable<ChatMessage> GetMessagesByRoom(string roomName)
@@ -228,6 +252,11 @@ namespace JabbR.Services
             return null;
         }
 
+        public Notification GetNotificationById(int notificationId)
+        {
+            return _db.Notifications.SingleOrDefault(n => n.Key == notificationId);
+        }
+
         public ChatUser GetUserByLegacyIdentity(string userIdentity)
         {
             return _db.Users.FirstOrDefault(u => u.Identity == userIdentity);
@@ -241,14 +270,6 @@ namespace JabbR.Services
             }
 
             return getClientById(_db, clientId);
-        }
-
-        public void RemoveAllClients()
-        {
-            foreach (var c in _db.Clients)
-            {
-                _db.Clients.Remove(c);
-            }
         }
 
         public bool IsUserInRoom(ChatUser user, ChatRoom room)
@@ -265,6 +286,6 @@ namespace JabbR.Services
         public void Reload(object entity)
         {
             _db.Entry(entity).Reload();
-        }
+        }        
     }
 }

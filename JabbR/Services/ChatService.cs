@@ -12,6 +12,7 @@ namespace JabbR.Services
     {
         private readonly IJabbrRepository _repository;
         private readonly ICache _cache;
+        private readonly ApplicationSettings _settings;
 
         private const int NoteMaximumLength = 140;
         private const int TopicMaximumLength = 80;
@@ -275,13 +276,26 @@ namespace JabbR.Services
                                                   };
 
         public ChatService(ICache cache, IJabbrRepository repository)
+            : this(cache, repository, ApplicationSettings.GetDefaultSettings())
+        {
+        }
+
+        public ChatService(ICache cache,
+                           IJabbrRepository repository,
+                           ApplicationSettings settings)
         {
             _cache = cache;
             _repository = repository;
+            _settings = settings;
         }
 
         public ChatRoom AddRoom(ChatUser user, string name)
         {
+            if (!_settings.AllowRoomCreation && !user.IsAdmin)
+            {
+                throw new InvalidOperationException("Room creation is disabled.");
+            }
+
             if (name.Equals("Lobby", StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException("Lobby is not a valid chat room.");
@@ -352,6 +366,7 @@ namespace JabbR.Services
             ChatClient client = AddClient(user, clientId, userAgent);
             client.UserAgent = userAgent;
             client.LastActivity = DateTimeOffset.UtcNow;
+            client.LastClientActivity = DateTimeOffset.UtcNow;
 
             // Remove any Afk notes.
             if (user.IsAfk)
@@ -368,6 +383,8 @@ namespace JabbR.Services
 
             // Remove the user from this room
             _repository.RemoveUserRoom(user, room);
+
+            _repository.CommitChanges();
         }
 
         public void AddAttachment(ChatMessage message, string fileName, string contentType, long size, UploadResult result)
@@ -421,6 +438,20 @@ namespace JabbR.Services
             _repository.CommitChanges();
 
             return message;
+        }
+
+        public void AddNotification(ChatUser mentionedUser, ChatMessage message, ChatRoom room, bool markAsRead)
+        {
+            // We need to use the key here since messages might be a new entity
+            var notification = new Notification
+            {
+                User = mentionedUser,
+                Message = message,
+                Read = markAsRead,
+                Room = room
+            };
+
+            _repository.Add(notification);
         }
 
         public void AppendMessage(string id, string content)
@@ -519,7 +550,8 @@ namespace JabbR.Services
                 Id = clientId,
                 User = user,
                 UserAgent = userAgent,
-                LastActivity = user.LastActivity
+                LastActivity = DateTimeOffset.UtcNow,
+                LastClientActivity = user.LastActivity
             };
 
             _repository.Add(client);
