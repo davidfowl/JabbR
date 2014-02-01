@@ -295,9 +295,7 @@ namespace JabbR.Services
             return _db.Entry(user)
                       .Collection(r => r.Rooms)
                       .Query()
-                      .Where(r => r.Key == room.Key)
-                      .Select(r => r.Name)
-                      .FirstOrDefault() != null;
+                      .Any(r => r.Key == room.Key);
         }
 
         public void Reload(object entity)
