@@ -16,6 +16,7 @@
         $roomActions = null,
         $toast = null,
         $disconnectDialog = null,
+        $timeoffsetDialog = null,
         $downloadIcon = null,
         $downloadDialog = null,
         $downloadDialogButton = null,
@@ -772,6 +773,7 @@
             $logout = $('#preferences .logout');
             $help = $('#preferences .help');
             $disconnectDialog = $('#disconnect-dialog');
+            $timeoffsetDialog = $('#timeoffset-dialog');
             $helpPopup = $('#jabbr-help');
             $helpBody = $('#jabbr-help .help-body');
             $shortCutHelp = $('#jabbr-help #shortcut');
@@ -2163,6 +2165,15 @@
         },
         showDisconnectUI: function () {
             $disconnectDialog.modal();
+        },
+        showTimeOffsetUI: function (difference) {
+            var modalBody = $timeoffsetDialog.find('.modal-body');
+
+            // Indicate seconds
+            var seconds = (difference / 1000).toFixed(1);
+            modalBody.html(modalBody.html().replace('{dif}', seconds));
+
+            $timeoffsetDialog.modal();
         },
         showHelp: function () {
             $helpPopup.modal();
