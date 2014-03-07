@@ -1760,7 +1760,7 @@
                 $target = $messages.children().first(),
                 $previousMessage = null,
                 previousUser = null,
-                previousTimestamp = new Date().addDays(1); // Tomorrow so we always see a date line
+                previousTimestamp = new Date().toServerTime().addDays(1); // Tomorrow so we always see a date line
 
             if (messages.length === 0) {
                 // Mark this list as full
@@ -1787,7 +1787,7 @@
 
                 if ($previousMessage) {
                     previousUser = $previousMessage.data('name');
-                    previousTimestamp = new Date($previousMessage.data('timestamp') || new Date());
+                    previousTimestamp = new Date($previousMessage.data('timestamp') || new Date().toServerTime());
                 }
 
                 if (this.date.toDate().diffDays(previousTimestamp.toDate())) {
@@ -1827,7 +1827,7 @@
             var room = getRoomElements(roomName),
                 $previousMessage = room.messages.children().last(),
                 previousUser = null,
-                previousTimestamp = new Date().addDays(1), // Tomorrow so we always see a date line
+                previousTimestamp = new Date().toServerTime().addDays(1), // Tomorrow so we always see a date line
                 showUserName = true,
                 isMention = message.highlight,
                 isNotification = message.messageType === 1;
@@ -1839,7 +1839,7 @@
 
             if ($previousMessage.length > 0) {
                 previousUser = $previousMessage.data('name');
-                previousTimestamp = new Date($previousMessage.data('timestamp') || new Date());
+                previousTimestamp = new Date($previousMessage.data('timestamp') || new Date().toServerTime());
             }
 
             // Force a user name to show if a header will be displayed
@@ -1945,7 +1945,7 @@
                 options = { content: options, encoded: false };
             }
 
-            var now = new Date(),
+            var now = new Date().toServerTime(),
             message = {
                 message: options.encoded ? options.content : ui.processContent(options.content),
                 type: type,
