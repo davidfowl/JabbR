@@ -847,6 +847,23 @@ namespace JabbR.Services
             _repository.CommitChanges();
         }
 
+        public void UnBanUser(ChatUser admin, ChatUser targetUser)
+        {
+            // Ensure the user is admin
+            EnsureAdmin(admin);
+
+            if (targetUser.IsAdmin)
+            {
+                // If the target user is an admin, then throw
+                throw new HubException(LanguageResources.UnBan_CannotUnBanAdmin);
+            }
+
+            //UnBan the user
+            targetUser.IsBanned = false;
+
+            _repository.CommitChanges();
+        }
+
         internal static void ValidateNote(string note, string noteTypeName = "note", int? maxLength = null)
         {
             var lengthToValidateFor = (maxLength ?? NoteMaximumLength);
