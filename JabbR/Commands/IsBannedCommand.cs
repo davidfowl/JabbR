@@ -5,7 +5,7 @@ using Microsoft.AspNet.SignalR;
 
 namespace JabbR.Commands
 {
-    [Command("isbanned", "IsBanned_CommandInfo", "[nickname]", "global")]
+    [Command("isbanned", "IsBanned_CommandInfo", "[nickname]", "admin")]
     public class IsBannedCommand : AdminCommand
     {
         public override void ExecuteAdminOperation(CommandContext context, CallerContext callerContext, ChatUser callingUser, string[] args)
