@@ -599,6 +599,11 @@
         ui.showUpdateUI();
     };
 
+    chat.client.isBanned = function (banInfo) {
+        var msg = 'User ' + banInfo.Name + ' is ' + (banInfo.IsBanned == false ? 'not ' : '') + 'banned ';
+        ui.addNotificationToActiveRoom(msg);
+    };
+
     chat.client.showUserInfo = function (userInfo) {
         var lastActivityDate = userInfo.LastActivity.fromJsonDate(),
             header,

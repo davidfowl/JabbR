@@ -1128,6 +1128,21 @@ namespace JabbR
             }
         }
 
+        void INotificationService.IsBanned()
+        {
+            var users = _repository.Users.Where<ChatUser>(s => s.IsBanned == true).Select(s => s.Name).OrderBy(s => s);
+            Clients.Caller.listUsers(users);
+        }
+
+        void INotificationService.IsBanned(ChatUser user)
+        {
+            Clients.Caller.IsBanned(new
+            {
+                Name = user.Name,
+                IsBanned = user.IsBanned
+            });
+        }
+
         void INotificationService.ForceUpdate()
         {
             Clients.All.forceUpdate();
