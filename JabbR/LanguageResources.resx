@@ -1182,4 +1182,7 @@ Use ? or type /? to display the FAQ and list of commands.</value>
   <data name="UnBan_UserRequired" xml:space="preserve">
     <value>Who do you want to unban?</value>
   </data>
+  <data name="Ban_CannotBanSelf" xml:space="preserve">
+    <value>Why would you want to ban yourself?</value>
+  </data>
 </root>

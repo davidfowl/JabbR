@@ -837,6 +837,11 @@ namespace JabbR.Services
         {
             EnsureAdmin(admin);
 
+            if (targetUser == admin)
+            {
+                throw new HubException(LanguageResources.Ban_CannotBanSelf);
+            }
+
             if (targetUser.IsAdmin)
             {
                 throw new HubException(LanguageResources.Ban_CannotBanAdmin);
