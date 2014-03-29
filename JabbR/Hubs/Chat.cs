@@ -1225,9 +1225,9 @@ namespace JabbR
             });
         }
 
-        void INotificationService.UnBanUser(ChatUser targetUser)
+        void INotificationService.UnbanUser(ChatUser targetUser)
         {
-            Clients.Caller.unBanUser(new
+            Clients.Caller.unbanUser(new
             {
                 Name = targetUser.Name
             });

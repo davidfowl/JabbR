@@ -852,7 +852,7 @@ namespace JabbR.Services
             _repository.CommitChanges();
         }
 
-        public void UnBanUser(ChatUser admin, ChatUser targetUser)
+        public void UnbanUser(ChatUser admin, ChatUser targetUser)
         {
             // Ensure the user is admin
             EnsureAdmin(admin);
@@ -860,10 +860,10 @@ namespace JabbR.Services
             if (targetUser.IsAdmin)
             {
                 // If the target user is an admin, then throw
-                throw new HubException(LanguageResources.UnBan_CannotUnBanAdmin);
+                throw new HubException(LanguageResources.Unban_CannotUnbanAdmin);
             }
 
-            //UnBan the user
+            //Unban the user
             targetUser.IsBanned = false;
 
             _repository.CommitChanges();

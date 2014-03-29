@@ -3078,27 +3078,27 @@ namespace JabbR {
         /// <summary>
         ///   Looks up a localized string similar to You cannot unban another admin..
         /// </summary>
-        public static string UnBan_CannotUnBanAdmin {
+        public static string Unban_CannotUnbanAdmin {
             get {
-                return ResourceManager.GetString("UnBan_CannotUnBanAdmin", resourceCulture);
+                return ResourceManager.GetString("Unban_CannotUnbanAdmin", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UnBan a user from JabbR!.
+        ///   Looks up a localized string similar to Unban a user from JabbR!.
         /// </summary>
-        public static string UnBan_CommandInfo {
+        public static string Unban_CommandInfo {
             get {
-                return ResourceManager.GetString("UnBan_CommandInfo", resourceCulture);
+                return ResourceManager.GetString("Unban_CommandInfo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Who do you want to unban?.
         /// </summary>
-        public static string UnBan_UserRequired {
+        public static string Unban_UserRequired {
             get {
-                return ResourceManager.GetString("UnBan_UserRequired", resourceCulture);
+                return ResourceManager.GetString("Unban_UserRequired", resourceCulture);
             }
         }
         

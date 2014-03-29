@@ -604,7 +604,7 @@
         ui.addNotificationToActiveRoom(msg);
     };
 
-    chat.client.unBanUser = function (userInfo) {
+    chat.client.unbanUser = function (userInfo) {
         var msg = 'User ' + userInfo.Name + ' was unbanned';
         ui.addNotificationToActiveRoom(msg);
     };
