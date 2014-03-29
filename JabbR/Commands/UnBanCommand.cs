@@ -20,6 +20,7 @@ namespace JabbR.Commands
             ChatUser targetUser = context.Repository.VerifyUser(targetUserName);
 
             context.Service.UnBanUser(callingUser, targetUser);
+            context.NotificationService.UnBanUser(targetUser);
             context.Repository.CommitChanges();
         }
     }

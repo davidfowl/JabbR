@@ -599,8 +599,18 @@
         ui.showUpdateUI();
     };
 
-    chat.client.isBanned = function (banInfo) {
-        var msg = 'User ' + banInfo.Name + ' is ' + (banInfo.IsBanned == false ? 'not ' : '') + 'banned ';
+    chat.client.banUser = function (userInfo) {
+        var msg = 'User ' + userInfo.Name + ' was banned';
+        ui.addNotificationToActiveRoom(msg);
+    };
+
+    chat.client.unBanUser = function (userInfo) {
+        var msg = 'User ' + userInfo.Name + ' was unbanned';
+        ui.addNotificationToActiveRoom(msg);
+    };
+
+    chat.client.isBanned = function (userInfo) {
+        var msg = 'User ' + userInfo.Name + ' is ' + (userInfo.IsBanned == false ? 'not ' : '') + 'banned ';
         ui.addNotificationToActiveRoom(msg);
     };
 

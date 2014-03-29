@@ -1214,6 +1214,19 @@ namespace JabbR
             }
 
             Clients.User(targetUser.Id).logOut(rooms);
+
+            Clients.Caller.banUser(new
+            {
+                Name = targetUser.Name
+            });
+        }
+
+        void INotificationService.UnBanUser(ChatUser targetUser)
+        {
+            Clients.Caller.unBanUser(new
+            {
+                Name = targetUser.Name
+            });
         }
 
         protected override void Dispose(bool disposing)
