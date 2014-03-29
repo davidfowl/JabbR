@@ -57,6 +57,8 @@ namespace JabbR.Services
 
         public HashSet<string> DisabledContentProviders { get; set; }
 
+        public HashSet<string> DisabledContentProviders { get; set; }
+
         public static bool TryValidateSettings(ApplicationSettings settings, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
