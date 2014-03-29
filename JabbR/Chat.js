@@ -610,7 +610,7 @@
     };
 
     chat.client.isBanned = function (userInfo) {
-        var msg = 'User ' + userInfo.Name + ' is ' + (userInfo.IsBanned == false ? 'not ' : '') + 'banned ';
+        var msg = 'User ' + userInfo.Name + ' is ' + (userInfo.IsBanned ? '' : 'not ') + 'banned ';
         ui.addNotificationToActiveRoom(msg);
     };
 
