@@ -953,6 +953,7 @@
     <Compile Include="ContentProviders\ConfiguredContentProvider.cs" />
     <Compile Include="Commands\IsBannedCommand.cs" />
     <Compile Include="Commands\UnbanCommand.cs" />
+    <Compile Include="ContentProviders\ConfiguredContentProvider.cs" />
     <Compile Include="Infrastructure\BinaryBlob.cs" />
     <Compile Include="Commands\MemeCommand.cs" />
     <Compile Include="Infrastructure\AuthenticationService.cs" />
