@@ -846,7 +846,7 @@ namespace JabbR
             Clients.Caller.hash = user.Hash;
 
             // Update the calling client
-            Clients.User(user.Id).gravatarChanged();
+            Clients.User(user.Id).gravatarChanged(user.Hash);
 
             // Create the view model
             var userViewModel = new UserViewModel(user);
@@ -993,14 +993,14 @@ namespace JabbR
         void INotificationService.NudgeUser(ChatUser user, ChatUser targetUser)
         {
             // Send a nudge message to the sender and the sendee
-            Clients.User(targetUser.Id).nudge(user.Name, targetUser.Name);
+            Clients.User(targetUser.Id).nudge(user.Name, targetUser.Name, null);
 
-            Clients.User(user.Id).nudge(user.Name, targetUser.Name);
+            Clients.User(user.Id).nudge(user.Name, targetUser.Name, null);
         }
 
         void INotificationService.NudgeRoom(ChatRoom room, ChatUser user)
         {
-            Clients.Group(room.Name).nudge(user.Name);
+            Clients.Group(room.Name).nudge(user.Name, null, room.Name);
         }
 
         void INotificationService.LeaveRoom(ChatUser user, ChatRoom room)

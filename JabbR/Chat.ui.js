@@ -64,7 +64,6 @@
         $fileConnectionId = null,
         connectionInfoStatus = null,
         connectionInfoTransport = null,
-        $topicBar = null,
         $loadingHistoryIndicator = null,
         trimRoomHistoryFrequency = 1000 * 60 * 2, // 2 minutes in ms
         $loadMoreRooms = null,
@@ -397,9 +396,9 @@
                               .appendTo($chatArea)
                               .hide();
 
-        $roomTopic = $('<div/>').attr('id', 'roomTopic-' + roomId)
+        $('<div/>').attr('id', 'roomTopic-' + roomId)
                               .addClass('roomTopic')
-                              .appendTo($topicBar)
+                              .appendTo($chatArea)
                               .hide();
 
         userContainer = $('<div/>').attr('id', 'userlist-' + roomId)
@@ -596,19 +595,44 @@
             return;
         }
 
-        var msg = $.trim($newMessage.val());
+        var msg = $.trim($newMessage.val()),
+            room = getCurrentRoomElements();
 
         focus = true;
 
         if (msg) {
-            $ui.trigger(ui.events.sendMessage, [msg]);
+            if (ui.isCommand(msg)) {
+                if (!ui.confirmCommand(msg)) {
+                    $ui.trigger(ui.events.sendMessage, [msg, null, true]);
+                }
+            } else {
+                // if you're in the lobby, you can't send mesages (only commands)
+                if (room.isLobby()) {
+                    ui.addErrorToActiveRoom(utility.getLanguageResource('Chat_CannotSendLobby'));
+                    return false;
+                }
+
+                // Added the message to the ui first
+                var viewModel = {
+                    name: ui.getUserName(),
+                    hash: ui.getUserHash(),
+                    message: ui.processContent(msg),
+                    id: utility.newId(),
+                    date: new Date(),
+                    highlight: '',
+                    isMine: true
+                };
+
+                ui.addChatMessage(viewModel, room.getName());
+
+                $ui.trigger(ui.events.sendMessage, [msg, viewModel.id, false]);
+            }
         }
 
         $newMessage.val('');
         $newMessage.focus();
 
         // always scroll to bottom after new message sent
-        var room = getCurrentRoomElements();
         room.scrollToBottom();
         room.removeSeparator();
     }
@@ -795,7 +819,8 @@
                 commandhelp: $('#command-help-template'),
                 multiline: $('#multiline-content-template'),
                 lobbyroom: $('#new-lobby-room-template'),
-                otherlobbyroom: $('#new-other-lobby-room-template')
+                otherlobbyroom: $('#new-other-lobby-room-template'),
+                commandConfirm: $('#command-confirm-template')
             };
             $reloadMessageNotification = $('#reloadMessageNotification');
             $fileUploadButton = $('.upload-button');
@@ -810,7 +835,6 @@
             $connectionInfoContent = $('#connection-info-content');
             connectionInfoStatus = '#connection-status';
             connectionInfoTransport = '#connection-transport';
-            $topicBar = $('#topic-bar');
             $loadingHistoryIndicator = $('#loadingRoomHistory');
 
             $loadMoreRooms = $('#load-more-rooms-item');
@@ -2066,11 +2090,20 @@
         getCommands: function () {
             return ui.commands || [];
         },
+        getCommand: function (name) {
+            return !ui.commandsLookup ? null : ui.commandsLookup[name];
+        },
         setCommands: function (commands) {
             ui.commands = commands.sort(function(a, b) {
                 return a.Name.toString().toUpperCase().localeCompare(b.Name.toString().toUpperCase());
             });
-            
+
+            ui.commandsLookup = {};
+            for (var i = 0; i < commands.length; ++i) {
+                var cmd = commands[i];
+                ui.commandsLookup[cmd.Name] = cmd;
+            }
+
             $globalCmdHelp.empty();
             $roomCmdHelp.empty();
             $userCmdHelp.empty();
@@ -2091,6 +2124,39 @@
                         break;
                 }
             });
+        },
+        isCommand: function (msg) {
+            if (msg[0] === '/') {
+                var parts = msg.substr(1).split(' ');
+                if (parts.length > 0) {
+                    var cmd = ui.getCommand(parts[0].toLowerCase());
+                    if (cmd) {
+                        return cmd.Name;
+                    }
+                }
+            }
+            return null;
+        },
+        confirmCommand: function (msg) {
+            var commandName = ui.isCommand(msg),
+                command = ui.getCommand(commandName);
+
+            if (command && command.ConfirmMessage !== null) {
+                var $dialog = templates.commandConfirm.tmpl(command).appendTo('#dialog-container').modal()
+                        .on('hidden.bs.modal', function () {
+                            $dialog.remove();
+                        })
+                        .on('click', 'a.btn', function () {
+                            if ($(this).is('.btn-danger')) {
+                                $ui.trigger(ui.events.sendMessage, [msg, null, true]);
+                            }
+
+                            $dialog.modal('hide');
+                        });
+                return true;
+            } else {
+                return false;
+            }
         },
         setInitialized: function (roomName) {
             var room = roomName ? getRoomElements(roomName) : getCurrentRoomElements();
@@ -2148,6 +2214,16 @@
                 toast.toastMessage(message, roomName);
             }
         },
+        nudge: function (message) {
+            if (anyRoomPreference('hasSound', true) === true) {
+                ui.notify(true);
+            }
+            
+            if (focus === false && anyRoomPreference('canToast', true) === true) {
+                // Only toast if there's no focus
+                ui.toast(message, true);
+            }
+        },
         setUserName: function (name) {
             ui.name = name;
         },
@@ -2162,6 +2238,12 @@
         },
         getUserName: function () {
             return ui.name;
+        },
+        getUserHash: function () {
+            return ui.userHash;
+        },
+        setUserHash: function (hash) {
+            ui.userHash = hash;
         },
         showDisconnectUI: function () {
             $disconnectDialog.modal();
@@ -2364,23 +2446,29 @@
                 $tabsDropdownButton = $('#tabs-dropdown-rooms');
             
             // move all (non-dragsort) tabs to the first list
-            $tabs.last().find('li:not(.placeholder)').each(function () { $(this).detach().appendTo($tabsList); });
-
-            // find overflow and move it all to the dropdown list ul
+            $tabs.last().find('li:not(.placeholder)').each(function () { $(this).css('visibility', 'hidden').detach().appendTo($tabsList); });
+            
             $roomTabs = $tabsList.find('li:not(.placeholder)');
-            $roomTabs.each(function (idx) {
-                if (sliceIndex !== -1) {
-                    return;
-                }
+            
+            // if width of first tab is greater than the tab area, move them all to the list
+            if ($roomTabs.length > 0 && $roomTabs.width() > $tabsList.width()) {
+                sliceIndex = 0;
+            } else {
+                // find overflow and move it all to the dropdown list ul
+                $roomTabs.each(function(idx) {
+                    if (sliceIndex !== -1) {
+                        return;
+                    }
 
-                var thisOffsetLeft = $(this).offset().left;
-                if (thisOffsetLeft <= lastOffsetLeft) {
-                    sliceIndex = idx;
-                    return;
-                }
+                    var thisOffsetLeft = $(this).offset().left;
+                    if (thisOffsetLeft <= lastOffsetLeft) {
+                        sliceIndex = idx;
+                        return;
+                    }
 
-                lastOffsetLeft = thisOffsetLeft;
-            });
+                    lastOffsetLeft = thisOffsetLeft;
+                });
+            }
 
             // move all elements from here to the dropdown list
             if (sliceIndex !== -1) {
@@ -2392,6 +2480,8 @@
             } else {
                 $tabsDropdownButton.fadeOut('slow').parent().removeClass('open');
             }
+
+            $roomTabs.each(function () { $(this).css('visibility', 'visible'); });
 
             return;
         },

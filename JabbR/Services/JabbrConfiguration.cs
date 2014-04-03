@@ -72,5 +72,27 @@ namespace JabbR.Services
                 return ConfigurationManager.AppSettings["jabbr:serviceBusTopicPrefix"];
             }
         }
+
+        public bool ScaleOutSqlServer
+        {
+            get
+            {
+                string scaleOutSqlServerValue = ConfigurationManager.AppSettings["jabbr:scaleOutSqlServer"];
+                bool scaleOutSqlServer;
+                if (Boolean.TryParse(scaleOutSqlServerValue, out scaleOutSqlServer))
+                {
+                    return scaleOutSqlServer;
+                }
+                return false;
+            }
+        }
+
+        public ConnectionStringSettings SqlConnectionString
+        {
+            get
+            {
+                return ConfigurationManager.ConnectionStrings["Jabbr"];
+            }
+        }
     }
 }

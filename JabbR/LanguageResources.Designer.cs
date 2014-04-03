@@ -442,6 +442,114 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Content Providers.
+        /// </summary>
+        public static string Administration_ContentProviders_BuiltIn {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_BuiltIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collapsible.
+        /// </summary>
+        public static string Administration_ContentProviders_Collapsible {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Collapsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Content Providers.
+        /// </summary>
+        public static string Administration_ContentProviders_Custom {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Domains.
+        /// </summary>
+        public static string Administration_ContentProviders_Domains {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Domains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string Administration_ContentProviders_Enabled {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extract (Regex).
+        /// </summary>
+        public static string Administration_ContentProviders_Extract {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Extract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Administration_ContentProviders_Name {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output (HTML).
+        /// </summary>
+        public static string Administration_ContentProviders_Output {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string Administration_ContentProviders_Remove {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling or Disabling a content provider will require an app restart to take effect.
+        /// </summary>
+        public static string Administration_ContentProviders_RequiresRestart {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_RequiresRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Script.
+        /// </summary>
+        public static string Administration_ContentProviders_Script {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Script", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Administration_ContentProviders_Title {
+            get {
+                return ResourceManager.GetString("Administration_ContentProviders_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email Sender.
         /// </summary>
         public static string Administration_EmailSender {
@@ -1190,7 +1298,7 @@ namespace JabbR {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *{0} nudged the room..
+        ///   Looks up a localized string similar to *{0} nudged room {1}..
         /// </summary>
         public static string Chat_UserNudgedRoom {
             get {
@@ -1199,7 +1307,7 @@ namespace JabbR {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *{0} nudged {1}.
+        ///   Looks up a localized string similar to *{0} nudged {1}..
         /// </summary>
         public static string Chat_UserNudgedUser {
             get {
@@ -1510,6 +1618,15 @@ namespace JabbR {
         public static string Client_Cancel {
             get {
                 return ResourceManager.GetString("Client_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Client_Confirm {
+            get {
+                return ResourceManager.GetString("Client_Confirm", resourceCulture);
             }
         }
         
@@ -2404,6 +2521,17 @@ namespace JabbR {
         public static string Lock_CommandInfo {
             get {
                 return ResourceManager.GetString("Lock_CommandInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;i class=&quot;icon-lock icon-4x pull-left&quot;&gt;&lt;/i&gt;
+        ///&lt;p&gt;&lt;strong&gt;Are you sure you want to lock this room?&lt;/strong&gt;&lt;/p&gt;
+        ///&lt;p&gt;A locked room can only be accessed by its owners and those granted access.&lt;/p&gt;.
+        /// </summary>
+        public static string Lock_ConfirmMessage {
+            get {
+                return ResourceManager.GetString("Lock_ConfirmMessage", resourceCulture);
             }
         }
         
