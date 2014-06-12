@@ -619,7 +619,7 @@ Utilisez ? ou tapez /? pour afficher la FAQ et la liste des commandes.</value>
     <value>Vous n'êtes désormais plus propriétaire de {0}.</value>
   </data>
   <data name="Chat_YouSetFlag" xml:space="preserve">
-    <value>Vous avez choisir comme drapeau {0}.</value>
+    <value>Vous avez choisi comme drapeau {0}.</value>
   </data>
   <data name="Chat_YouSetRoomTopic" xml:space="preserve">
     <value>Vous avez renseigné le sujet du salon avec "{0}".</value>
