@@ -968,6 +968,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LanguageResources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="LanguageResources.fr.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Compile Include="App_Start\Startup.DependencyInjection.cs" />
     <Compile Include="Commands\AllowedCommand.cs" />
     <Compile Include="ContentProviders\Core\ContentProviderProcessor.cs" />
