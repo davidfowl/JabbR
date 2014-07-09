@@ -983,6 +983,8 @@
     <Content Include="Views\_layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\LmbtfyCommand.cs" />
+    <Compile Include="Commands\LmgtfyCommand.cs" />
     <Compile Include="Commands\OwnersCommand.cs" />
     <Compile Include="Commands\CheckBannedCommand.cs" />
     <Compile Include="Commands\UnBanCommand.cs" />
