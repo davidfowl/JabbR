@@ -1,10 +1,13 @@
-﻿using JabbR.Models;
+﻿using JabbR.Infrastructure;
+using JabbR.Models;
 using Microsoft.AspNet.SignalR;
 using System;
+using System.IO;
+using System.Linq;
 
 namespace JabbR.Commands
 {
-    [Command("lmgtfy", "Lmgtfy_CommandInfo", "query", "user")]
+    [Command("lmgtfy", "Lmgtfy_CommandInfo", "[@user] query", "user")]
     public class LmgtfyCommand : UserCommand
     {
         public override void Execute(CommandContext context, CallerContext callerContext, Models.ChatUser callingUser, string[] args)
@@ -19,13 +22,44 @@ namespace JabbR.Commands
                 throw new HubException(LanguageResources.Lmstfy_DataRequired);
             }
 
+            string query = null;
+            ChatUser alertUser = null;
+            if (args[0].StartsWith("@"))
+            {
+                alertUser = context.Repository.VerifyUser(args[0]);
+                query = string.Join(" ", args.Skip(1));
+            }
+            else
+            {
+                query = string.Join(" ", args);
+            }
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                throw new HubException(LanguageResources.Lmstfy_DataRequired);
+            }
+
             ChatRoom callingRoom = context.Repository.GetRoomByName(callerContext.RoomName);
 
-            string query = string.Join(" ", args);
-            string queryEscaped = Uri.EscapeDataString(query);
-            string url = String.Format("http://lmgtfy.com/?q={0}", queryEscaped);
+            string tinyUrlRequest = string.Format("http://tinyurl.com/api-create.php?url=http://lmgtfy.com/?q={0}", Uri.EscapeDataString(query));
+            var tinyUrlResponse = Http.GetAsync(tinyUrlRequest).Result;
+            string url;
 
-            context.NotificationService.SendMessage(callingRoom, url);
+            using (var tinyUrlStream = tinyUrlResponse.GetResponseStream())
+            {
+                using (var tinyUrlReader = new StreamReader(tinyUrlStream))
+                {
+                    url = tinyUrlReader.ReadToEnd();
+                }
+            }
+
+            string msg;
+            if (alertUser == null)
+                msg = url;
+            else
+                msg = string.Format("@{0} {1}", alertUser.Name, url);
+
+            context.NotificationService.SendMessage(callingRoom, msg);
         }
     }
 }
