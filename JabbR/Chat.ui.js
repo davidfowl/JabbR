@@ -134,6 +134,20 @@
                 return -1;
             }
 
+            // the higher priorities will appear first
+            if (a.PinnedPriority > b.PinnedPriority) {
+                return -1;
+            } else if (b.PinnedPriority > a.PinnedPriority) {
+                return 1;
+            }
+            
+            // then it will check the pinned flag
+            if (a.Pinned && !b.Pinned) {
+                return -1;
+            } else if (b.Pinned && !a.Pinned) {
+                return 1;
+            }          
+
             if (a.Count > b.Count) {
                 return -1;
             } else if (b.Count > a.Count) {

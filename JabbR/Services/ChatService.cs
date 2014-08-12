@@ -869,6 +869,24 @@ namespace JabbR.Services
             _repository.CommitChanges();
         }
 
+        public void PinRoom(ChatUser user, ChatRoom targetRoom, int pinnedPriority)
+        {
+            EnsureAdmin(user);
+
+            targetRoom.Pinned = true;
+            targetRoom.PinnedPriority = pinnedPriority;
+            _repository.CommitChanges();
+        }
+
+        public void UnPinRoom(ChatUser user, ChatRoom targetRoom)
+        {
+            EnsureAdmin(user);
+
+            targetRoom.Pinned = false;
+            targetRoom.PinnedPriority = 0;
+            _repository.CommitChanges();
+        }
+
         internal static void ValidateNote(string note, string noteTypeName = "note", int? maxLength = null)
         {
             var lengthToValidateFor = (maxLength ?? NoteMaximumLength);

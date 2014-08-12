@@ -370,7 +370,9 @@ namespace JabbR
                 Count = r.Users.Count(u => u.Status != (int)UserStatus.Offline),
                 Private = r.Private,
                 Closed = r.Closed,
-                Topic = r.Topic
+                Topic = r.Topic, 
+                Pinned = r.Pinned, 
+                PinnedPriority = r.PinnedPriority
             }).ToListAsync();
         }
 

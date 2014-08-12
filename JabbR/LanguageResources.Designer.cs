@@ -2968,6 +2968,15 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which room do you want to pin?.
+        /// </summary>
+        public static string PinRoom_RoomRequired {
+            get {
+                return ResourceManager.GetString("PinRoom_RoomRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You&apos;re not allowed to post a notification..
         /// </summary>
         public static string PostNotification_NotAllowed {
@@ -3396,6 +3405,15 @@ namespace JabbR {
         public static string Unban_UserRequired {
             get {
                 return ResourceManager.GetString("Unban_UserRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which room do you want to unpin?.
+        /// </summary>
+        public static string UnPinRoom_RoomRequired {
+            get {
+                return ResourceManager.GetString("UnPinRoom_RoomRequired", resourceCulture);
             }
         }
         

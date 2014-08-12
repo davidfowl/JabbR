@@ -582,6 +582,12 @@
   <data name="Lock_RoomRequired" xml:space="preserve">
     <value>Which room do you want to lock?</value>
   </data>
+  <data name="PinRoom_RoomRequired" xml:space="preserve">
+    <value>Which room do you want to pin?</value>
+  </data>
+  <data name="UnPinRoom_RoomRequired" xml:space="preserve">
+    <value>Which room do you want to unpin?</value>
+  </data>
   <data name="Me_ActionRequired" xml:space="preserve">
     <value>You what?</value>
   </data>

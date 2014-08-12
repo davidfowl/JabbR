@@ -19,6 +19,8 @@ namespace JabbR.Models
         public string Topic { get; set; }
         [StringLength(200)]
         public string Welcome { get; set; }
+        public bool Pinned { get; set; }
+        public int PinnedPriority { get; set; }
 
         // Private rooms
         public bool Private { get; set; }
