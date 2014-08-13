@@ -7,8 +7,8 @@ using System.Web;
 
 namespace JabbR.Commands
 {
-    [Command("pinroom", "PinRoom_CommandInfo", "room [priority]", "admin")]
-    public class PinRoomCommand : AdminCommand
+    [Command("pin", "Pin_CommandInfo", "room [priority]", "room")]
+    public class PinCommand : AdminCommand
     {
         public override void ExecuteAdminOperation(CommandContext context, CallerContext callerContext, ChatUser callingUser, string[] args)
         {   
@@ -29,6 +29,8 @@ namespace JabbR.Commands
             }                       
 
             context.Service.PinRoom(callingUser, room, pinnedPriority);
+
+            context.NotificationService.PinRoom(room);
         }
     }
 }

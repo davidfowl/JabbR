@@ -1117,6 +1117,12 @@ Use ? or type /? to display the FAQ and list of commands.</value>
   <data name="Open_CommandInfo" xml:space="preserve">
     <value>Open a closed room. Only works if you're an owner of that room.</value>
   </data>
+  <data name="Pin_CommandInfo" xml:space="preserve">
+    <value>Pin a room so that it displays at the top of the list in the Lobby. Only works if you're an administrator.</value>
+  </data>
+  <data name="UnPin_CommandInfo" xml:space="preserve">
+    <value>Unpin a room. Only works if you're an administrator.</value>
+  </data>
   <data name="RemoveOwner_CommandInfo" xml:space="preserve">
     <value>Remove room owner permissions from a user. Only works if you're the creator of that room.</value>
   </data>
@@ -1272,8 +1278,14 @@ Use ? or type /? to display the FAQ and list of commands.</value>
   <data name="Chat_UserKickedFromRoom" xml:space="preserve">
     <value>{0} was kicked from {1} by {2}.</value>
   </data>
-  <data name="Chat_UserKickedFromRoomReason" xml:space="preserve">
-    <value>{0} was kicked from {1} by {2} for "{3}".</value>
+  <data name="Chat_UserKickedFromRoom" xml:space="preserve">
+    <value>{0} was kicked from {1} by {2}.</value>
+  </data>
+  <data name="Chat_RoomPinned" xml:space="preserve">
+    <value>{0} has been Pinned.</value>
+  </data>
+  <data name="Chat_RoomUnpinned" xml:space="preserve">
+    <value>{0} has been Unpinned.</value>
   </data>
   <data name="Chat_YouBanned" xml:space="preserve">
     <value>You have been banned by {0}.</value>

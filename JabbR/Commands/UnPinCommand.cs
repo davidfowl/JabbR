@@ -7,8 +7,8 @@ using System.Web;
 
 namespace JabbR.Commands
 {
-    [Command("unpinroom", "UnPinRoom_CommandInfo", "room", "admin")]
-    public class UnPinRoomCommand : AdminCommand
+    [Command("unpin", "UnPin_CommandInfo", "room", "room")]
+    public class UnPinCommand : AdminCommand
     {
         public override void ExecuteAdminOperation(CommandContext context, CallerContext callerContext, ChatUser callingUser, string[] args)
         {
@@ -22,6 +22,8 @@ namespace JabbR.Commands
             ChatRoom room = context.Repository.VerifyRoom(roomName, mustBeOpen: false);
 
             context.Service.UnPinRoom(callingUser, room);
+
+            context.NotificationService.UnPinRoom(room);
         }
     }
 }

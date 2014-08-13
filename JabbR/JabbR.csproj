@@ -988,9 +988,9 @@
   <ItemGroup>
     <Compile Include="Commands\OwnersCommand.cs" />
     <Compile Include="Commands\CheckBannedCommand.cs" />
-    <Compile Include="Commands\PinRoomCommand.cs" />
+    <Compile Include="Commands\PinCommand.cs" />
     <Compile Include="Commands\UnBanCommand.cs" />
-    <Compile Include="Commands\UnPinRoomCommand.cs" />
+    <Compile Include="Commands\UnPinCommand.cs" />
     <Compile Include="ContentProviders\ConfiguredContentProvider.cs" />
     <Compile Include="ContentProviders\UrbanDictionaryContentProvider.cs" />
     <Compile Include="ContentProviders\XkcdContentProvider.cs" />

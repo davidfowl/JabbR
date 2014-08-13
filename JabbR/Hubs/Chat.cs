@@ -1036,6 +1036,16 @@ namespace JabbR
             }
         }
 
+        void INotificationService.PinRoom(ChatRoom room)
+        {
+            Clients.Group(room.Name).pinRoom(room.Name);
+        }
+
+        void INotificationService.UnPinRoom(ChatRoom room)
+        {
+            Clients.Group(room.Name).unPinRoom(room.Name);
+        }
+
         void INotificationService.ChangeAfk(ChatUser user)
         {
             // Create the view model

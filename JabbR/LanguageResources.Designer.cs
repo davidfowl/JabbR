@@ -1100,6 +1100,15 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} has been Pinned..
+        /// </summary>
+        public static string Chat_RoomPinned {
+            get {
+                return ResourceManager.GetString("Chat_RoomPinned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No users are allowed in {0}..
         /// </summary>
         public static string Chat_RoomPrivateNoUsersAllowed {
@@ -1132,6 +1141,15 @@ namespace JabbR {
         public static string Chat_RoomSearchResults {
             get {
                 return ResourceManager.GetString("Chat_RoomSearchResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been Unpinned..
+        /// </summary>
+        public static string Chat_RoomUnpinned {
+            get {
+                return ResourceManager.GetString("Chat_RoomUnpinned", resourceCulture);
             }
         }
         
@@ -1294,15 +1312,6 @@ namespace JabbR {
         public static string Chat_UserKickedFromRoom {
             get {
                 return ResourceManager.GetString("Chat_UserKickedFromRoom", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} was kicked from {1} by {2} for &quot;{3}&quot;..
-        /// </summary>
-        public static string Chat_UserKickedFromRoomReason {
-            get {
-                return ResourceManager.GetString("Chat_UserKickedFromRoomReason", resourceCulture);
             }
         }
         
@@ -2968,6 +2977,15 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pin a room so that it displays at the top of the list in the Lobby. Only works if you&apos;re an administrator..
+        /// </summary>
+        public static string Pin_CommandInfo {
+            get {
+                return ResourceManager.GetString("Pin_CommandInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which room do you want to pin?.
         /// </summary>
         public static string PinRoom_RoomRequired {
@@ -3405,6 +3423,15 @@ namespace JabbR {
         public static string Unban_UserRequired {
             get {
                 return ResourceManager.GetString("Unban_UserRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpin a room. Only works if you&apos;re an administrator..
+        /// </summary>
+        public static string UnPin_CommandInfo {
+            get {
+                return ResourceManager.GetString("UnPin_CommandInfo", resourceCulture);
             }
         }
         
