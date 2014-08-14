@@ -25,7 +25,10 @@ namespace JabbR.Commands
             int pinnedPriority = 0;
             if (args.Length > 1)
             {
-                pinnedPriority = Convert.ToInt32(String.Join(" ", args.Skip(1)).Trim());
+                if (!Int32.TryParse(String.Join(" ", args.Skip(1)).Trim(), out pinnedPriority))
+                {                   
+                    throw new HubException(LanguageResources.PinRoom_PriorityNotInt);
+                }                
             }                       
 
             context.Service.PinRoom(callingUser, room, pinnedPriority);

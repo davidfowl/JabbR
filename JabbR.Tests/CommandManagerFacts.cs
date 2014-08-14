@@ -4903,6 +4903,339 @@ namespace JabbR.Test
             }
         }
 
+        public class PinCommand
+        {
+            [Fact]
+            public void CanPinRoom()
+            { 
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room",
+                    Private = false
+                };
+                room.Creator = user;
+                room.Owners.Add(user);
+                user.OwnedRooms.Add(room);
+                repository.Add(room);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                bool result = commandManager.TryHandleCommand("/pin room");
+
+                Assert.True(result);
+                notificationService.Verify(x => x.PinRoom(room), Times.Once());               
+                Assert.True(room.Pinned);
+            }
+
+            [Fact]
+            public void CanPinRoomWithPriority()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room",
+                    Private = false
+                };
+                room.Creator = user;
+                room.Owners.Add(user);
+                user.OwnedRooms.Add(room);
+                repository.Add(room);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                bool result = commandManager.TryHandleCommand("/pin room 1000");
+
+                Assert.True(result);
+                notificationService.Verify(x => x.PinRoom(room), Times.Once());
+                Assert.True(room.Pinned);
+                Assert.Equal(1000, room.PinnedPriority);
+            }
+
+            [Fact]
+            public void PinRoomWithPriorityThrowsIfPriorityIsntInt()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room",
+                    Private = false
+                };
+                room.Creator = user;
+                room.Owners.Add(user);
+                user.OwnedRooms.Add(room);
+                repository.Add(room);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/pin room bob"));
+                Assert.Equal("You didn't enter a number for the room priority.", ex.Message);
+                notificationService.Verify(x => x.PinRoom(room), Times.Never());
+                Assert.False(room.Pinned);
+                Assert.Equal(0, room.PinnedPriority);
+            }            
+
+            [Fact]
+            public void ThrowsIfUserIsNotAdmin()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1"
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room",
+                    Private = false
+                };
+                room.Creator = user;
+                room.Owners.Add(user);
+                user.OwnedRooms.Add(room);
+                repository.Add(room);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/pin room"));
+                Assert.Equal("You are not an admin.", ex.Message);
+            }
+
+            [Fact]
+            public void MissingRoomNameThrowsFromLobby()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/pin"));
+                Assert.Equal("Which room do you want to pin?", ex.Message);
+            }
+
+            [Fact]
+            public void NotExistingRoomNameThrows()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/pin room"));
+                Assert.Equal("Unable to find room.", ex.Message);
+            }
+        }
+
+        public class UnPinCommand
+        {
+            [Fact]
+            public void CanUnPinRoom()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room",
+                    Private = false, 
+                    Pinned = true, 
+                    PinnedPriority = 3000
+                };
+                room.Creator = user;
+                room.Owners.Add(user);
+                user.OwnedRooms.Add(room);
+                repository.Add(room);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                bool result = commandManager.TryHandleCommand("/unpin room");
+
+                Assert.True(result);
+                notificationService.Verify(x => x.UnPinRoom(room), Times.Once());
+                Assert.False(room.Pinned);
+            }
+
+            [Fact]
+            public void ThrowsIfUserIsNotAdmin()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1"
+                };
+                repository.Add(user);
+                var room = new ChatRoom
+                {
+                    Name = "room",
+                    Private = false
+                };
+                room.Creator = user;
+                room.Owners.Add(user);
+                user.OwnedRooms.Add(room);
+                repository.Add(room);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/unpin room"));
+                Assert.Equal("You are not an admin.", ex.Message);
+            }
+
+            [Fact]
+            public void MissingRoomNameThrowsFromLobby()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/unpin"));
+                Assert.Equal("Which room do you want to unpin?", ex.Message);
+            }
+
+            [Fact]
+            public void NotExistingRoomNameThrows()
+            {
+                var repository = new InMemoryRepository();
+                var cache = new Mock<ICache>().Object;
+                var user = new ChatUser
+                {
+                    Name = "dfowler",
+                    Id = "1",
+                    IsAdmin = true
+                };
+                repository.Add(user);
+                var service = new ChatService(cache, new Mock<IRecentMessageCache>().Object, repository);
+                var notificationService = new Mock<INotificationService>();
+                var commandManager = new CommandManager("clientid",
+                                                        "1",
+                                                        null,
+                                                        service,
+                                                        repository,
+                                                        cache,
+                                                        notificationService.Object);
+
+                HubException ex = Assert.Throws<HubException>(() => commandManager.TryHandleCommand("/unpin room"));
+                Assert.Equal("Unable to find room.", ex.Message);
+            }
+        }
+
         public class CloseCommand
         {
             [Fact]

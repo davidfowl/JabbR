@@ -2986,6 +2986,15 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You didn&apos;t enter a number for the room priority..
+        /// </summary>
+        public static string PinRoom_PriorityNotInt {
+            get {
+                return ResourceManager.GetString("PinRoom_PriorityNotInt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which room do you want to pin?.
         /// </summary>
         public static string PinRoom_RoomRequired {
