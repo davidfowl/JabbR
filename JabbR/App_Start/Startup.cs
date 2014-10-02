@@ -53,7 +53,7 @@ namespace JabbR
                 app.Use(typeof(RequireHttpsHandler));
             }
 
-            app.UseErrorPage();
+            app.UseErrorPage(new Microsoft.Owin.Diagnostics.ErrorPageOptions() { ShowExceptionDetails = true });
 
             SetupAuth(app, kernel);
             SetupSignalR(configuration, kernel, app);
@@ -63,6 +63,8 @@ namespace JabbR
             SetupNancy(kernel, app);
 
             SetupErrorHandling();
+
+            SetupDefaultAdmin(kernel, app);
         }
 
         private void SetupFileUpload(IKernel kernel, IAppBuilder app)
@@ -213,6 +215,26 @@ namespace JabbR
             );
 
             app.UseWebApi(config);
+        }
+
+        //private static void SetupDefaultAdmin(IApplicationSettings settings, IJabbrRepository repository, IMembershipService membershipService)
+        private static void SetupDefaultAdmin(IKernel kernel, IAppBuilder app)
+        {
+            var configuration = kernel.Get<IJabbrConfiguration>();
+            var repository = kernel.Get<IJabbrRepository>();
+            var membershipService = kernel.Get<IMembershipService>();
+
+            if (String.IsNullOrEmpty(configuration.DefaultAdminUserName))
+                return;
+
+            if (repository.GetUserByName(configuration.DefaultAdminUserName) == null)
+            {
+                var defaultAdmin = membershipService.AddUser(configuration.DefaultAdminUserName, "admin@myjabbrsite.com", configuration.DefaultAdminPassword);
+
+                defaultAdmin.IsAdmin = true;
+
+                repository.CommitChanges();
+            }
         }
     }
 }

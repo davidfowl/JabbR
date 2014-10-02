@@ -221,6 +221,7 @@
 
     function getMessageViewModel(message) {
         var re = new RegExp("\\b@?" + chat.state.name.replace(/\./g, '\\.') + "\\b", "i");
+        var regt = new RegExp("^(>|&gt;)");
         return {
             name: message.User.Name,
             hash: message.User.Hash,
@@ -229,6 +230,7 @@
             id: message.Id,
             date: message.When.fromJsonDate(),
             highlight: re.test(message.Content) ? 'highlight' : '',
+            greentext: regt.test(message.Content) ? 'greentext' : '',
             isOwn: re.test(message.User.name),
             isMine: message.User.Name === chat.state.name,
             imageUrl: message.ImageUrl,

@@ -33,7 +33,7 @@ namespace JabbR
                   .InSingletonScope();
 
             kernel.Bind<IJabbrRepository>()
-                .To<PersistedRepository>();
+                  .To<PersistedRepository>();
 
             kernel.Bind<IChatService>()
                   .To<ChatService>();
@@ -173,7 +173,9 @@ namespace JabbR
             kernel.Bind<IContentProvider>().To<SpotifyContentProvider>();
             kernel.Bind<IContentProvider>().To<UserVoiceContentProvider>();
             kernel.Bind<IContentProvider>().To<UStreamContentProvider>();
+            kernel.Bind<IContentProvider>().To<VideoContentProvider>();
             kernel.Bind<IContentProvider>().To<YouTubeContentProvider>();
+            kernel.Bind<IContentProvider>().To<ConfiguredContentProvider>();
         }
     }
 }

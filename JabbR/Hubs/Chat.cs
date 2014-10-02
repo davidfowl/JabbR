@@ -364,21 +364,21 @@ namespace JabbR
             string userId = Context.User.GetUserId();
             ChatUser user = _repository.VerifyUserId(userId);
 
-            return _repository.GetAllowedRooms(user).Select(r => new LobbyRoomViewModel
+            return Task.Run(() => _repository.GetAllowedRooms(user).Select(r => new LobbyRoomViewModel
             {
                 Name = r.Name,
                 Count = r.Users.Count(u => u.Status != (int)UserStatus.Offline),
                 Private = r.Private,
                 Closed = r.Closed,
                 Topic = r.Topic
-            }).ToListAsync();
+            }).ToList());
         }
 
         public async Task<IEnumerable<MessageViewModel>> GetPreviousMessages(string messageId)
         {
-            var previousMessages = await (from m in _repository.GetPreviousMessages(messageId)
+            var previousMessages = await Task.Run(() => (from m in _repository.GetPreviousMessages(messageId)
                                           orderby m.When descending
-                                          select m).Take(100).ToListAsync();
+                                          select m).Take(100).ToList());
 
 
             return previousMessages.AsEnumerable()
@@ -449,9 +449,9 @@ namespace JabbR
             // If we haven't cached enough messages just populate it now
             if (recentMessages.Count == 0)
             {
-                var messages = await (from m in _repository.GetMessagesByRoom(room)
+                var messages = await Task.Run(() => (from m in _repository.GetMessagesByRoom(room)
                                       orderby m.When descending
-                                      select m).Take(50).ToListAsync();
+                                        select m).Take(50).ToList());
                 // Reverse them since we want to get them in chronological order
                 messages.Reverse();
 
@@ -461,7 +461,7 @@ namespace JabbR
             }
 
             // Get online users through the repository
-            List<ChatUser> onlineUsers = await _repository.GetOnlineUsers(room).ToListAsync();
+            List<ChatUser> onlineUsers = await Task.Run(() => _repository.GetOnlineUsers(room).ToList());
 
             return new RoomViewModel
             {

@@ -6,6 +6,7 @@ using JabbR.Infrastructure;
 
 namespace JabbR.Models
 {
+    [Serializable]
     public class ChatUser
     {
         [Key]
@@ -68,6 +69,28 @@ namespace JabbR.Models
             AllowedRooms = new SafeCollection<ChatRoom>();
             Attachments = new SafeCollection<Attachment>();
             Notifications = new SafeCollection<Notification>();
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (Object.ReferenceEquals(this, obj))
+                return true;
+
+            if (obj is ChatUser)
+            {
+                var cuser = obj as ChatUser;
+
+                return Id == cuser.Id;
+            }
+
+            return false;
         }
 
         public bool HasUserNameAndPasswordCredentials()

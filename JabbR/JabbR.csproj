@@ -24,6 +24,8 @@
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -237,7 +239,14 @@
     <Content Include="Content\images\download-on.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\ponymoticon\a2.png" />
+    <Content Include="Content\images\ponymoticon\a3.png" />
+    <Content Include="Content\images\ponymoticon\b2.png" />
+    <Content Include="Content\images\ponymoticon\c2.png" />
+    <Content Include="Content\images\ponymoticon\c3.png" />
+    <Content Include="Content\images\ponymoticon\e2.png" />
     <Content Include="Content\images\splash-logo.png" />
+    <Content Include="Content\images\tl-logo64.png" />
     <Content Include="Content\themes\default\Chat.bbcnews.css" />
     <Content Include="Content\themes\default\Chat.css" />
     <Content Include="Chat.documentOnWrite.js" />
@@ -762,6 +771,7 @@
     <Content Include="Content\images\emojis\yellow_heart.png" />
     <Content Include="Content\images\emojis\zap.png" />
     <Content Include="Content\images\emojis\zzz.png" />
+    <Content Include="Content\images\emotelist.png" />
     <Content Include="Content\images\error.png" />
     <Content Include="Content\images\flags.png" />
     <Content Include="Content\images\link.png" />
@@ -773,6 +783,11 @@
     <Content Include="Content\images\logout.png" />
     <Content Include="Content\images\no-typing-white.png" />
     <Content Include="Content\images\no-typing.png" />
+    <Content Include="Content\images\ponymoticon\a.png" />
+    <Content Include="Content\images\ponymoticon\b.png" />
+    <Content Include="Content\images\ponymoticon\c.png" />
+    <Content Include="Content\images\ponymoticon\d.png" />
+    <Content Include="Content\images\ponymoticon\e.png" />
     <Content Include="Content\images\question-icon-white.png" />
     <Content Include="Content\images\question-icon.png" />
     <Content Include="Content\images\richness-off-white.png" />
@@ -793,6 +808,48 @@
     <Content Include="Content\images\Clippy.png" />
     <Content Include="Content\images\StopWatch.png" />
     <Content Include="Content\images\unlink.png" />
+    <Content Include="Content\images\v4c\1ducktart.jpg" />
+    <Content Include="Content\images\v4c\33.png" />
+    <Content Include="Content\images\v4c\a.gif" />
+    <Content Include="Content\images\v4c\aliens.gif" />
+    <Content Include="Content\images\v4c\biogurl.gif" />
+    <Content Include="Content\images\v4c\birdy.gif" />
+    <Content Include="Content\images\v4c\bodywash.png" />
+    <Content Include="Content\images\v4c\cat.gif" />
+    <Content Include="Content\images\v4c\dilbert.gif" />
+    <Content Include="Content\images\v4c\dooktart.png" />
+    <Content Include="Content\images\v4c\dsdasd.png" />
+    <Content Include="Content\images\v4c\duane.gif" />
+    <Content Include="Content\images\v4c\ee.gif" />
+    <Content Include="Content\images\v4c\fantasy.gif" />
+    <Content Include="Content\images\v4c\gp.png" />
+    <Content Include="Content\images\v4c\grove.gif" />
+    <Content Include="Content\images\v4c\heh.png" />
+    <Content Include="Content\images\v4c\jimmy.gif" />
+    <Content Include="Content\images\v4c\keke6.png" />
+    <Content Include="Content\images\v4c\kim.gif" />
+    <Content Include="Content\images\v4c\kray.png" />
+    <Content Include="Content\images\v4c\ll.gif" />
+    <Content Include="Content\images\v4c\o2XNE.jpg" />
+    <Content Include="Content\images\v4c\oz.gif" />
+    <Content Include="Content\images\v4c\pomf.png" />
+    <Content Include="Content\images\v4c\pstriple.png" />
+    <Content Include="Content\images\v4c\push.gif" />
+    <Content Include="Content\images\v4c\ready.gif" />
+    <Content Include="Content\images\v4c\seal.png" />
+    <Content Include="Content\images\v4c\shower.gif" />
+    <Content Include="Content\images\v4c\snoop.gif" />
+    <Content Include="Content\images\v4c\sonicx.png" />
+    <Content Include="Content\images\v4c\spekettle.gif" />
+    <Content Include="Content\images\v4c\spooky.gif" />
+    <Content Include="Content\images\v4c\ss.gif" />
+    <Content Include="Content\images\v4c\ssd.gif" />
+    <Content Include="Content\images\v4c\VffoS.jpg" />
+    <Content Include="Content\images\v4c\wee2.gif" />
+    <Content Include="Content\images\v4c\zgabe.gif" />
+    <Content Include="Content\images\v4c\zgo.gif" />
+    <Content Include="Content\images\v4c\zgobz.jpg" />
+    <Content Include="Content\images\v4c\ztop.gif" />
     <Content Include="Content\jquery.mobile-1.1.1.css" />
     <Content Include="Content\jquery.mobile-1.1.1.min.css" />
     <Content Include="Content\jquery.mobile.structure-1.1.1.css" />
@@ -801,11 +858,28 @@
     <Content Include="Content\jquery.mobile.theme-1.1.1.min.css" />
     <Content Include="Content\KeyTips.css" />
     <Content Include="Content\KeyTips.min.css" />
+    <Content Include="Content\ponymoticon.css" />
     <Content Include="Content\popup-back.gif" />
     <Content Include="Content\qunit.css" />
     <Content Include="Chat.githubissues.js" />
     <Content Include="Content\themes\default\Chat.githubissues.css" />
     <Content Include="Content\themes\default\Chat.nuget.css" />
+    <Content Include="Content\themes\smoothness\images\animated-overlay.gif" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\smoothness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\smoothness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\smoothness\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\smoothness\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\smoothness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\smoothness\jquery-ui-1.10.3.custom.css" />
+    <Content Include="Content\themes\smoothness\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\images\big-logo.png" />
     <Content Include="Content\images\logo32.png" />
@@ -881,9 +955,13 @@
     <EmbeddedResource Include="Migrations\201310240539050_AddPrecision.resx">
       <DependentUpon>201310240539050_AddPrecision.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Properties\PublishProfiles\TL2.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
+    <Content Include="Scripts\jquery-migrate-1.2.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.custom.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.custom.min.js" />
     <Content Include="Scripts\jquery-migrate-1.2.1.js" />
     <Content Include="Scripts\jquery-migrate-1.2.1.min.js" />
     <Content Include="Scripts\jquery.color-2.1.2.js" />
@@ -955,6 +1033,7 @@
     <Compile Include="Commands\CheckBannedCommand.cs" />
     <Compile Include="Commands\UnBanCommand.cs" />
     <Compile Include="ContentProviders\ConfiguredContentProvider.cs" />
+    <Compile Include="ContentProviders\VideoContentProvider.cs" />
     <Compile Include="Infrastructure\BinaryBlob.cs" />
     <Compile Include="Commands\MemeCommand.cs" />
     <Compile Include="Infrastructure\AuthenticationService.cs" />
@@ -1102,6 +1181,7 @@
     <Compile Include="Nancy\HomeModule.cs" />
     <Compile Include="Nancy\NotificationsModule.cs" />
     <Compile Include="Nancy\SessionExtensions.cs" />
+    <Compile Include="Services\CustomRepository.cs" />
     <Compile Include="Services\ContentProviderSetting.cs" />
     <Compile Include="Services\DefaultUserAuthenticator.cs" />
     <Compile Include="Services\Email\Email.cs" />
@@ -1408,6 +1488,7 @@ xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.20.0\BuildProvi
 xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.20.0\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
 )</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

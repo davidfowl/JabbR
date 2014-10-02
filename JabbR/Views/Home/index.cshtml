@@ -11,8 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A real-time chat application." />
     <meta name="keywords" content="chat,realtime chat,signalr,jabbr" />
-    <link href="@Url.Content("~/Content/images/logo32.png")" rel="icon" type="image/png" sizes="32x32">
-    <link href="@Url.Content("~/Content/images/logo64.png")" rel="icon" type="image/png" sizes="64x64">
     <link href="@Url.Content("~/favicon.ico")" rel="shortcut icon" type="image/x-icon" sizes="16x16">
     @{ 
         WriteLiteral(Bundle.Css().ForceDebugIf(() => Model.DebugMode)
@@ -26,6 +24,8 @@
             .Add("~/Content/themes/default/Chat.dictionary.css")
             .Add("~/Content/KeyTips.css")
             .Add("~/Content/emoji20.css")
+            .Add("~/Content/ponymoticon.css")
+            .Add("~/Content/themes/smoothness/jquery-ui-1.10.3.custom.min.css")
             .Render("~/Content/JabbR_#.css"));
    }
 
@@ -44,14 +44,14 @@
     </script>
     }
     <script id="new-message-template" type="text/x-jquery-tmpl">
-        <li class="message ${highlight} clearfix{{if isMine}} my-message{{/if}}{{if showUser}} first{{/if}}" id="m-${id}" data-name="${name}" data-timestamp="${date}">
+        <li class="message ${highlight} ${greentext} clearfix{{if isMine}} my-message{{/if}}{{if showUser}} first{{/if}}" id="m-${id}" data-name="${name}" data-timestamp="${date}">
             <div class="left">
                 {{if showUser}}
                 <div class="user ${status} ${presence}">
                     <div class="user-status-container">
                         <i class="user-status"></i>
                     </div>
-                    <img src="https://secure.gravatar.com/avatar/${hash}?s=16&d=mm" class="gravatar" />
+                    <img src="https://secure.gravatar.com/avatar/${hash}?s=32&d=mm" class="gravatar" />
                     <div class="name">${name}</div>
                 </div>
                 {{/if}}
@@ -307,6 +307,7 @@
                 <div id="preferences" class="navbar account pull-right">
                     <div class="navbar-inner">
                         <ul class="nav">
+                            <li><a id="emotelist" class="" href="#"><img src="../../Content/images/emotelist.png" alt="face emoticon" title="emote list" /></a></li>
                             <li><a id="notifications" class="" title="@LanguageResources.Client_Notifications" href="@Url.Content("~/notifications")" target="_blank"><i class="icon-comments"></i><span id="notification-unread-count" class="badge badge-info"></span></a></li>
                             <li><a class="" title="@LanguageResources.Client_AccountSettings" href="@Url.Content("~/account")" target="_blank"><i class="icon-user"></i></a></li>
                             @if (Model.IsAdmin)
@@ -407,6 +408,7 @@
                     <a href="#" class="btn btn-primary" id="download-dialog-button">@LanguageResources.Client_Download</a>
                 </div>
             </div>
+      <div id="emotelist-dialog" title="emote list"></div>
             <div id="jabbr-help" class="modal hide fade">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">&times;</a>
@@ -494,6 +496,7 @@
             .Add("~/Scripts/jquery.pulse.min.js")
             .Add("~/Scripts/jquery.KeyTips.js")
             .Add("~/Scripts/jquery.signalR-2.1.0-pre-140513-b35.min.js")
+            .Add("~/Scripts/jquery-ui-1.10.3.custom.min.js")
             .Render("~/Scripts/JabbR1_#.js"));
     }
     <script type="text/javascript" src="@Url.Content("~/signalr/hubs")"></script>

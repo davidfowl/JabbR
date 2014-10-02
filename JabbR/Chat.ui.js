@@ -64,6 +64,8 @@
         $fileConnectionId = null,
         connectionInfoStatus = null,
         connectionInfoTransport = null,
+        $emotelist = null,
+        $emotelistDialog = null,
         $loadingHistoryIndicator = null,
         trimRoomHistoryFrequency = 1000 * 60 * 2, // 2 minutes in ms
         $loadMoreRooms = null,
@@ -612,7 +614,8 @@
                     return false;
                 }
 
-                // Added the message to the ui first
+            	// Added the message to the ui first
+                var regt = new RegExp("^(>|&gt;)");
                 var viewModel = {
                     name: ui.getUserName(),
                     hash: ui.getUserHash(),
@@ -620,6 +623,7 @@
                     id: utility.newId(),
                     date: new Date(),
                     highlight: '',
+                    greentext: regt.test(msg) ? 'greentext' : '',
                     isMine: true
                 };
 
@@ -796,6 +800,8 @@
             $downloadRange = $('#download-range');
             $logout = $('#preferences .logout');
             $help = $('#preferences .help');
+            $emotelist = $('#emotelist');
+            $emotelistDialog = $('#emotelist-dialog');
             $disconnectDialog = $('#disconnect-dialog');
             $helpPopup = $('#jabbr-help');
             $helpBody = $('#jabbr-help .help-body');
@@ -1206,6 +1212,23 @@
                     room.setListState($(this));
                 });
                 return false;
+            });
+
+            $emotelist.click(function () {
+                // toggle emote list dialog
+                if ($emotelistDialog.dialog('isOpen'))
+                    $emotelistDialog.dialog('close');
+                else
+                    $emotelistDialog.dialog('open');
+            });
+
+            $emotelistDialog.dialog({
+                autoOpen: false,
+                draggable: false,
+                resizable: false,
+                width: 480,
+                maxHeight: 650,
+                position: { my: "right top", at: "right bottom", of: "#emotelist" }
             });
 
             $window.blur(function () {
@@ -1709,7 +1732,7 @@
         changeGravatar: function (user, roomName) {
             var room = getRoomElements(roomName),
                 $user = room.getUserReferences(user.Name),
-                src = 'https://secure.gravatar.com/avatar/' + user.Hash + '?s=16&d=mm';
+                src = 'https://secure.gravatar.com/avatar/' + user.Hash + '?s=32&d=mm';
 
             $user.find('.gravatar')
                  .attr('src', src);

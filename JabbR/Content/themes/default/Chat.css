@@ -225,16 +225,16 @@ form#send-message {
             }
 
         .messages li img.gravatar {
-            height: 16px;
-            width: 16px;
+            height: 32px;
+            width: 32px;
             display: inline-block;
             float: left;
             margin: 0 2px 0 0;
         }
 
 .message img {
-    max-width: 300px;
-    max-height: 250px;
+    max-width: 500px;
+    max-height: 300px;
 }
 
 .roomTopic {
@@ -559,6 +559,12 @@ canvas {
         color: #909090;
         font-style: italic;
     }
+
+  .users li .gravatar
+  {
+    width: 16px;
+    height: 16px;
+  }
 
     .users li .name {
         vertical-align: middle;
@@ -1134,6 +1140,14 @@ li.error {
 
 .highlight {
     background-color: #fff6bd;
+}
+
+.greentext .middle
+{
+  color: #789922;
+  font-family: 'Arial', Sans-Serif;
+  font-weight: normal;
+  font-size: 12px;
 }
 
 .list-header {
@@ -2902,6 +2916,25 @@ h3.userlist-header {
     color: white;
 }
 
+#emotelist
+{
+}
+
+#emotelist-dialog
+{
+    padding: 0;
+}
+
+#emotelist-dialog > div
+{
+    overflow: auto;
+}
+
+#emotelist-dialog td
+{
+    cursor: pointer;
+}
+
 .inactive-since {
     float: right;
     font-size: 11px;
@@ -3325,7 +3358,6 @@ h3.userlist-header {
     max-width: 100%;
     max-height: 300px;
 }
-
 @media only screen and (-Webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5) {
     .close {
         line-height: 15px;

@@ -5,6 +5,7 @@ using JabbR.Infrastructure;
 
 namespace JabbR.Models
 {
+    [Serializable]
     public class ChatMessage
     {
         [Key]
