@@ -17,3 +17,24 @@ lib/Android/Microsoft.AspNet.SignalR.Client.Android.dll.mdb
 lib/iOS/Microsoft.AspNet.SignalR.Client.iOS.dll.mdb
 .DS_Store
 *.dotSettings
+
+
+
+#==============================================================================
+# HolisticWare
+
+**/.DS_Store
+**/.svn
+docs/workspace/sharpen/**
+**/*.userprefs
+src/samples/Components/**
+**/Components/
+**/packages/
+**/.git*
+**/.git.*/*
+
+**/UpgradeLog.htm
+
+
+**/*.data.bat
+**/*.data.sh

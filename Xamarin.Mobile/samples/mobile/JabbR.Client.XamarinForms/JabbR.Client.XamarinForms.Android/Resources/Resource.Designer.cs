@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("JabbR.Client.Android.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("JabbR.Client.XamarinForms.Droid.Resource", IsApplication=true)]
 
-namespace JabbR.Client.Android
+namespace JabbR.Client.XamarinForms.Droid
 {
 	
 	
@@ -22,6 +22,10 @@ namespace JabbR.Client.Android
 		static Resource()
 		{
 			global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+		}
+		
+		public static void UpdateIdValues()
+		{
 		}
 		
 		public partial class Attribute
@@ -37,18 +41,18 @@ namespace JabbR.Client.Android
 			}
 		}
 		
-		public partial class String
+		public partial class Drawable
 		{
 			
 			// aapt resource value: 0x7f020000
-			public static int library_name = 2130837504;
+			public const int Icon = 2130837504;
 			
-			static String()
+			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
 			}
 			
-			private String()
+			private Drawable()
 			{
 			}
 		}
