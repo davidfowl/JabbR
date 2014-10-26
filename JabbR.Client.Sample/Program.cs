@@ -13,10 +13,14 @@ namespace JabbR.Client.Sample
     {
         static void Main(string[] args)
         {
-            string server = "https://jabbr-staging.apphb.com";
-            string roomName = "test";
-            string userName = "testclient";
-            string password = "password";
+		
+            string server = 
+					//"https://jabbr-staging.apphb.com"
+					"https://jabbr.net/"
+					;
+			string roomName = "room";
+            string userName = "user";
+            string password = "pwd";
 
             var client = new JabbRClient(server);
 

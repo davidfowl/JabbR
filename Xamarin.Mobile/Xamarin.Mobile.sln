@@ -428,7 +428,7 @@ Global
 		{4FAA7091-796F-46E2-80F8-2909F9D51395} = {8B6EC659-1156-4519-9024-6326BD9251C3}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = samples\mobile\JabbR.Client.XamarinForms\JabbR.Client.XamarinForms.iOS\JabbR.Client.XamarinForms.iOS.csproj
+		StartupItem = samples\mobile\JabbR.Client.XamarinForms\JabbR.Client.XamarinForms.Android\JabbR.Client.XamarinForms.Android.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
