@@ -12,7 +12,7 @@ using Http = JabbR.Infrastructure.Http;
 
 namespace JabbR.Commands
 {
-    [Command("giphy","Giphy", "keywords", "user")]
+    [Command("giphy","Giphy_CommandInfo", "keyword1 keyword2 keywordX", "user")]
     public class GiphyCommand : UserCommand
     {
         public override void Execute(CommandContext context, CallerContext callerContext, ChatUser callingUser, string[] args)
