@@ -1100,7 +1100,7 @@ Use ? or type /? to display the FAQ and list of commands.</value>
     <value>Incorrect number of meme arguments. You need to provide 3 seperate arguments delimeted by spaces. Use a dash (eg: your-message) to display a space in your message.</value>
   </data>
   <data name="Giphy_CommandInfo" xml:space="preserve">
-    <value>Post a random GIF using the Giphy REST-like API.</value>
+    <value>Post a random GIF using the Giphy REST-like API. The randomness can be limited by using keywords separated by spaces.</value>
   </data>
   <data name="Giphy_DataRequired" xml:space="preserve">
     <value>Limit the randomness by keywords. Excluding keywords will return a random GIF from the Giphy catalog.</value>

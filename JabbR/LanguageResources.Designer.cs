@@ -2399,7 +2399,7 @@ namespace JabbR {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Post a random GIF using the Giphy REST-like API..
+        ///   Looks up a localized string similar to Post a random GIF using the Giphy REST-like API. The randomness can be limited by using keywords separated by spaces..
         /// </summary>
         public static string Giphy_CommandInfo {
             get {
