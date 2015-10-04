@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -57,6 +59,33 @@ namespace JabbR.Infrastructure
                     return JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd());
                 }
             });
+        }
+
+        //Returns a webresponse as a dynamic object
+        public static string GetWebResponse(string url)
+        {
+            
+                  HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            try
+            {
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    return reader.ReadToEnd();
+                }
+            }
+            catch (WebException ex)
+            {
+                WebResponse errorResponse = ex.Response;
+                using (Stream responseStream = errorResponse.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("utf-8"));
+                    String errorText = reader.ReadToEnd();
+                    // log errorText
+                }
+                throw;
+            }
         }
     }
 }

@@ -876,6 +876,11 @@ namespace JabbR
             Clients.User(toUser.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
         }
 
+        public void GenerateGiphy(ChatUser user, ChatRoom room, string message)
+        {
+            Send(message, room.Name);
+        }
+
         void INotificationService.PostNotification(ChatRoom room, ChatUser user, string message)
         {
             Clients.User(user.Id).postNotification(message, room.Name);
