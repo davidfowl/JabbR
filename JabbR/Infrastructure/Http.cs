@@ -61,7 +61,7 @@ namespace JabbR.Infrastructure
             });
         }
 
-        //Returns a webresponse as a dynamic object
+        //Returns a webresponse as a string
         public static string GetWebResponse(string url)
         {
             
