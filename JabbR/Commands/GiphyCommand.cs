@@ -45,7 +45,7 @@ namespace JabbR.Commands
             if (!dataContent.Equals("[]"))
             {
                 string message = data.fixed_height_downsampled_url.ToString();
-                context.NotificationService.GenerateMeme(callingUser, callingRoom, data.fixed_height_downsampled_url.ToString());
+                context.NotificationService.GenerateGiphy(callingUser, callingRoom, data.fixed_height_downsampled_url.ToString());
             }
         }
     }
