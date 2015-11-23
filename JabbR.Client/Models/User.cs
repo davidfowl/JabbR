@@ -5,7 +5,7 @@ using System.Text;
 
 namespace JabbR.Client.Models
 {
-    public class User
+	public partial class User
     {
         public string Name { get; set; }
         public string Hash { get; set; }

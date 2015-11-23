@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="JabbR.Client.Views.ContentViewsUserControls.Authorization"
+	xmlns:views="clr-namespace:JabbR.Client.Views.ContentViewsUserControls;assembly=JabbR.Client.Views"
+	>
+	<ContentView.Content>
+		<ScrollView>
+			<StackLayout>
+				<views:Server></views:Server>
+				<views:Login></views:Login>
+				<views:Rooms></views:Rooms>
+			</StackLayout>
+		</ScrollView>
+	</ContentView.Content>
+</ContentView>

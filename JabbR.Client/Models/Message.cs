@@ -2,7 +2,7 @@
 
 namespace JabbR.Client.Models
 {
-    public class Message
+	public partial class Message
     {
         public bool HtmlEncoded { get; set; }
         public string Id { get; set; }

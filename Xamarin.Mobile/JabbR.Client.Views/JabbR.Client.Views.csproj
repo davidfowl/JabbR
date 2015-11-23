@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{D508FC2F-93CB-40C6-9E8A-84B1A35A0627}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>JabbR.Client.Views</RootNamespace>
+    <AssemblyName>JabbR.Client.Views</AssemblyName>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pages\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Room.xaml.cs">
+      <DependentUpon>Room.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User.xaml.cs">
+      <DependentUpon>User.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Users.xaml.cs">
+      <DependentUpon>Users.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Rooms.xaml.cs">
+      <DependentUpon>Rooms.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Room.xaml.cs">
+      <DependentUpon>Room.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Rooms.xaml.cs">
+      <DependentUpon>Rooms.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\User.xaml.cs">
+      <DependentUpon>User.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Users.xaml.cs">
+      <DependentUpon>Users.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\JabbRPage.xaml.cs">
+      <DependentUpon>JabbRClient.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Lobby.xaml.cs">
+      <DependentUpon>Lobby.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Lobby.xaml.cs">
+      <DependentUpon>Lobby.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HolisticWare.Tools\HolisticWare.XamarinForms.XamarinIOS.ContentPage.cs" />
+    <Compile Include="ContentViewsUserControls\Logger.xaml.cs">
+      <DependentUpon>Logger.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Logger.xaml.cs">
+      <DependentUpon>Logger.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Server.xaml.cs">
+      <DependentUpon>Server.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentViewsUserControls\Authorization.xaml.cs">
+      <DependentUpon>Authorization.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Authorization.xaml.cs">
+      <DependentUpon>Authorization.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="..\packages\Xamarin.Forms.2.0.0.6484\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.0.0.6484\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <ItemGroup>
+    <ProjectReference Include="..\JabbR.Client.ViewModels\JabbR.Client.ViewModels.csproj">
+      <Project>{CE8FD1CA-8C34-4569-9B89-7078EA9FBA30}</Project>
+      <Name>JabbR.Client.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\samples\JabbR.Client.Models\JabbR.Client.Models.csproj">
+      <Project>{89AFF8C2-1F01-4C00-9FEA-249836EEDCCB}</Project>
+      <Name>JabbR.Client.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\JabbR.Client.Portable\JabbR.Client.Portable.csproj">
+      <Project>{3786FC2E-7FC9-43EC-B137-41B070DE37D8}</Project>
+      <Name>JabbR.Client.Portable</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\" />
+    <Folder Include="ContentViewsUserControls\" />
+    <Folder Include="HolisticWare.Tools\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\Settings.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Room.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\User.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Users.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Rooms.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Room.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Rooms.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\User.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Users.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Settings.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\JabbRClient.xaml" />
+    <EmbeddedResource Include="ContentViewsUserControls\Login.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Login.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Lobby.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Lobby.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Logger.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Logger.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Server.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContentViewsUserControls\Authorization.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Authorization.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Xamarin.Forms.Core">
+      <HintPath>..\packages\Xamarin.Forms.2.0.0.6484\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml">
+      <HintPath>..\packages\Xamarin.Forms.2.0.0.6484\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform">
+      <HintPath>..\packages\Xamarin.Forms.2.0.0.6484\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Ioc">
+      <HintPath>..\packages\XLabs.IoC.2.0.5782\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\XLabs.Ioc.dll</HintPath>
+    </Reference>
+    <Reference Include="ExifLib">
+      <HintPath>..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Core">
+      <HintPath>..\packages\XLabs.Core.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Platform">
+      <HintPath>..\packages\XLabs.Platform.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Serialization">
+      <HintPath>..\packages\XLabs.Serialization.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Forms">
+      <HintPath>..\packages\XLabs.Forms.2.0.5782\lib\portable-net45+netcore45+wpa81+wp8\XLabs.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Xamarin.Forms;
 
-namespace JabbR.Client.XamarinForms
+namespace JabbR.Client.Views.ContentViewsUserControls
 {
-	public partial class UserControl : ContentView
+	public partial class Room : ContentView
 	{
-		public UserControl ()
+		public Room ()
 		{
 			InitializeComponent ();
 		}

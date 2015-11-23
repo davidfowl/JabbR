@@ -12,7 +12,7 @@ using Xamarin.Forms.Platform.Android;
 namespace JabbR.Client.XamarinForms.Droid
 {
 	[Activity(Label = "JabbR.Client.XamarinForms", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-	public class MainActivity : AndroidActivity
+	public partial class MainActivity : AndroidActivity
 	{
 		protected override void OnCreate(Bundle bundle)
 		{

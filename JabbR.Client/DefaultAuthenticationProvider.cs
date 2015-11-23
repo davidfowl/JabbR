@@ -8,7 +8,7 @@ using Microsoft.AspNet.SignalR.Client;
 
 namespace JabbR.Client
 {
-    public class DefaultAuthenticationProvider : IAuthenticationProvider
+    public partial class DefaultAuthenticationProvider : IAuthenticationProvider
     {
         private readonly string _url;
 

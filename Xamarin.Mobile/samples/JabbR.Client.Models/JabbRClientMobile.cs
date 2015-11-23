@@ -9,13 +9,13 @@ using System.Net.Http;
 using JabbR.Models;
 using JabbR.Client.Models;
 
-namespace JabbR.Client.XamarinForms
+namespace JabbR.Client.Models
 {
-	public class JabbRClientMobile
+	public partial class JabbRClientMobile
 	{
 		static JabbRClientMobile()
 		{
-			JabbRClientMobile.Client = new JabbRClientMobile();
+			JabbRClientMobile.ClientMobile = new JabbRClientMobile();
 
 			return;
 		}
@@ -25,73 +25,42 @@ namespace JabbR.Client.XamarinForms
 			return;
 		}
 
-		public static JabbRClientMobile Client { get; set; }
+		public static JabbRClientMobile ClientMobile
+		 { 
+		 	get; 
+		 	set; 
+		 }
 
-		private JabbRClient ClientJabbRAPI = null;
-	    private LogOnInfo InfoJabbrAPI = null;
-		private User UserJabbRAPI = null;
-
-		public async Task InitializeAsync(string server)
+		public JabbRClient JabbRClientAPI
 		{
-            ClientJabbRAPI = new JabbRClient(server);
+			get; 
+		 	set; 
+		}
 
-            // Uncomment to see tracing
-            //client.TraceWriter = Debug.Out;
+		public LogOnInfo LogOnInfo
+		{
+			get;
+			set;
+		}
 
-            // Subscribe to new messages
-			ClientJabbRAPI.MessageReceived += ClientJabbRAPI_MessageReceived;
-			ClientJabbRAPI.UserJoined += ClientJabbRAPI_UserJoined;
-            ClientJabbRAPI.UserLeft += ClientJabbRAPI_UserLeft;
-            ClientJabbRAPI.PrivateMessage += ClientJabbRAPI_PrivateMessage;
+		public User User
+		{
+			get;
+			set;
+		}
 
-
-            //RunClientAPITestsAsync(server, roomName, username, password, ClientJabbRAPI, wh);
-
-			return;
+		public string Server
+		{
+			get;
+			set;
 		}
 
 
-		public async Task LoginAsync(string server, string username, string password)
-		{
-			try
-			{
-				await InitializeAsync(server);
-				//await CreateAccountAsync(server, username, password);
-
-				// Connect to chat
-				InfoJabbrAPI = await ClientJabbRAPI.Connect(username, password);
-
-				Debug.WriteLine("Logged on successfully. You are currently in the following rooms:");
-				foreach (var room in InfoJabbrAPI.Rooms)
-				{
-					Debug.WriteLine(room.Name);
-					Debug.WriteLine(room.Private);
-				}
-
-				Debug.WriteLine("User id is {0}. Don't share this!", InfoJabbrAPI.UserId);
-
-				Debug.WriteLine("");
-
-				// Get my user info
-				UserJabbRAPI = await ClientJabbRAPI.GetUserInfo();
-
-				Debug.WriteLine(UserJabbRAPI.Name);
-				Debug.WriteLine(UserJabbRAPI.LastActivity);
-				Debug.WriteLine(UserJabbRAPI.Status);
-				Debug.WriteLine(UserJabbRAPI.Country);
-			}
-			catch (System.Exception exc)
-			{
-				string msg = exc.Message;
-			}
-
-			return;
-		}
 
 		public async Task JoinRoomAsync(string room)
 		{
 			// Join a room called test
-			await ClientJabbRAPI.JoinRoom(room);
+			await JabbRClientAPI.JoinRoom(room);
 
 			// Send a client side message
 			//var message = new ClientMessage
@@ -104,85 +73,44 @@ namespace JabbR.Client.XamarinForms
 			// Send the message to the server and wait for the ack
 			//await client.Send(message, TimeSpan.FromSeconds(2));
 
-
+			return;
 		}
 
 		public async Task GetRoomInfoAsync(string room)
 		{
 			// Get info about the test room
-			Room roomInfo = await ClientJabbRAPI.GetRoomInfo(room);
+			Room roomInfo = await JabbRClientAPI.GetRoomInfo(room);
 
-			Debug.WriteLine("Users");
-
-			foreach (var u in roomInfo.Users)
-			{
-				Debug.WriteLine(u.Name);
-			}
-
-			Debug.WriteLine("");
-
-			foreach (var u in roomInfo.Users)
-			{
-				if (u.Name != UserJabbRAPI.Name)
-				{
-					//await client.SendPrivateMessage(u.Name, "hey there, this is private right?");
-				}
-			}
 
 			return;
 		}
-
-		private void ClientJabbRAPI_MessageReceived(Message message, string arg2)
-		{
-			Debug.WriteLine("[{0}] {1}: {2}", message.When, message.User.Name, message.Content);
-
-			return;
-		}
-
-		private void ClientJabbRAPI_UserJoined(User user, string room, bool arg3)
-		{
-			Debug.WriteLine("{0} joined {1}", user.Name, room);
-		}
-
-		private void ClientJabbRAPI_UserLeft(User user, string room)
-		{
-			Debug.WriteLine("{0} left {1}", user.Name, room);
-		}
-
-		private void ClientJabbRAPI_PrivateMessage(string from, string to, string message)
-		{
-			Debug.WriteLine("*PRIVATE* {0} -> {1} ", from, message);
-		}
-
 
 		private async void RunClientAPITestsAsync(string server, string roomName, string userName, string password, IJabbRClient client, ManualResetEventSlim wh)
-        {
-       
+        {       
             try
             {
-                await CreateAccountAsync(server, userName, password);
+                //await CreateAccountAsync(server, userName, password);
 
                 // Connect to chat
-                InfoJabbrAPI = await client.Connect(userName, password);
+                LogOnInfo = await client.Connect(userName, password);
 
                 Debug.WriteLine("Logged on successfully. You are currently in the following rooms:");
-                foreach (var room in InfoJabbrAPI.Rooms)
+				foreach (Room room in LogOnInfo.Rooms)
                 {
                     Debug.WriteLine(room.Name);
                     Debug.WriteLine(room.Private);
                 }
 
-                Debug.WriteLine("User id is {0}. Don't share this!", InfoJabbrAPI.UserId);
+				Debug.WriteLine("User id is {0}. Don't share this!", LogOnInfo.UserId);
 
-                Debug.WriteLine("");
 
                 // Get my user info
-                UserJabbRAPI = await client.GetUserInfo();
+                User = await client.GetUserInfo();
 
-                Debug.WriteLine(UserJabbRAPI.Name);
-                Debug.WriteLine(UserJabbRAPI.LastActivity);
-                Debug.WriteLine(UserJabbRAPI.Status);
-                Debug.WriteLine(UserJabbRAPI.Country);
+                Debug.WriteLine(User.Name);
+                Debug.WriteLine(User.LastActivity);
+                Debug.WriteLine(User.Status);
+                Debug.WriteLine(User.Country);
 
                 // Join a room called test
                 await client.JoinRoom(roomName);
@@ -203,7 +131,7 @@ namespace JabbR.Client.XamarinForms
 
                 Debug.WriteLine("Users");
 
-                foreach (var u in roomInfo.Users)
+                foreach (User u in roomInfo.Users)
                 {
                     Debug.WriteLine(u.Name);
                 }
@@ -262,29 +190,37 @@ namespace JabbR.Client.XamarinForms
             }
         }
 
-        private static async Task CreateAccountAsync(string server, string userName, string password)
+		private async Task CreateAccountAsync (string username, string password)
+		{
+			await CreateAccountAsync(this.Server, username, password);
+
+			return;
+		}
+
+        private static async Task CreateAccountAsync(string server, string username, string password)
         {
-            var client = new HttpClient
+			HttpClient client = new HttpClient
             {
                 BaseAddress = new Uri(server)
             };
 
-            var content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "username", userName },
-                { "email", "foo@bar.com" },
-                { "password", password },
-                { "confirmPassword", password }
-            });
+			FormUrlEncodedContent content = new FormUrlEncodedContent
+														(
+															new Dictionary<string, string>
+														            {
+														                { "username", username },
+														                { "email", "foo@bar.com" },
+														                { "password", password },
+														                { "confirmPassword", password }
+														            }
+														);
 
             HttpResponseMessage response = await client.PostAsync("/account/create", content);
 
             response.EnsureSuccessStatusCode();
+
+            return;
         }
-
-
-
-
 	}
 }
 

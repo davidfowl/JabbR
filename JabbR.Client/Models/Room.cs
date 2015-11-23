@@ -2,7 +2,7 @@
 
 namespace JabbR.Client.Models
 {
-    public class Room
+	public partial class Room
     {
         public string Name { get; set; }
         public int Count { get; set; }

@@ -5,7 +5,7 @@ namespace JabbR.Client.XamarinForms.WinPhone
 	/// <summary>
 	/// Provides access to string resources.
 	/// </summary>
-	public class LocalizedStrings
+	public partial LocalizedStrings
 	{
 		private static AppResources _localizedResources = new AppResources();
 

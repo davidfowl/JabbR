@@ -34,9 +34,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNet.SignalR.Client">
-      <HintPath>..\Xamarin.Mobile\packages\Microsoft.AspNet.SignalR.Client.2.1.2\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -47,8 +44,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.AspNet.SignalR.Client">
+      <HintPath>..\Xamarin.Mobile\packages\Microsoft.AspNet.SignalR.Client.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Xamarin.Mobile\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\Xamarin.Mobile\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

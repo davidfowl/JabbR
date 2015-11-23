@@ -7,7 +7,7 @@ using MonoTouch.UIKit;
 
 namespace JabbR.Client.XamarinForms.iOS
 {
-	public class Application
+	public partial class Application
 	{
 		// This is the main entry point of the application.
 		static void Main(string[] args)

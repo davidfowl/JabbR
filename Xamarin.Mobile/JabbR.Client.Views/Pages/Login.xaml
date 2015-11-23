@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<h:ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:h="clr-namespace:HolisticWare.XamarinForms.XamarinIOS;assembly=JabbR.Client.Views"
+	xmlns:usercontrols-contentviews="clr-namespace:JabbR.Client.Views.ContentViewsUserControls;assembly=JabbR.Client.Views"
+	x:Class="JabbR.Client.Views.Pages.Login"
+	Title="Login"
+	>
+	<ContentPage.Content>
+
+		<usercontrols-contentviews:Login>
+		</usercontrols-contentviews:Login>
+
+	</ContentPage.Content>
+</h:ContentPage>
