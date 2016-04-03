@@ -32,7 +32,7 @@ namespace JabbR.ContentProviders
                         }
 
                         var projectInfo = new StringBuilder();
-                        projectInfo.AppendFormat("<div class=\"nuget-authors\" ><span>Authors: </span><div class=\"nuget-authors-entry\">{0}</div></div>",
+                        projectInfo.AppendFormat("<div class=\"nuget-authors\" ><span>Authors: </span>{0}</div>",
                                                  packageInfo.Authors);
                         projectInfo.AppendFormat("<div class=\"nuget-downloads\" ><span># Downloads:</span> {0}</div>",
                                                  packageInfo.DownloadCount);
