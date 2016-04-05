@@ -79,7 +79,8 @@
         Room = chat.Room,
         $unreadNotificationCount = null,
         $splashScreen = null,
-        $createRoomButton = null;
+        $createRoomButton = null,
+        $timeOffsetDialog = null;
 
     function getRoomNameFromHash(hash) {
         if (hash.length && hash[0] === '/') {
@@ -853,6 +854,8 @@
 
             $createRoomButton = $('#create-room');
             
+            $timeOffsetDialog = $('#time-offset-dialog');
+
             if (toast.canToast()) {
                 $toast.show();
             }
@@ -2372,6 +2375,15 @@
                         break;
                 }
             }
+        },
+        showTimeOffsetUI: function (offset) {
+            var modelBody = $timeOffsetDialog.find('.modal-body');
+
+            // Indicate seconds
+            var seconds = (offset / 1000).toFixed(1);
+            modelBody.html(modelBody.html().replace('{offset}', seconds));
+
+            $timeOffsetDialog.modal();
         },
         setReadOnly: function (isReadOnly) {
             readOnly = isReadOnly;

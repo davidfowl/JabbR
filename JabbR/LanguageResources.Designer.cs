@@ -1940,6 +1940,15 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is a time difference or significant network latency between the server and client ({offset} seconds). Unusual behaviour can be expected until the problem is corrected..
+        /// </summary>
+        public static string Client_JabbrErrorTimeMessage {
+            get {
+                return ResourceManager.GetString("Client_JabbrErrorTimeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to JabbR Settings.
         /// </summary>
         public static string Client_JabbrSettings {

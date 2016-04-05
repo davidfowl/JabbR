@@ -1051,7 +1051,13 @@
     };
 
     chat.client.serverTime = function (time) {
-        utility.serverTimeOffset = (time.fromJsonDate().getTime() - Date.now());
+        var offset = (time.fromJsonDate().getTime() - Date.now());
+
+        utility.serverTimeOffset = offset;
+
+        if (offset > 5000 || offset < -5000) {
+            ui.showTimeOffsetUI(offset);
+        }
     };
 
     $ui.bind(ui.events.typing, function () {
