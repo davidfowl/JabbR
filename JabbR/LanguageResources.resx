@@ -1287,4 +1287,7 @@ Use ? or type /? to display the FAQ and list of commands.</value>
   <data name="Account_OwnedRooms" xml:space="preserve">
     <value>Owned Rooms</value>
   </data>
+  <data name="Client_JabbrErrorTimeMessage" xml:space="preserve">
+    <value>There is a time difference or significant network latency between the server and client ({offset} seconds). Unusual behaviour can be expected until the problem is corrected.</value>
+  </data>
 </root>
