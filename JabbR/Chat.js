@@ -1050,6 +1050,10 @@
         ui.updateTabOrder(tabOrder);
     };
 
+    chat.client.serverTime = function (time) {
+        utility.serverTimeOffset = (time.fromJsonDate().getTime() - Date.now());
+    };
+
     $ui.bind(ui.events.typing, function () {
         // If not in a room, don't try to send typing notifications
         if (!chat.state.activeRoom) {
