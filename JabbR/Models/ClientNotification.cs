@@ -1,6 +1,6 @@
 ﻿namespace JabbR.Models
 {
-    public class ClientNotification
+	public partial class ClientNotification
     {
         public string Room { get; set; }
         public string ImageUrl { get; set; }

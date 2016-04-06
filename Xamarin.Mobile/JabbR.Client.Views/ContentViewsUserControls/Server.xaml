@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="JabbR.Client.Views.ContentViewsUserControls.Server"
+	xmlns:view-models="clr-namespace:JabbR.Client.ViewModels;assembly=JabbR.Client.ViewModels"
+	BindingContext="{x:Static view-models:State.StateData}"
+	>
+	<ContentView.Content>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+			</Grid.RowDefinitions>
+				
+			<Label 
+				Grid.Row="0" Grid.Column="0"
+				Text="JabbR Server:"
+				>
+			</Label>
+			<Entry
+				Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+				x:Name="textBoxJabbRServer"
+				Text="{Binding Server.Url}"
+				>
+			    <Entry.Triggers>
+			        <DataTrigger 
+			        	TargetType="Entry"
+			            Binding="{Binding Server.ClientJabbRAPI}"
+			            Value="{x:Null}"
+			            >
+			            <Setter Property="TextColor" Value="Red" />
+			        </DataTrigger>
+			    </Entry.Triggers>
+			</Entry>
+
+			<Button
+				x:Name="buttonConnect"
+				Grid.Row="1" Grid.Column="2"
+				Text="Connect"
+				Clicked="buttonConnect_Clicked"
+				>
+			</Button>
+		</Grid>
+
+	</ContentView.Content>
+</ContentView>

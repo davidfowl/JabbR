@@ -1,6 +1,6 @@
 ﻿namespace JabbR.Models
 {
-    public class ClientMessage
+    public partial class ClientMessage
     {
         public string Id { get; set; }
         public string Content { get; set; }

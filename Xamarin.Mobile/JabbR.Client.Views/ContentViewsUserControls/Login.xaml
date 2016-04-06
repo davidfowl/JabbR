@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="JabbR.Client.Views.ContentViewsUserControls.Login"
+	xmlns:view-models="clr-namespace:JabbR.Client.ViewModels;assembly=JabbR.Client.ViewModels"
+	BindingContext="{x:Static view-models:State.StateData}"
+	>
+	<ContentView.Content>
+		<Grid
+			x:Name="grid"
+			>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+			</Grid.RowDefinitions>
+				
+			<Label 
+				Grid.Row="0" Grid.Column="0"
+				Text="Username:"
+				>
+			</Label>
+			<Entry
+				Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+				x:Name="textBoxUsername"
+				Placeholder = "Username..."
+				Text="{Binding Login.Username}"
+				>
+			</Entry>
+
+			<Label 
+				Grid.Row="1" Grid.Column="0"
+				Text="Password:"
+				>
+			</Label>
+			<Entry
+				Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+				x:Name="textBoxPassword"
+				Placeholder = "Password..."
+				IsPassword="true"
+				Text="{Binding Login.Password}"
+				>
+			</Entry>
+
+
+			<Button
+				x:Name="buttonLogin"
+				Grid.Row="2" Grid.Column="2"
+				Text="Login"
+				Clicked="buttonLogin_Clicked"
+				>
+			</Button>
+
+		</Grid>
+
+	</ContentView.Content>
+</ContentView>

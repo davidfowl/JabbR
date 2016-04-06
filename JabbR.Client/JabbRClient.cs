@@ -13,12 +13,12 @@ using Newtonsoft.Json.Linq;
 
 namespace JabbR.Client
 {
-    public class JabbRClient : IJabbRClient
+	public partial class JabbRClient : IJabbRClient
     {
         private readonly IAuthenticationProvider _defaultAuthenticationProvider;
         private readonly Func<IClientTransport> _transportFactory;
 
-        private IHubProxy _chat;
+		private IHubProxy _chat;
         private HubConnection _connection;
         private IAuthenticationProvider _authenticationProvider;
 

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="JabbR.Client.Views.ContentViewsUserControls.Rooms"
+	xmlns:view-models="clr-namespace:JabbR.Client.ViewModels;assembly=JabbR.Client.ViewModels"
+	BindingContext="{x:Static view-models:State.StateData}"
+	>
+	<ContentView.Content>
+		<Grid>
+			<Label
+				Grid.Row="3" Grid.Column="0"
+				Text="Rooms:"
+				>
+			</Label>
+
+			<ListView 
+				x:Name="listViewRoms"					
+				ItemsSource="{Binding Login.Rooms}"
+				HasUnevenRows="true"
+				ItemSelected="ListViewRooms_OnItemSelected"
+				ItemTapped="ListViewRooms_ItemTapped"
+				>
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ViewCell>
+							<ViewCell.View>
+								<Grid Padding="0,20,0,20" >										
+									<Grid.RowDefinition Height="*"></Grid.RowDefinition>
+
+									<Grid.ColumnDefinitions>
+				                      <ColumnDefinition Width="*" />
+				                      <ColumnDefinition Width="120" />
+				                    </Grid.ColumnDefinitions>
+
+									<Label
+										Grid.Row="0" Grid.Column="0"
+										Text="{Binding FullName}"
+										>
+									</Label>
+									<Label
+										Grid.Row="0" Grid.Column="1"
+										Text="{Binding Phone}"
+										XAlign="End"
+										>
+									</Label>
+								</Grid>
+							</ViewCell.View>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+
+		</Grid>
+	</ContentView.Content>
+</ContentView>

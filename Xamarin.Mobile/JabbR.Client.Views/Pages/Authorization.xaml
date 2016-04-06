@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<h:ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="JabbR.Client.Views.Pages.Authorization"
+	xmlns:usercontrols-contentviews="clr-namespace:JabbR.Client.Views.ContentViewsUserControls;assembly=JabbR.Client.Views"
+	xmlns:h="clr-namespace:HolisticWare.XamarinForms.XamarinIOS;assembly=JabbR.Client.Views"
+	Title="Authorization"
+	>
+	<ContentPage.Content>
+		<usercontrols-contentviews:Authorization>
+		</usercontrols-contentviews:Authorization>
+	</ContentPage.Content>
+</h:ContentPage>

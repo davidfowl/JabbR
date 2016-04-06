@@ -8,7 +8,7 @@ using Microsoft.AspNet.SignalR.Client;
 
 namespace JabbR.Client
 {
-    public class DefaultAuthenticationProvider : IAuthenticationProvider
+    public partial class DefaultAuthenticationProvider : IAuthenticationProvider
     {
         private readonly string _url;
 
@@ -24,7 +24,7 @@ namespace JabbR.Client
 
             var cookieJar = new CookieContainer();
 
-#if PORTABLE
+#if PORTABLE || __ANDROID__ || __IOS__
             var handler = new HttpClientHandler
             {
 #else
