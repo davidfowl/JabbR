@@ -1257,6 +1257,15 @@ Use ? or type /? to display the FAQ and list of commands.</value>
   <data name="Administration_AppInsightsId" xml:space="preserve">
     <value>AppInsights ID</value>
   </data>
+  <data name="Lmbtfy_CommandInfo" xml:space="preserve">
+    <value>Posts a link instructing how a user can Bing the query for themselves using the letmebingthatforyou.com API.</value>
+  </data>
+  <data name="Lmgtfy_CommandInfo" xml:space="preserve">
+    <value>Posts a link instructing how a user can Google the query for themselves using the lmgtfy.com API.</value>
+  </data>
+  <data name="Lmstfy_DataRequired" xml:space="preserve">
+    <value>A search query is required.</value>
+  </data>
   <data name="Chat_UserBanned" xml:space="preserve">
     <value>{0} was banned by {1}.</value>
   </data>
