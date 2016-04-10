@@ -370,7 +370,9 @@ namespace JabbR
                 Count = r.Users.Count(u => u.Status != (int)UserStatus.Offline),
                 Private = r.Private,
                 Closed = r.Closed,
-                Topic = r.Topic
+                Topic = r.Topic, 
+                Pinned = r.Pinned, 
+                PinnedPriority = r.PinnedPriority
             }).ToListAsync();
         }
 
@@ -1032,6 +1034,16 @@ namespace JabbR
             {
                 Clients.Group(room.Name).changeUserName(oldUserName, userViewModel, room.Name);
             }
+        }
+
+        void INotificationService.PinRoom(ChatRoom room)
+        {
+            Clients.Group(room.Name).pinRoom(room.Name);
+        }
+
+        void INotificationService.UnPinRoom(ChatRoom room)
+        {
+            Clients.Group(room.Name).unPinRoom(room.Name);
         }
 
         void INotificationService.ChangeAfk(ChatUser user)

@@ -38,6 +38,8 @@ namespace JabbR.Services
         void RemoveAdmin(ChatUser admin, ChatUser targetUser);
         void BanUser(ChatUser callingUser, ChatUser targetUser);
         void UnbanUser(ChatUser admin, ChatUser targetUser);
+        void PinRoom(ChatUser user, ChatRoom targetRoom, int pinnedPriority);
+        void UnPinRoom(ChatUser user, ChatRoom targetRoom);
 
         void AddAttachment(ChatMessage message, string fileName, string contentType, long size, UploadResult result);
 

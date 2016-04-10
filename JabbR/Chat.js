@@ -849,6 +849,15 @@
         }
     };
 
+    chat.client.pinRoom = function(room)
+    {      
+        ui.addNotification(utility.getLanguageResource('Chat_RoomPinned', room), room);      
+    };
+
+    chat.client.unPinRoom = function (room) {
+        ui.addNotification(utility.getLanguageResource('Chat_RoomUnpinned', room), room);
+    };
+
     chat.client.nudge = function (from, to, roomName) {
         var message;
 

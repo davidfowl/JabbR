@@ -10,5 +10,7 @@ namespace JabbR.ViewModels
         public bool Private { get; set; }
         public bool Closed { get; set; }
         public string Topic { get; set; }
+        public bool Pinned { get; set; }
+        public int PinnedPriority { get; set; }
     }
 }
