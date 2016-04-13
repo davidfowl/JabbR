@@ -626,7 +626,7 @@ namespace JabbR
                 }
 
                 // Initialize the chat with the rooms the user is in
-                Clients.Caller.logOn(rooms, privateRooms, user.Preferences);
+                Clients.Caller.logOn(rooms, privateRooms, user.Preferences, new { _settings.AllowAutoRoomCreation });
             }
         }
 

@@ -1372,13 +1372,12 @@
             }, trimRoomHistoryFrequency);
         },
         
-        run: function () {
+        run: function (appSettings) {
             $.history.init(function (hash) {
                 var roomName = getRoomNameFromHash(hash);
-
                 if (roomName) {
                     if (ui.setActiveRoomCore(roomName) === false && roomName !== 'Lobby') {
-                        $ui.trigger(ui.events.openRoom, [roomName]);
+                        $ui.trigger(ui.events.openRoom, [roomName, appSettings.AllowAutoRoomCreation]);
                     }
                 }
             });

@@ -324,7 +324,7 @@
     };
 
     // Called when a returning users join chat
-    chat.client.logOn = function (rooms, myRooms, userPreferences) {
+    chat.client.logOn = function (rooms, myRooms, userPreferences, appSettings) {
         privateRooms = myRooms;
 
         var loadRooms = function () {
@@ -373,7 +373,7 @@
         ui.setUnreadNotifications(chat.state.unreadNotifications);
 
         // Process any urls that may contain room names
-        ui.run();
+        ui.run(appSettings);
 
         // Otherwise set the active room
         ui.setActiveRoom(this.state.activeRoom || 'Lobby');
@@ -1153,13 +1153,18 @@
         updateTitle();
     });
 
-    $ui.bind(ui.events.openRoom, function (ev, room) {
+    $ui.bind(ui.events.openRoom, function (ev, room, createIfNotExists) {
         try {
             chat.server.send('/join ' + room, chat.state.activeRoom)
                 .fail(function (e) {
-                    ui.setActiveRoom('Lobby');
-                    if (e.source === 'HubException') {
-                        ui.addErrorToActiveRoom(e.message);
+                    if (createIfNotExists) {
+                        $ui.trigger(ui.events.sendMessage, ["/create " + room, null, true]);
+                    }
+                    else {
+                        ui.setActiveRoom('Lobby');
+                        if (e.source === 'HubException') {
+                            ui.addErrorToActiveRoom(e.message);
+                        }
                     }
                 });
         }

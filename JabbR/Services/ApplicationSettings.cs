@@ -41,6 +41,8 @@ namespace JabbR.Services
 
         public bool AllowRoomCreation { get; set; }
 
+        public bool AllowAutoRoomCreation { get; set; }
+
         public string FacebookAppId { get; set; }
 
         public string FacebookAppSecret { get; set; }

@@ -198,6 +198,12 @@
   <data name="Administration_AllowRoomCreation" xml:space="preserve">
     <value>Allow Room Creation</value>
   </data>
+  <data name="Administration_AllowAutoRoomCreation" xml:space="preserve">
+    <value>Allow Auto Room Creation</value>
+  </data>
+  <data name="Administration_AllowAutoRoomCreation_Detail" xml:space="preserve">
+    <value>Allows users to link to rooms that don't exist yet</value>
+  </data>
   <data name="Administration_AllowUserRegistration" xml:space="preserve">
     <value>Allow User Registration</value>
   </data>

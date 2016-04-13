@@ -406,6 +406,24 @@ namespace JabbR {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Auto Room Creation.
+        /// </summary>
+        public static string Administration_AllowAutoRoomCreation {
+            get {
+                return ResourceManager.GetString("Administration_AllowAutoRoomCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows users to link to rooms that don&apos;t exist yet.
+        /// </summary>
+        public static string Administration_AllowAutoRoomCreation_Detail {
+            get {
+                return ResourceManager.GetString("Administration_AllowAutoRoomCreation_Detail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Room Creation.
         /// </summary>
         public static string Administration_AllowRoomCreation {

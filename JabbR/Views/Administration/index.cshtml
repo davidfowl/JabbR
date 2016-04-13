@@ -69,6 +69,13 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label" for="allowAutoRoomCreation">@LanguageResources.Administration_AllowAutoRoomCreation</label>
+                        <div class="controls">
+                            @Html.CheckBox("allowAutoRoomCreation", applicationSettings.AllowAutoRoomCreation)
+                            <span class="help-block">@LanguageResources.Administration_AllowAutoRoomCreation_Detail</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label" for="maxMessageLength">@LanguageResources.Administration_MaxMessageLength</label>
                         <div class="controls">
                             <input type="text" id="maxMessageLength" name="maxMessageLength" class="input-xlarge" value="@applicationSettings.MaxMessageLength" placeholder="@LanguageResources.Administration_MaxMessageLength"/>
