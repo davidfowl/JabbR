@@ -63,3 +63,12 @@ To perform your first build, grab the source, and open a visual studio command p
 
 #### Getting Involved
 We welcome contributions from experienced developers.  You can get involved by logging bugs in github, hacking on the source, or discussing issues / features in the [meta](https://jabbr.net/#/rooms/meta) room.
+
+
+### File Upload Setup
+
+1. Create a folder OUTSIDE of the JabbR solution, 
+2. Get the path to the folder, 
+3. Go into JabbR > Settings > Local Storage > and paste path in 'Local File System Storage Path'
+4. In IIS, create a virtual directory and point to the upload folder and update 'Local File System Storage Uri Prefix' with the IIS path (e.g. if i created a virtual directory 'upload' then i enter in 'mydomain.com/upload'
+
