@@ -180,9 +180,30 @@ namespace JabbR.Nancy
             };
         }
 
-        private static string BuildClientResources()
+        private string BuildClientResources()
         {
-            var resourceSet = LanguageResources.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+            CultureInfo cultureInfo = CultureInfo.CurrentUICulture;
+
+            if (!_clientResourceCache.ContainsKey(cultureInfo.Name))
+            {
+                lock (_resourceLock)
+                {
+                    if (!_clientResourceCache.ContainsKey(cultureInfo.Name))
+                    {
+                        var resourcesToEmbed = BuildClientResourcesInternal(cultureInfo);
+
+                        _clientResourceCache[cultureInfo.Name] =
+                            String.Join(",", resourcesToEmbed.Select(e => string.Format("'{0}': {1}", e.Key, Encoder.JavaScriptEncode(e.Value))));
+                    }
+                }
+            }
+
+            return _clientResourceCache[cultureInfo.Name];
+        }
+
+        private static IDictionary<string, string> BuildClientResourcesInternal(CultureInfo cultureInfo)
+        {
+            var resourceSet = LanguageResources.ResourceManager.GetResourceSet(cultureInfo, true, true);
             var invariantResourceSet = LanguageResources.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
 
             var resourcesToEmbed = new Dictionary<string, string>();
@@ -199,11 +220,14 @@ namespace JabbR.Nancy
                     catch (InvalidOperationException)
                     {
                         // The resource specified by name is not a String.
-                    }   
+                    }
                 }
             }
 
-            return String.Join(",", resourcesToEmbed.Select(e => string.Format("'{0}': {1}", e.Key, Encoder.JavaScriptEncode(e.Value))));
+            return resourcesToEmbed;
         }
+
+        static readonly object _resourceLock = new object();
+        static readonly IDictionary<string, string> _clientResourceCache = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
     }
 }
