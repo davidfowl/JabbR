@@ -209,6 +209,11 @@ namespace JabbR.Services
         {
             RunNonLazy(() =>
             {
+                if (!room.Users.Contains(user))
+                {
+                    return;
+                }
+
                 // The hack from hell to attach the user to room.Users so delete is tracked
                 ObjectContext context = ((IObjectContextAdapter)_db).ObjectContext;
                 RelationshipManager manger = context.ObjectStateManager.GetRelationshipManager(room);
