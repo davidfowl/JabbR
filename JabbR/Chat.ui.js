@@ -2494,6 +2494,15 @@
                 $downloadIcon.attr("title", "download messages");
             }
         },
+        toggleDownloadButton: function(disabled) {
+            if (disabled) {
+                $downloadIcon.addClass("off");
+                $downloadIcon.attr("title", "download messages disabled for private rooms");
+            } else {
+                $downloadIcon.removeClass("off");
+                $downloadIcon.attr("title", "download messages");
+            }
+        },
         closeRoom: function (roomName) {
             var room = getRoomElements(roomName);
 
